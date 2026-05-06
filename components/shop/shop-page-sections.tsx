@@ -1,19 +1,43 @@
 import Link from "next/link";
 import Image from "next/image";
-import { ArrowRight, Gem, Heart, Sparkles, WandSparkles } from "lucide-react";
+import { ArrowRight, Gem, Package, Sparkles, WandSparkles } from "lucide-react";
 import { ProductGrid } from "@/components/shop/product-grid";
 import { SourceBanner } from "@/components/shop/source-banner";
 import { getShopProducts } from "@/lib/shopify/client";
-import { formatMoney, getCategoryLabel } from "@/lib/shopify/utils";
 import { shopCategories, type ShopDataResult, type ShopProduct, type ShopProductType } from "@/lib/shopify/types";
+import { cn } from "@/lib/utils/cn";
 
-const quickEntries = [
+/**
+ * Quick-entry cards on the shop landing : the visitor reads these
+ * once and immediately knows the four ways to buy here.
+ *
+ *   - Perles + Pierres : "compose your own" — buy materials in
+ *     quantity (1, 5, 10, 50… pieces) at degressive prices
+ *   - Figurines        : kawaii / enamel decorative pieces
+ *   - Kits             : pre-composed ready-made bracelets, no
+ *                        assembly — the "I don't want to compose"
+ *                        path. Linked to the main-site kits page
+ *                        until the shop's own /shop/kits goes live.
+ */
+const MAIN_HOST = "https://mynicebracelet.com";
+
+type QuickEntry = {
+  title: string;
+  eyebrow: string;
+  body: string;
+  href: string;
+  type?: ShopProductType;
+  icon: typeof WandSparkles;
+  external?: boolean;
+};
+
+const quickEntries: QuickEntry[] = [
   {
     title: "Perles",
     eyebrow: "Je veux composer une base",
     body: "Perles pastel, nacrees ou transparentes, vendues au nombre de pieces.",
     href: "/shop/perles",
-    type: "perles" satisfies ShopProductType,
+    type: "perles",
     icon: WandSparkles,
   },
   {
@@ -21,7 +45,7 @@ const quickEntries = [
     eyebrow: "Je veux une matiere plus bijou",
     body: "Quartz, amethyste et pierres naturelles selectionnees par l'atelier.",
     href: "/shop/pierres-semi-precieuses",
-    type: "pierres" satisfies ShopProductType,
+    type: "pierres",
     icon: Gem,
   },
   {
@@ -29,28 +53,40 @@ const quickEntries = [
     eyebrow: "Je veux une piece coup de coeur",
     body: "Coeurs, etoiles, fleurs et figurines douces pour personnaliser une creation.",
     href: "/shop/figurines-kawaii",
-    type: "figurines" satisfies ShopProductType,
+    type: "figurines",
     icon: Sparkles,
+  },
+  {
+    title: "Kits & bracelets prets",
+    eyebrow: "Je veux une creation prete a porter",
+    body: "Bracelets composes par l'atelier, livres assembles et prets a offrir — sans assembler chez soi.",
+    href: `${MAIN_HOST}/kits`,
+    icon: Package,
+    external: true,
   },
 ];
 
-const moodboards = [
-  "Pastel Parisien",
-  "Sakura Kawaii",
-  "Dore & nacre",
-  "Coeurs rouges",
-  "Pierres douces",
-  "Initiales",
-];
-
 export function ShopFilterBar({ activeType }: { activeType?: ShopProductType }) {
+  // `scroll={false}` keeps the user's vertical position when switching
+  // categories. Each filter is technically a full route navigation
+  // (/shop ↔ /shop/perles ↔ /shop/pierres-semi-precieuses ↔
+  // /shop/figurines-kawaii), and Next.js's default behaviour is to
+  // reset scroll to 0 on push. Since every one of those routes
+  // renders the same hero + rayon tiles + filter bar at the same Y,
+  // freezing scroll makes the click feel like an in-page filter
+  // change instead of a "jump back to top".
   return (
     <div className="mnb-filter-bar" aria-label="Collections">
-      <Link className={!activeType ? "is-active" : ""} href="/shop">
+      <Link className={!activeType ? "is-active" : ""} href="/shop" scroll={false}>
         Tout
       </Link>
       {shopCategories.map((category) => (
-        <Link className={activeType === category.key ? "is-active" : ""} href={category.href} key={category.key}>
+        <Link
+          className={activeType === category.key ? "is-active" : ""}
+          href={category.href}
+          key={category.key}
+          scroll={false}
+        >
           {category.label}
         </Link>
       ))}
@@ -84,14 +120,16 @@ export function ShopLanding({
     .map((handle) => boutiqueProducts.find((product) => product.handle === handle))
     .filter((product): product is ShopProduct => Boolean(product));
   const heroProducts = heroPreviewProducts.length > 0 ? heroPreviewProducts : boutiqueProducts.slice(0, 4);
-  const heroLeadProduct = heroProducts[0];
   const atelierSelection = boutiqueProducts
     .filter((product) => product.badges.includes("Selection atelier"))
     .slice(0, 6);
-  const title = currentCategory?.label ?? "Perles, pierres & figurines de l'atelier";
+  const title = currentCategory?.label ?? "Perles, figurines & kits";
   const lead =
     currentCategory?.description ??
-    "Achetez uniquement les pieces de l'atelier: perles, pierres semi-precieuses et figurines kawaii, avec prix degressifs selon le nombre de pieces.";
+    // Tightened to a single short sentence — the rayon tiles below
+    // already detail each option, no need to describe all three
+    // here. Keeps the hero airy.
+    "Les pièces et kits de l'atelier, à la pièce ou en lot — expédié de Paris.";
   const categoryCtaLabels: Partial<Record<ShopProductType, string>> = {
     perles: "Voir les perles",
     pierres: "Voir les pierres",
@@ -104,82 +142,194 @@ export function ShopLanding({
 
   return (
     <main className="mnb-shop-main">
-      <section className="mnb-shop-gateway">
-        <div className="mnb-shop-gateway-copy">
-          <p className="mnb-kicker">Boutique de l&apos;atelier</p>
-          <h1>{title}</h1>
-          <p>{lead}</p>
-          <div className="mnb-shop-proof-row" aria-label="Reassurance boutique">
-            <span>Selection atelier</span>
-            <span>Expedition depuis Paris</span>
-            <span>Pieces seules</span>
-            <span>Prix degressifs</span>
-          </div>
-          <div className="mnb-hero-actions">
-            <Link className="mnb-button mnb-button-primary" href="#selection">
-              {primaryCtaLabel}
-              <ArrowRight size={16} />
-            </Link>
-            <Link className="mnb-button" href={secondaryCta.href}>
-              {secondaryCta.label}
-            </Link>
-          </div>
-        </div>
-        {heroProducts.length > 0 ? (
-          <div className="mnb-shop-gateway-media mnb-shop-piece-preview" aria-label="Selection de pieces de l'atelier">
-            <div className="mnb-piece-preview-grid">
-              {heroProducts.map((product, index) => (
-                <Link
-                  className="mnb-piece-preview-item"
-                  href={`/shop/produit/${product.handle}`}
-                  key={product.id}
-                  style={{ position: "relative" }}
-                >
-                  <Image
-                    className={product.featuredImage.url.startsWith("/shop/products/") ? "is-product-asset" : undefined}
-                    src={product.featuredImage.url}
-                    alt={product.featuredImage.altText}
-                    fill
-                    priority={index === 0}
-                    sizes="(max-width: 980px) 42vw, 18vw"
-                  />
-                </Link>
-              ))}
-            </div>
-            {heroLeadProduct ? (
-              <Link className="mnb-piece-preview-caption" href={`/shop/produit/${heroLeadProduct.handle}`}>
-                <strong>Selection coups de coeur</strong>
-                <span>A partir de {formatMoney(heroLeadProduct.price)}</span>
+      {/* ─── HERO ─────────────────────────────────────────────────
+        Flowing layout that breathes on the cream background — no
+        nested white cards, no pill-shaped clarifier. The product
+        photos float as a free-form mosaic on the right ; the copy
+        sits on the left with generous whitespace and a single
+        primary CTA. */}
+      <section className="relative pt-12 md:pt-16 pb-12 md:pb-20">
+        {/* Soft pastel blob behind the visual side — gives the hero
+            depth without adding a card. */}
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute right-[-10%] top-[5%] h-[520px] w-[520px] rounded-full bg-gradient-to-br from-[#E8DBF0]/55 via-[#F8E0E8]/45 to-transparent blur-3xl -z-10"
+        />
+        <div className="container mx-auto px-4 md:px-6 grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-center">
+          {/* Copy column — kept tight on purpose. The eyebrow + h1
+              + one short lead sentence + CTA pair carry the whole
+              hero ; the rayon tiles below do the detailing. */}
+          <div className="lg:col-span-7">
+            <p className="text-[10px] md:text-[11px] font-black uppercase tracking-[0.32em] text-[#3D5A73] mb-5">
+              Boutique de l&apos;atelier
+            </p>
+            <h1 className="font-serif text-[2.4rem] sm:text-5xl lg:text-[4rem] xl:text-[4.4rem] font-black leading-[0.96] tracking-tight text-[#2D3748] uppercase mb-5">
+              {title}
+            </h1>
+            <p className="text-base md:text-lg text-[#5A6878] max-w-lg leading-relaxed mb-8">
+              {lead}
+            </p>
+            <div className="flex flex-wrap gap-3">
+              {/* Reuse the existing .mnb-button / .mnb-button-primary
+                  classes from globals.css. Tag-level rule
+                  `a { color: inherit }` (line 27 of globals) was
+                  silently overriding `text-white` on the inline-flex
+                  Link, collapsing the label into the dark slate
+                  background. The .mnb-button-primary class sets
+                  `color: var(--mnb-soft)` explicitly so the label
+                  always reads on top of the dark background. */}
+              <Link className="mnb-button mnb-button-primary" href="#selection">
+                {primaryCtaLabel}
+                <ArrowRight size={16} />
               </Link>
-            ) : null}
+              <Link className="mnb-button" href={secondaryCta.href}>
+                {secondaryCta.label}
+              </Link>
+            </div>
           </div>
-        ) : null}
+
+          {/* Visual column : free-form product mosaic. Each product
+              sits in its own circular bubble, slightly rotated and
+              shadowed, evoking a flat-lay rather than a sterile
+              4-cell grid. */}
+          {heroProducts.length > 0 && (
+            <div className="lg:col-span-5 relative aspect-square max-w-[460px] mx-auto w-full">
+              {heroProducts.slice(0, 4).map((product, index) => {
+                const layouts = [
+                  { className: "top-[2%] left-[6%] w-[46%] h-[46%]", rotation: -4 },
+                  { className: "top-[8%] right-[2%] w-[42%] h-[42%]", rotation: 6 },
+                  { className: "bottom-[4%] left-[2%] w-[44%] h-[44%]", rotation: 5 },
+                  { className: "bottom-[8%] right-[6%] w-[48%] h-[48%]", rotation: -3 },
+                ] as const;
+                const layout = layouts[index]!;
+                const isAsset = product.featuredImage.url.startsWith("/shop/products/");
+                return (
+                  <Link
+                    key={product.id}
+                    href={`/shop/produit/${product.handle}`}
+                    aria-label={product.title}
+                    className={cn(
+                      "absolute rounded-full bg-white shadow-[0_18px_42px_-12px_rgba(45,55,72,0.22)] overflow-hidden transition-transform duration-500 hover:scale-[1.04]",
+                      layout.className,
+                    )}
+                    style={{ transform: `rotate(${layout.rotation}deg)` }}
+                  >
+                    <Image
+                      src={product.featuredImage.url}
+                      alt={product.featuredImage.altText}
+                      fill
+                      priority={index === 0}
+                      sizes="(max-width: 980px) 220px, 22vw"
+                      className={cn(
+                        "object-contain",
+                        isAsset ? "p-3" : "object-cover",
+                      )}
+                    />
+                  </Link>
+                );
+              })}
+            </div>
+          )}
+        </div>
       </section>
 
-      <section className="mnb-shop-clarifier" aria-label="Separation des experiences">
-        <strong>Ici, vous achetez des pieces seules.</strong>
-        <span>
-          Cette boutique est dediee aux perles, pierres semi-precieuses et figurines, vendues par paliers de quantite.
-        </span>
-      </section>
+      {/* ─── RAYON CARDS ──────────────────────────────────────────
+        Image-driven category tiles that replace the boxy "icon +
+        eyebrow + body + footer" white cards. Each rayon shows a
+        big product photo as backdrop with a colored gradient
+        overlay (subtle pastel tint per category), a strong
+        serif label, and a hover scale effect. */}
+      <section
+        aria-label="Choisir son rayon"
+        className="container mx-auto px-4 md:px-6 mb-16 md:mb-20"
+      >
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
+          {quickEntries.map((entry, index) => {
+            const count = entry.type
+              ? overviewProducts.filter((p) => p.category === entry.type).length
+              : null;
+            const cover = entry.type
+              ? overviewProducts.find((p) => p.category === entry.type)?.featuredImage
+              : undefined;
+            // Per-category soft tint so the 4 tiles read as a set
+            // but each has its own personality.
+            const tints = [
+              "from-[#EBF1FB]/90 to-[#FFFFFF]/30", // perles — pale blue
+              "from-[#F2EBF8]/90 to-[#FFFFFF]/30", // pierres — lavender
+              "from-[#FBE9EE]/90 to-[#FFFFFF]/30", // figurines — pink
+              "from-[#F4ECDB]/90 to-[#FFFFFF]/30", // kits — warm beige
+            ] as const;
+            const tint = tints[index] ?? tints[0];
+            const cardClasses = cn(
+              "group relative flex flex-col justify-end aspect-[4/5] rounded-[28px] overflow-hidden",
+              "bg-gradient-to-br shadow-[0_14px_36px_-12px_rgba(45,55,72,0.2)]",
+              "transition-all duration-300 hover:-translate-y-1",
+              "hover:shadow-[0_22px_50px_-12px_rgba(45,55,72,0.28)]",
+              tint,
+            );
+            const inner = (
+              <>
+                {/* Cover image (uses the first product photo of the
+                    category as a stand-in product visual) */}
+                {cover && entry.type ? (
+                  <div className="absolute inset-x-0 top-0 h-[60%] flex items-center justify-center pointer-events-none">
+                    <div className="relative w-[78%] h-[88%]">
+                      <Image
+                        src={cover.url}
+                        alt=""
+                        fill
+                        sizes="(max-width: 980px) 35vw, 18vw"
+                        className="object-contain transition-transform duration-500 group-hover:scale-[1.05]"
+                      />
+                    </div>
+                  </div>
+                ) : (
+                  // Kits has no local catalogue yet — show the icon
+                  // bigger as a glyph so the tile doesn't look empty.
+                  <div className="absolute inset-x-0 top-0 h-[60%] flex items-center justify-center text-[#3D5A73]/70 pointer-events-none">
+                    <entry.icon size={64} strokeWidth={1.4} />
+                  </div>
+                )}
 
-      <section className="mnb-shop-entry-grid" aria-label="Choisir son point de depart">
-        {quickEntries.map((entry) => {
-          const Icon = entry.icon;
-          const count = overviewProducts.filter((product) => product.category === entry.type).length;
-
-          return (
-            <Link className="mnb-shop-entry-card" href={entry.href} key={entry.title}>
-              <span>
-                <Icon size={18} />
-              </span>
-              <small>{entry.eyebrow}</small>
-              <strong>{entry.title}</strong>
-              <p>{entry.body}</p>
-              <em>{count} selection{count > 1 ? "s" : ""}</em>
-            </Link>
-          );
-        })}
+                {/* Bottom content : label + caption */}
+                <div className="relative z-10 px-4 md:px-5 pb-4 md:pb-5 pt-3 bg-gradient-to-t from-white/95 via-white/70 to-transparent">
+                  <p className="text-[8px] md:text-[9px] font-black uppercase tracking-[0.22em] text-[#3D5A73]/75 mb-1.5">
+                    {entry.eyebrow}
+                  </p>
+                  <h3 className="font-serif text-[15px] md:text-[18px] font-black uppercase leading-[1.05] tracking-tight text-[#2D3748] mb-2">
+                    {entry.title}
+                  </h3>
+                  <p className="text-[10px] md:text-[11px] italic text-[#5A6878] leading-snug line-clamp-2 mb-2">
+                    {entry.body}
+                  </p>
+                  <p className="inline-flex items-center gap-1.5 text-[9px] md:text-[10px] font-black uppercase tracking-[0.18em] text-[#3D5A73]">
+                    {entry.external
+                      ? "Site principal"
+                      : count !== null
+                        ? `${count} sélection${count > 1 ? "s" : ""}`
+                        : "Découvrir"}
+                    <ArrowRight size={11} className="transition-transform group-hover:translate-x-1" />
+                  </p>
+                </div>
+              </>
+            );
+            return entry.external ? (
+              <a
+                key={entry.title}
+                href={entry.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={cardClasses}
+              >
+                {inner}
+              </a>
+            ) : (
+              <Link key={entry.title} href={entry.href} className={cardClasses}>
+                {inner}
+              </Link>
+            );
+          })}
+        </div>
       </section>
 
       <ShopFilterBar activeType={activeType} />
@@ -213,8 +363,6 @@ export function ShopLanding({
         </section>
       ) : null}
 
-      <EditorialSections products={overviewProducts} />
-      <InspirationSections />
     </main>
   );
 }
@@ -225,105 +373,10 @@ export async function ShopCollectionPage({ type }: { type: ShopProductType }) {
   return <ShopLanding activeType={type} allProducts={allResult.data} result={result} />;
 }
 
-export function EditorialSections({ products }: { products: ShopProduct[] }) {
-  const blocks = [
-    {
-      title: "Le bar a perles",
-      body: "Perles transparentes, nacrees ou colorees, a choisir par nombre de pieces.",
-      icon: WandSparkles,
-      products: products.filter((product) => product.category === "perles").slice(0, 2),
-      href: "/shop/perles",
-    },
-    {
-      title: "Le coin kawaii",
-      body: "Figurines et petites pieces coup de coeur, photographiees comme des bijoux plutot que des jouets.",
-      icon: Sparkles,
-      products: products.filter((product) => product.category === "figurines").slice(0, 2),
-      href: "/shop/figurines-kawaii",
-    },
-    {
-      title: "L'ecrin des pierres",
-      body: "Des nuances naturelles a associer avec du nacre, du dore ou des perles pastel.",
-      icon: Gem,
-      products: products.filter((product) => product.category === "pierres").slice(0, 2),
-      href: "/shop/pierres-semi-precieuses",
-    },
-  ];
-
-  return (
-    <section className="mnb-editorial-grid">
-      {blocks.map((block) => {
-        const Icon = block.icon;
-        const preview = block.products[0];
-
-        return (
-          <Link className="mnb-editorial-card" href={block.href} key={block.title}>
-            {preview ? (
-              <div className="mnb-editorial-image">
-                <Image
-                  src={preview.featuredImage.url}
-                  alt={preview.featuredImage.altText}
-                  fill
-                  sizes="(max-width: 980px) 35vw, 18vw"
-                />
-              </div>
-            ) : null}
-            <div>
-              <Icon size={18} />
-              <h3>{block.title}</h3>
-              <p>{block.body}</p>
-              {preview ? <span>A partir de {formatMoney(preview.price)}</span> : <span>Bientot</span>}
-            </div>
-          </Link>
-        );
-      })}
-    </section>
-  );
-}
-
-function InspirationSections() {
-  return (
-    <>
-      <section className="mnb-shop-steps" aria-label="Composer chez soi">
-        <div>
-          <p className="mnb-kicker">Comment ca marche</p>
-          <h2>Composer chez soi en 3 etapes</h2>
-        </div>
-        <ol>
-          <li>
-            <span>1</span>
-            <strong>Choisissez vos pieces</strong>
-            <p>Perles, pierres ou figurines: partez d&apos;une couleur, d&apos;une matiere ou d&apos;une piece coup de coeur.</p>
-          </li>
-          <li>
-            <span>2</span>
-            <strong>Selectionnez la quantite</strong>
-            <p>Choisissez 1, 5, 10, 50 pieces ou un palier pro avec prix degressif a partir de 100 pieces.</p>
-          </li>
-          <li>
-            <span>3</span>
-            <strong>Composez a votre rythme</strong>
-            <p>Vous recevez les pieces seules, preparees separement du configurateur et des ateliers.</p>
-          </li>
-        </ol>
-      </section>
-
-      <section className="mnb-shop-moodboards" aria-label="Inspirations a composer">
-        <div className="mnb-section-head">
-          <div>
-            <p className="mnb-kicker">Inspirations</p>
-            <h2>Creer par ambiance</h2>
-          </div>
-        </div>
-        <div>
-          {moodboards.map((moodboard) => (
-            <Link href={`/shop?mood=${encodeURIComponent(moodboard.toLowerCase())}`} key={moodboard}>
-              <Heart size={14} />
-              {moodboard}
-            </Link>
-          ))}
-        </div>
-      </section>
-    </>
-  );
-}
+// EditorialSections + InspirationSections ont été retirés :
+//   - Editorial cards : doublon visuel des tuiles "rayon" du haut de
+//     la page — on n'a pas besoin de présenter Perles / Figurines /
+//     Pierres deux fois.
+//   - Moodboards "Créer par ambiance" : décoration sans valeur
+//     d'achat directe ; la version compacte de "Comment ça marche"
+//     suffit largement en bas de page (cf. HowItWorksStrip).

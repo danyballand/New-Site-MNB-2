@@ -3,7 +3,7 @@ export const SHOPIFY_API_VERSION = "2026-04";
 export const shopCategories = [
   {
     key: "perles",
-    label: "Perles & couleurs",
+    label: "Perles & figurines",
     href: "/shop/perles",
     description: "Perles en mini-lots pour completer une creation My Nice Bracelet sans effet mercerie.",
   },
