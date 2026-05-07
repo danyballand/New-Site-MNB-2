@@ -615,7 +615,11 @@ textarea {
   color: var(--mnb-muted);
   font-size: 0.92rem;
   font-weight: 720;
-  margin: 8px 0 20px;
+  /* Top margin pushes the back-link visibly below the fixed header
+     band (~72-80px tall in scrolled solid state) so it doesn't read
+     as part of the menu. Only this element gets pushed down — the
+     rest of the page keeps its normal flow. */
+  margin: 90px 0 20px;
 }
 
 .mnb-product-detail {
@@ -658,18 +662,22 @@ textarea {
 }
 
 .mnb-product-info h1 {
-  margin: 14px 0 0;
+  margin: 10px 0 0;
   color: var(--mnb-ink);
-  font-size: 3rem;
-  font-weight: 820;
-  line-height: 1;
+  /* Base size — kept smaller than the previous 3rem to align with the
+     cream-theme override and give a calmer hierarchy on every theme. */
+  font-size: clamp(1.5rem, 2.4vw, 2rem);
+  font-weight: 780;
+  line-height: 1.15;
+  letter-spacing: -0.005em;
 }
 
 .mnb-product-lead {
-  margin: 18px 0 0;
+  margin: 14px 0 0;
   color: var(--mnb-muted);
-  font-size: 1rem;
-  line-height: 1.7;
+  font-size: 0.95rem;
+  line-height: 1.65;
+  max-width: 56ch;
 }
 
 .mnb-purchase-panel {
@@ -712,11 +720,16 @@ textarea {
   margin-top: 18px;
 }
 
-.mnb-variant-group p {
-  margin: 0 0 8px;
-  color: var(--mnb-muted);
-  font-size: 0.82rem;
-  font-weight: 760;
+.mnb-variant-group > p {
+  /* Variant picker label, e.g. "Choisissez votre tenue". Promote it
+     to a small heading via uppercase tracking — the previous lowercase
+     muted-grey "p" felt indistinct from body copy. */
+  margin: 0 0 10px;
+  color: var(--mnb-blue);
+  font-size: 0.7rem;
+  font-weight: 900;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
 }
 
 .mnb-variant-group div {
@@ -777,28 +790,43 @@ textarea {
 }
 
 .mnb-product-story {
-  margin-top: 22px;
+  margin-top: 28px;
+  padding-top: 22px;
+  border-top: 1px solid var(--mnb-line);
   color: var(--mnb-muted);
   line-height: 1.65;
 }
 
+.mnb-product-story > div :where(p, ul, ol) {
+  /* Tighter rhythm for the dangerouslySetInnerHTML descriptionHtml :
+     the supplier copy is short paragraphs and the default browser
+     margins were creating awkward gaps. */
+  margin: 8px 0;
+}
+
+.mnb-product-story > div :where(p, li) {
+  font-size: 0.92rem;
+}
+
 .mnb-product-story ul {
   display: grid;
-  gap: 9px;
-  margin: 16px 0 0;
+  gap: 10px;
+  margin: 18px 0 0;
   padding: 0;
   list-style: none;
 }
 
 .mnb-product-story li {
   display: flex;
-  gap: 8px;
+  gap: 10px;
   align-items: flex-start;
+  font-size: 0.92rem;
+  line-height: 1.5;
 }
 
 .mnb-product-story li svg {
   flex: 0 0 auto;
-  margin-top: 5px;
+  margin-top: 4px;
   color: var(--mnb-rose-dark);
 }
 
@@ -1158,7 +1186,10 @@ textarea {
   }
 
   .mnb-product-info h1 {
-    font-size: 2.25rem;
+    /* Mobile : honour the clamp lower bound. The clamp on the base
+       rule already produces ~1.5rem at narrow viewports, so this
+       block is effectively a no-op kept for clarity. */
+    font-size: clamp(1.4rem, 5vw, 1.7rem);
   }
 
   .mnb-product-gallery {
@@ -1627,34 +1658,57 @@ textarea {
 
 .mnb-product-gallery img {
   border-color: var(--mnb-cream-line);
-  border-radius: 42px;
+  /* Was 42px — read as oversized pill rather than product photo.
+     20px is in line with the purchase panel + product cards. */
+  border-radius: 20px;
   background: #fff;
 }
 
 .mnb-product-gallery img.is-featured {
-  height: clamp(280px, 34vw, 460px);
+  height: clamp(320px, 38vw, 540px);
   aspect-ratio: auto;
 }
 
 .mnb-product-info h1 {
+  margin: 10px 0 0;
   color: var(--mnb-ink);
   font-family: Georgia, Cambria, "Times New Roman", Times, serif;
-  font-size: clamp(2.6rem, 5vw, 4.6rem);
-  font-weight: 900;
-  text-transform: uppercase;
+  /* Refined size — was 2.6→4.6rem (overly dominant). 1.55→2.1rem
+     gives a confident product title without dwarfing the price /
+     description / variant picker that follow. */
+  font-size: clamp(1.55rem, 2.4vw, 2.1rem);
+  font-weight: 800;
+  line-height: 1.12;
+  letter-spacing: -0.01em;
+  text-transform: none;
 }
 
-.mnb-product-lead,
+.mnb-product-lead {
+  margin-top: 12px;
+  color: var(--mnb-muted);
+  font-size: 0.95rem;
+  font-style: normal;
+  line-height: 1.65;
+  max-width: 56ch;
+}
+
 .mnb-product-story {
   color: var(--mnb-muted);
-  font-style: italic;
+  font-style: normal;
+  line-height: 1.6;
 }
 
 .mnb-purchase-panel {
+  /* Calmer panel : softer radius, lighter shadow. The previous
+     boxy 18px-blur shadow read as a "promo card" floating on the
+     page. With the smaller title we want the purchase panel to feel
+     like part of the info column, not its centerpiece. */
+  margin-top: 22px;
   border-color: var(--mnb-cream-line);
-  border-radius: 28px;
+  border-radius: 20px;
   background: #fff;
-  box-shadow: 0 18px 42px rgba(45, 55, 72, 0.09);
+  padding: 22px;
+  box-shadow: 0 8px 22px rgba(45, 55, 72, 0.05);
 }
 
 .mnb-price-row span.is-available {

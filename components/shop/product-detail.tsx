@@ -1,8 +1,8 @@
 import Link from "next/link";
-import Image from "next/image";
 import { ArrowLeft, Check, Sparkles } from "lucide-react";
 import { ProductGrid } from "@/components/shop/product-grid";
 import { ProductPurchasePanel } from "@/components/shop/product-purchase-panel";
+import { ProductGalleryLightbox } from "@/components/shop/ProductGalleryLightbox";
 import { SourceBanner } from "@/components/shop/source-banner";
 import type { ShopDataResult, ShopProduct } from "@/lib/shopify/types";
 import { getCategoryLabel } from "@/lib/shopify/utils";
@@ -29,25 +29,7 @@ export function ProductDetail({
       </Link>
 
       <section className="mnb-product-detail">
-        <div className="mnb-product-gallery">
-          {product.images.map((image, index) => (
-            <Image
-              className={[
-                index === 0 ? "is-featured" : "",
-                image.url.startsWith("/shop/products/") ? "is-product-asset" : "",
-              ]
-                .filter(Boolean)
-                .join(" ")}
-              src={image.url}
-              alt={image.altText}
-              width={image.width ?? 1200}
-              height={image.height ?? 1500}
-              priority={index === 0}
-              sizes={index === 0 ? "(max-width: 980px) 100vw, 58vw" : "(max-width: 980px) 50vw, 28vw"}
-              key={`${image.url}-${index}`}
-            />
-          ))}
-        </div>
+        <ProductGalleryLightbox images={product.images} />
         <div className="mnb-product-info">
           <div className="mnb-product-eyebrow">
             <span>{getCategoryLabel(product.category)}</span>

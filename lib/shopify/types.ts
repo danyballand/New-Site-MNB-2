@@ -56,6 +56,10 @@ export type ShopProductVariant = {
   price: ShopMoney;
   compareAtPrice?: ShopMoney | null;
   selectedOptions: ShopSelectedOption[];
+  /** Optional per-variant image — used when the product surfaces a
+   *  visual variant picker (e.g. choose your character from a series).
+   *  When undefined, the product's `featuredImage` is used everywhere. */
+  image?: ShopImage;
 };
 
 export type ShopProduct = {

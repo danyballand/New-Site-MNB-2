@@ -17,9 +17,15 @@ export function ProductCard({ product }: { product: ShopProduct }) {
   const requiresPieceChoice = product.variants.some((item) =>
     item.selectedOptions.some((option) => option.name.toLowerCase().includes("nombre de pieces")),
   );
+  // Products that surface a visual variant picker (e.g. character
+  // series with per-variant images) must be opened on the detail
+  // page so the user actually picks — adding the first variant
+  // directly would be hostile UX ("you bought Hello Kitty by accident").
+  const hasVisualVariantChoice = product.variants.some((item) => item.image?.url);
+  const requiresChoice = requiresPieceChoice || hasVisualVariantChoice;
 
   function addToCart() {
-    if (requiresPieceChoice) {
+    if (requiresChoice) {
       router.push(`/shop/produit/${product.handle}`);
       return;
     }
@@ -64,21 +70,23 @@ export function ProductCard({ product }: { product: ShopProduct }) {
         <p>{product.description}</p>
         <div className="mnb-product-card-bottom">
           <strong>
-            {requiresPieceChoice ? "A partir de " : ""}
+            {requiresChoice ? "A partir de " : ""}
             {formatMoney(product.price)}
           </strong>
           <button
             aria-label={
               requiresPieceChoice
                 ? `Choisir le nombre de pieces pour ${product.title}`
-                : `Ajouter ${product.title} au panier`
+                : hasVisualVariantChoice
+                  ? `Choisir un personnage pour ${product.title}`
+                  : `Ajouter ${product.title} au panier`
             }
             className="mnb-icon-button"
             disabled={!isAvailable}
             onClick={addToCart}
             type="button"
           >
-            {requiresPieceChoice ? <ArrowRight size={16} /> : <ShoppingBag size={16} />}
+            {requiresChoice ? <ArrowRight size={16} /> : <ShoppingBag size={16} />}
           </button>
         </div>
       </div>

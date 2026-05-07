@@ -3,6 +3,7 @@ import Image from "next/image";
 import { ArrowRight, Gem, Package, Sparkles, WandSparkles } from "lucide-react";
 import { ProductGrid } from "@/components/shop/product-grid";
 import { SourceBanner } from "@/components/shop/source-banner";
+import { HeroModelViewer } from "@/components/shop/HeroModelViewer";
 import { getShopProducts } from "@/lib/shopify/client";
 import { shopCategories, type ShopDataResult, type ShopProduct, type ShopProductType } from "@/lib/shopify/types";
 import { cn } from "@/lib/utils/cn";
@@ -110,16 +111,10 @@ export function ShopLanding({
     ["perles", "pierres", "figurines"].includes(product.category),
   );
   const displayProducts = activeType ? products : boutiqueProducts;
-  const heroPreviewHandles = [
-    "piece-etoile-bleu-transparent",
-    "piece-ange-argent",
-    "piece-ourson-vert-menthe",
-    "piece-papillon-vert-pastel",
-  ];
-  const heroPreviewProducts = heroPreviewHandles
-    .map((handle) => boutiqueProducts.find((product) => product.handle === handle))
-    .filter((product): product is ShopProduct => Boolean(product));
-  const heroProducts = heroPreviewProducts.length > 0 ? heroPreviewProducts : boutiqueProducts.slice(0, 4);
+  // (Le hero précédent affichait 4 photos produits dans des bulles ;
+  //  remplacé par <HeroModelViewer> avec un GLB 3D de Hello Kitty —
+  //  les variables heroProducts / heroPreviewHandles ne sont plus
+  //  nécessaires.)
   const atelierSelection = boutiqueProducts
     .filter((product) => product.badges.includes("Selection atelier"))
     .slice(0, 6);
@@ -188,48 +183,22 @@ export function ShopLanding({
             </div>
           </div>
 
-          {/* Visual column : free-form product mosaic. Each product
-              sits in its own circular bubble, slightly rotated and
-              shadowed, evoking a flat-lay rather than a sterile
-              4-cell grid. */}
-          {heroProducts.length > 0 && (
-            <div className="lg:col-span-5 relative aspect-square max-w-[460px] mx-auto w-full">
-              {heroProducts.slice(0, 4).map((product, index) => {
-                const layouts = [
-                  { className: "top-[2%] left-[6%] w-[46%] h-[46%]", rotation: -4 },
-                  { className: "top-[8%] right-[2%] w-[42%] h-[42%]", rotation: 6 },
-                  { className: "bottom-[4%] left-[2%] w-[44%] h-[44%]", rotation: 5 },
-                  { className: "bottom-[8%] right-[6%] w-[48%] h-[48%]", rotation: -3 },
-                ] as const;
-                const layout = layouts[index]!;
-                const isAsset = product.featuredImage.url.startsWith("/shop/products/");
-                return (
-                  <Link
-                    key={product.id}
-                    href={`/shop/produit/${product.handle}`}
-                    aria-label={product.title}
-                    className={cn(
-                      "absolute rounded-full bg-white shadow-[0_18px_42px_-12px_rgba(45,55,72,0.22)] overflow-hidden transition-transform duration-500 hover:scale-[1.04]",
-                      layout.className,
-                    )}
-                    style={{ transform: `rotate(${layout.rotation}deg)` }}
-                  >
-                    <Image
-                      src={product.featuredImage.url}
-                      alt={product.featuredImage.altText}
-                      fill
-                      priority={index === 0}
-                      sizes="(max-width: 980px) 220px, 22vw"
-                      className={cn(
-                        "object-contain",
-                        isAsset ? "p-3" : "object-cover",
-                      )}
-                    />
-                  </Link>
-                );
-              })}
-            </div>
-          )}
+          {/* Visual column : 3D Hello Kitty model that auto-rotates
+              and supports drag-to-orbit. Replaces the previous
+              4-bubble flat-lay — gives the hero a richer, more
+              "boutique signature" feel. The pastel blob behind the
+              model (siblings sit in the parent <section>) frames it
+              without an explicit card. */}
+          <div className="lg:col-span-5 relative aspect-square max-w-[460px] mx-auto w-full">
+            <HeroModelViewer
+              models={[
+                { src: '/shop/models/hello_kitty.glb', label: '1' },
+                { src: '/shop/models/hello_kitty_2.glb', label: '2' },
+              ]}
+              alt="Modèle 3D Hello Kitty — boutique My Nice Bracelet"
+              className="absolute inset-0"
+            />
+          </div>
         </div>
       </section>
 

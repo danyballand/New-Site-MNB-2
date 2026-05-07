@@ -48,6 +48,220 @@ const perleCubeVertAnisImage = productAsset(
   "Perle cube vert anis facette My Nice Bracelet",
 );
 
+// ─── YuMe Hello Kitty & Friends — Light-Up Camping Lamp Series ────
+// Six personnages Sanrio en porte-clés lampe-camping lumineux. Photos
+// fournies (JPEG fond blanc) ; chaque produit pointe sur sa photo
+// principale + la photo de groupe en image secondaire pour montrer
+// la collection complète depuis la fiche produit.
+const yumeCollectionImage = productAsset(
+  "mnb_yume_camping_collection_v1.jpeg",
+  "Collection YuMe Hello Kitty & Friends Light-Up Camping Lamp",
+);
+const yumeHelloKittyImage = productAsset(
+  "mnb_yume_hello_kitty_camping_v1.jpeg",
+  "Porte-clé lampe camping Hello Kitty YuMe",
+);
+const yumeMyMelodyImage = productAsset(
+  "mnb_yume_my_melody_camping_v1.jpeg",
+  "Porte-clé lampe camping My Melody YuMe",
+);
+const yumeCinnamorollImage = productAsset(
+  "mnb_yume_cinnamoroll_camping_v1.jpeg",
+  "Porte-clé lampe camping Cinnamoroll YuMe",
+);
+const yumePompompurinImage = productAsset(
+  "mnb_yume_pompompurin_camping_v1.jpeg",
+  "Porte-clé lampe camping Pompompurin YuMe",
+);
+const yumePochaccoImage = productAsset(
+  "mnb_yume_pochacco_camping_v1.jpeg",
+  "Porte-clé lampe camping Pochacco YuMe",
+);
+const yumeKuromiImage = productAsset(
+  "mnb_yume_kuromi_camping_v1.jpeg",
+  "Porte-clé lampe camping Kuromi YuMe",
+);
+
+// ─── Balloon Series ──────────────────────────────────────────────
+const yumeBalloonCollection = productAsset(
+  "mnb_yume_balloon_collection_v1.jpeg",
+  "Collection YuMe Hello Kitty Balloon Series",
+);
+const yumeBalloonHelloKitty = productAsset(
+  "mnb_yume_balloon_hello_kitty_v1.jpeg",
+  "Porte-clé Hello Kitty sur ballon-cheval rose YuMe",
+);
+const yumeBalloonMyMelody = productAsset(
+  "mnb_yume_balloon_my_melody_v1.jpeg",
+  "Porte-clé My Melody sur ballon-cheval rose YuMe",
+);
+const yumeBalloonCinnamoroll = productAsset(
+  "mnb_yume_balloon_cinnamoroll_v1.jpeg",
+  "Porte-clé Cinnamoroll sur ballon-cheval bleu YuMe",
+);
+const yumeBalloonPompompurin = productAsset(
+  "mnb_yume_balloon_pompompurin_v1.jpeg",
+  "Porte-clé Pompompurin sur ballon-cheval jaune YuMe",
+);
+const yumeBalloonKuromi = productAsset(
+  "mnb_yume_balloon_kuromi_v1.jpeg",
+  "Porte-clé Kuromi sur ballon-cheval rose YuMe",
+);
+
+// ─── Light-Up Star Series ────────────────────────────────────────
+const yumeStarCollection = productAsset(
+  "mnb_yume_star_collection_v1.jpeg",
+  "Collection YuMe Hello Kitty Light-Up Star Series",
+);
+const yumeStarHelloKitty = productAsset(
+  "mnb_yume_star_hello_kitty_v1.jpeg",
+  "Porte-clé Hello Kitty sur étoile lumineuse YuMe",
+);
+const yumeStarKuromi = productAsset(
+  "mnb_yume_star_kuromi_v1.jpeg",
+  "Porte-clé Kuromi sur étoile lumineuse YuMe",
+);
+const yumeStarPochacco = productAsset(
+  "mnb_yume_star_pochacco_v1.jpeg",
+  "Porte-clé Pochacco sur étoile lumineuse YuMe",
+);
+const yumeStarMyMelody = productAsset(
+  "mnb_yume_star_my_melody_v1.jpeg",
+  "Porte-clé My Melody sur étoile lumineuse YuMe",
+);
+const yumeStarCinnamoroll = productAsset(
+  "mnb_yume_star_cinnamoroll_v1.jpeg",
+  "Porte-clé Cinnamoroll sur étoile lumineuse YuMe",
+);
+
+// ─── 5cm Mini-Doll Cute Outfit Series ────────────────────────────
+// Photos pré-recadrées par scripts/normalize_minidoll.py (Hello Kitty
+// au centre, ~86 % de la hauteur).
+const yumeMinidollCollection = productAsset(
+  "mnb_yume_minidoll_collection_v1.jpeg",
+  "Collection YuMe Hello Kitty 5cm Mini-Doll Cute Outfit",
+);
+const yumeMinidollPinkDress = productAsset(
+  "mnb_yume_minidoll_pink_dress_v1.jpeg",
+  "Mini-Doll Hello Kitty robe rose YuMe",
+);
+const yumeMinidollRockstar = productAsset(
+  "mnb_yume_minidoll_rockstar_v1.jpeg",
+  "Mini-Doll Hello Kitty rockstar YuMe",
+);
+const yumeMinidollDenim = productAsset(
+  "mnb_yume_minidoll_denim_v1.jpeg",
+  "Mini-Doll Hello Kitty veste denim YuMe",
+);
+const yumeMinidollYellowHeart = productAsset(
+  "mnb_yume_minidoll_yellow_heart_v1.jpeg",
+  "Mini-Doll Hello Kitty top jaune sac cœur YuMe",
+);
+const yumeMinidollCheerleader = productAsset(
+  "mnb_yume_minidoll_cheerleader_v1.jpeg",
+  "Mini-Doll Hello Kitty pom-pom girl YuMe",
+);
+const yumeMinidollOveralls = productAsset(
+  "mnb_yume_minidoll_overalls_v1.jpeg",
+  "Mini-Doll Hello Kitty salopette bleue YuMe",
+);
+const yumeMinidollPirate = productAsset(
+  "mnb_yume_minidoll_pirate_v1.jpeg",
+  "Mini-Doll Hello Kitty pirate fanion YuMe",
+);
+const yumeMinidollChef = productAsset(
+  "mnb_yume_minidoll_chef_v1.jpeg",
+  "Mini-Doll Hello Kitty chef tablier pomme YuMe",
+);
+
+// ─── Raincoat Series ─────────────────────────────────────────────
+const yumeRaincoatCollection = productAsset(
+  "mnb_yume_raincoat_collection_v1.jpeg",
+  "Collection YuMe Hello Kitty Raincoat Series",
+);
+const yumeRaincoatHelloKitty = productAsset(
+  "mnb_yume_raincoat_hello_kitty_v1.jpeg",
+  "Porte-clé Hello Kitty imperméable rose YuMe",
+);
+const yumeRaincoatMyMelody = productAsset(
+  "mnb_yume_raincoat_my_melody_v1.jpeg",
+  "Porte-clé My Melody imperméable rose YuMe",
+);
+const yumeRaincoatPompompurin = productAsset(
+  "mnb_yume_raincoat_pompompurin_v1.jpeg",
+  "Porte-clé Pompompurin imperméable jaune YuMe",
+);
+const yumeRaincoatKuromi = productAsset(
+  "mnb_yume_raincoat_kuromi_v1.jpeg",
+  "Porte-clé Kuromi imperméable violet YuMe",
+);
+const yumeRaincoatPochacco = productAsset(
+  "mnb_yume_raincoat_pochacco_v1.jpeg",
+  "Porte-clé Pochacco imperméable bleu YuMe",
+);
+
+// ─── One Piece Pocket Hero (window box) ──────────────────────────
+const yumeOnepieceCollection = productAsset(
+  "mnb_yume_onepiece_collection_v1.jpeg",
+  "Collection YuMe One Piece Pocket Hero",
+);
+const yumeOnepieceChopper = productAsset(
+  "mnb_yume_onepiece_chopper_v1.jpeg",
+  "Porte-clé One Piece Chopper YuMe Pocket Hero",
+);
+const yumeOnepieceLuffy = productAsset(
+  "mnb_yume_onepiece_luffy_v1.jpeg",
+  "Porte-clé One Piece Luffy YuMe Pocket Hero",
+);
+const yumeOnepieceZoro = productAsset(
+  "mnb_yume_onepiece_zoro_v1.jpeg",
+  "Porte-clé One Piece Zoro YuMe Pocket Hero",
+);
+
+// ─── Molang Scooter Series ───────────────────────────────────────
+const yumeMolangScooterCollection = productAsset(
+  "mnb_yume_molang_scooter_collection_v1.jpeg",
+  "Collection YuMe Molang Scooter",
+);
+const yumeMolangScooterPurple = productAsset(
+  "mnb_yume_molang_scooter_purple_v1.jpeg",
+  "Porte-clé Molang scooter violet YuMe",
+);
+const yumeMolangScooterBlue = productAsset(
+  "mnb_yume_molang_scooter_blue_v1.jpeg",
+  "Porte-clé Molang scooter bleu YuMe",
+);
+const yumeMolangScooterGreen = productAsset(
+  "mnb_yume_molang_scooter_green_v1.jpeg",
+  "Porte-clé Molang scooter vert menthe YuMe",
+);
+const yumeMolangScooterPink = productAsset(
+  "mnb_yume_molang_scooter_pink_v1.jpeg",
+  "Porte-clé Molang scooter rose YuMe",
+);
+
+// ─── Molang Snack Time Series ────────────────────────────────────
+const yumeMolangSnackCollection = productAsset(
+  "mnb_yume_molang_snack_collection_v1.jpeg",
+  "Collection YuMe Molang Snack Time",
+);
+const yumeMolangSnackIcecream = productAsset(
+  "mnb_yume_molang_snack_icecream_v1.jpeg",
+  "Porte-clé Molang glace YuMe",
+);
+const yumeMolangSnackDonut = productAsset(
+  "mnb_yume_molang_snack_donut_v1.jpeg",
+  "Porte-clé Molang donut YuMe",
+);
+const yumeMolangSnackTeacup = productAsset(
+  "mnb_yume_molang_snack_teacup_v1.jpeg",
+  "Porte-clé Molang tasse à thé YuMe",
+);
+const yumeMolangSnackCupcake = productAsset(
+  "mnb_yume_molang_snack_cupcake_v1.jpeg",
+  "Porte-clé Molang cupcake YuMe",
+);
+
 type PieceChoiceVariant = {
   pieces: number;
   price: string;
@@ -428,5 +642,660 @@ export const mockProducts: ShopProduct[] = [
       name: "Couleur",
       value: "Vert anis",
     }),
+  },
+
+  // ─── YuMe Hello Kitty & Friends — Light-Up Camping Lamp Series ───
+  // Une seule fiche produit avec 6 variantes-personnages (Hello Kitty,
+  // My Melody, Cinnamoroll, Pompompurin, Pochacco, Kuromi). Chaque
+  // variante porte sa propre image — ProductPurchasePanel détecte
+  // `image` sur les variants et affiche un picker en mosaïque au lieu
+  // des boutons texte habituels. Pas de palier quantité ici : ces
+  // porte-clés se vendent à l'unité, l'utilisateur ajuste la qty avec
+  // le stepper standard.
+  {
+    id: "mock-product-yume-camping-lamp-series",
+    handle: "yume-hello-kitty-friends-camping-lamp",
+    title: "Lampe Camping YuMe — Hello Kitty & Friends",
+    description:
+      "Porte-cle figurine illumine, serie officielle Sanrio sous licence YuMe. Choisis ton personnage parmi les 6 ci-dessous.",
+    descriptionHtml:
+      "<p>Petite figurine Sanrio dans sa lampe-tente miniature, illuminee par une LED interne. Dragonne en silicone aux couleurs du personnage avec sa signature etoile + lune sur le strap. Officielle Sanrio sous licence YuMe.</p><p>Six personnages au choix : Hello Kitty, My Melody, Cinnamoroll, Pompompurin, Pochacco, Kuromi.</p>",
+    productType: "Figurines",
+    category: "figurines",
+    tags: ["figurines", "kawaii", "sanrio", "yume", "lampe", "porte-cle", "best-seller"],
+    badges: ["Best-seller", "Selection atelier"],
+    availableForSale: true,
+    totalInventory: 103,
+    price: money("12.00"),
+    compareAtPrice: null,
+    // Featured image = la collection complète : la card du grid montre
+    // d'emblée que l'offre couvre tous les personnages, ce qui pousse
+    // au clic vers la fiche pour choisir.
+    featuredImage: yumeCollectionImage,
+    images: [
+      yumeCollectionImage,
+      yumeHelloKittyImage,
+      yumeMyMelodyImage,
+      yumeCinnamorollImage,
+      yumePompompurinImage,
+      yumePochaccoImage,
+      yumeKuromiImage,
+    ],
+    variants: [
+      {
+        id: "mock-variant-yume-hello-kitty",
+        title: "Hello Kitty",
+        availableForSale: true,
+        quantityAvailable: 24,
+        price: money("12.00"),
+        compareAtPrice: null,
+        selectedOptions: [{ name: "Personnage", value: "Hello Kitty" }],
+        image: yumeHelloKittyImage,
+      },
+      {
+        id: "mock-variant-yume-my-melody",
+        title: "My Melody",
+        availableForSale: true,
+        quantityAvailable: 18,
+        price: money("12.00"),
+        compareAtPrice: null,
+        selectedOptions: [{ name: "Personnage", value: "My Melody" }],
+        image: yumeMyMelodyImage,
+      },
+      {
+        id: "mock-variant-yume-cinnamoroll",
+        title: "Cinnamoroll",
+        availableForSale: true,
+        quantityAvailable: 22,
+        price: money("12.00"),
+        compareAtPrice: null,
+        selectedOptions: [{ name: "Personnage", value: "Cinnamoroll" }],
+        image: yumeCinnamorollImage,
+      },
+      {
+        id: "mock-variant-yume-pompompurin",
+        title: "Pompompurin",
+        availableForSale: true,
+        quantityAvailable: 16,
+        price: money("12.00"),
+        compareAtPrice: null,
+        selectedOptions: [{ name: "Personnage", value: "Pompompurin" }],
+        image: yumePompompurinImage,
+      },
+      {
+        id: "mock-variant-yume-pochacco",
+        title: "Pochacco",
+        availableForSale: true,
+        quantityAvailable: 14,
+        price: money("12.00"),
+        compareAtPrice: null,
+        selectedOptions: [{ name: "Personnage", value: "Pochacco" }],
+        image: yumePochaccoImage,
+      },
+      {
+        id: "mock-variant-yume-kuromi",
+        title: "Kuromi",
+        availableForSale: true,
+        quantityAvailable: 9,
+        price: money("12.00"),
+        compareAtPrice: null,
+        selectedOptions: [{ name: "Personnage", value: "Kuromi" }],
+        image: yumeKuromiImage,
+      },
+    ],
+  },
+
+  // ─── YuMe Hello Kitty & Friends — Balloon Series ────────────────
+  // 5 personnages Sanrio chevauchant des animaux-ballons gonflables.
+  // Variantes-images, prix unique 12 €, à l'unité (pas de dégressif).
+  {
+    id: "mock-product-yume-balloon-series",
+    handle: "yume-hello-kitty-balloon-series",
+    title: "Porte-clé YuMe Balloon Series — Hello Kitty & Friends",
+    description:
+      "Porte-cle figurine sur ballon-cheval coloré, série officielle Sanrio sous licence YuMe. Choisis ton personnage parmi les 5.",
+    descriptionHtml:
+      "<p>Mini figurine Sanrio assise sur un animal-ballon translucide rose ou bleu, dragonne en silicone aux couleurs du personnage avec sa signature étoile + lune. Officielle Sanrio sous licence YuMe.</p><p>Cinq personnages au choix : Hello Kitty, My Melody, Cinnamoroll, Pompompurin, Kuromi.</p>",
+    productType: "Figurines",
+    category: "figurines",
+    tags: ["figurines", "kawaii", "sanrio", "yume", "ballon", "porte-cle"],
+    badges: ["Selection atelier", "Best-seller"],
+    availableForSale: true,
+    totalInventory: 75,
+    price: money("12.00"),
+    compareAtPrice: null,
+    featuredImage: yumeBalloonCollection,
+    images: [
+      yumeBalloonCollection,
+      yumeBalloonHelloKitty,
+      yumeBalloonMyMelody,
+      yumeBalloonCinnamoroll,
+      yumeBalloonPompompurin,
+      yumeBalloonKuromi,
+    ],
+    variants: [
+      {
+        id: "mock-variant-yume-balloon-hello-kitty",
+        title: "Hello Kitty",
+        availableForSale: true,
+        quantityAvailable: 18,
+        price: money("12.00"),
+        compareAtPrice: null,
+        selectedOptions: [{ name: "Personnage", value: "Hello Kitty" }],
+        image: yumeBalloonHelloKitty,
+      },
+      {
+        id: "mock-variant-yume-balloon-my-melody",
+        title: "My Melody",
+        availableForSale: true,
+        quantityAvailable: 14,
+        price: money("12.00"),
+        compareAtPrice: null,
+        selectedOptions: [{ name: "Personnage", value: "My Melody" }],
+        image: yumeBalloonMyMelody,
+      },
+      {
+        id: "mock-variant-yume-balloon-cinnamoroll",
+        title: "Cinnamoroll",
+        availableForSale: true,
+        quantityAvailable: 16,
+        price: money("12.00"),
+        compareAtPrice: null,
+        selectedOptions: [{ name: "Personnage", value: "Cinnamoroll" }],
+        image: yumeBalloonCinnamoroll,
+      },
+      {
+        id: "mock-variant-yume-balloon-pompompurin",
+        title: "Pompompurin",
+        availableForSale: true,
+        quantityAvailable: 13,
+        price: money("12.00"),
+        compareAtPrice: null,
+        selectedOptions: [{ name: "Personnage", value: "Pompompurin" }],
+        image: yumeBalloonPompompurin,
+      },
+      {
+        id: "mock-variant-yume-balloon-kuromi",
+        title: "Kuromi",
+        availableForSale: true,
+        quantityAvailable: 14,
+        price: money("12.00"),
+        compareAtPrice: null,
+        selectedOptions: [{ name: "Personnage", value: "Kuromi" }],
+        image: yumeBalloonKuromi,
+      },
+    ],
+  },
+
+  // ─── YuMe Hello Kitty & Friends — Light-Up Star Series ──────────
+  // 5 personnages assis sur étoiles lumineuses (LED).
+  {
+    id: "mock-product-yume-star-series",
+    handle: "yume-hello-kitty-light-up-star-series",
+    title: "Porte-clé YuMe Light-Up Star — Hello Kitty & Friends",
+    description:
+      "Porte-cle figurine sur étoile lumineuse, série officielle Sanrio sous licence YuMe. Cinq personnages au choix.",
+    descriptionHtml:
+      "<p>Mini figurine assise sur une étoile jaune translucide qui s'illumine via une LED interne. Dragonne pastel aux couleurs du personnage. Officielle Sanrio sous licence YuMe.</p><p>Cinq personnages au choix : Hello Kitty, Kuromi, Pochacco, My Melody, Cinnamoroll.</p>",
+    productType: "Figurines",
+    category: "figurines",
+    tags: ["figurines", "kawaii", "sanrio", "yume", "etoile", "lumineux", "porte-cle"],
+    badges: ["Best-seller", "Selection atelier"],
+    availableForSale: true,
+    totalInventory: 70,
+    price: money("14.00"),
+    compareAtPrice: null,
+    featuredImage: yumeStarCollection,
+    images: [
+      yumeStarCollection,
+      yumeStarHelloKitty,
+      yumeStarKuromi,
+      yumeStarPochacco,
+      yumeStarMyMelody,
+      yumeStarCinnamoroll,
+    ],
+    variants: [
+      {
+        id: "mock-variant-yume-star-hello-kitty",
+        title: "Hello Kitty",
+        availableForSale: true,
+        quantityAvailable: 16,
+        price: money("14.00"),
+        compareAtPrice: null,
+        selectedOptions: [{ name: "Personnage", value: "Hello Kitty" }],
+        image: yumeStarHelloKitty,
+      },
+      {
+        id: "mock-variant-yume-star-kuromi",
+        title: "Kuromi",
+        availableForSale: true,
+        quantityAvailable: 13,
+        price: money("14.00"),
+        compareAtPrice: null,
+        selectedOptions: [{ name: "Personnage", value: "Kuromi" }],
+        image: yumeStarKuromi,
+      },
+      {
+        id: "mock-variant-yume-star-pochacco",
+        title: "Pochacco",
+        availableForSale: true,
+        quantityAvailable: 11,
+        price: money("14.00"),
+        compareAtPrice: null,
+        selectedOptions: [{ name: "Personnage", value: "Pochacco" }],
+        image: yumeStarPochacco,
+      },
+      {
+        id: "mock-variant-yume-star-my-melody",
+        title: "My Melody",
+        availableForSale: true,
+        quantityAvailable: 15,
+        price: money("14.00"),
+        compareAtPrice: null,
+        selectedOptions: [{ name: "Personnage", value: "My Melody" }],
+        image: yumeStarMyMelody,
+      },
+      {
+        id: "mock-variant-yume-star-cinnamoroll",
+        title: "Cinnamoroll",
+        availableForSale: true,
+        quantityAvailable: 15,
+        price: money("14.00"),
+        compareAtPrice: null,
+        selectedOptions: [{ name: "Personnage", value: "Cinnamoroll" }],
+        image: yumeStarCinnamoroll,
+      },
+    ],
+  },
+
+  // ─── YuMe Hello Kitty 5cm Mini-Doll Cute Outfit Series ──────────
+  // Une fiche regroupant 8 tenues différentes de Hello Kitty (figurine
+  // 5 cm). Folders 3 + 4 du dossier sources : doublons retirés (5
+  // photos identiques entre les 2), 8 tenues uniques restantes.
+  {
+    id: "mock-product-yume-minidoll-outfit-series",
+    handle: "yume-hello-kitty-mini-doll-cute-outfit",
+    title: "Mini-Doll Hello Kitty — Cute Outfit Series",
+    description:
+      "Figurine Hello Kitty 5 cm avec tenue détaillée, série officielle Sanrio sous licence YuMe. Huit tenues à choisir.",
+    descriptionHtml:
+      "<p>Mini-figurine Hello Kitty 5 cm avec tenue émaillée détaillée. Officielle Sanrio sous licence YuMe — la collection complète couvre des styles très variés (chef, pirate, pom-pom girl, rockstar…).</p><p>Huit tenues au choix : Robe rose à nœuds, Rockstar gingham, Veste denim, Top jaune sac cœur, Pom-pom girl, Salopette bleue, Pirate, Chef tablier pomme.</p>",
+    productType: "Figurines",
+    category: "figurines",
+    tags: ["figurines", "kawaii", "sanrio", "yume", "mini-doll", "tenue"],
+    badges: ["Selection atelier", "Edition limitee"],
+    availableForSale: true,
+    totalInventory: 88,
+    price: money("9.00"),
+    compareAtPrice: null,
+    featuredImage: yumeMinidollCollection,
+    images: [
+      yumeMinidollCollection,
+      yumeMinidollPinkDress,
+      yumeMinidollRockstar,
+      yumeMinidollDenim,
+      yumeMinidollYellowHeart,
+      yumeMinidollCheerleader,
+      yumeMinidollOveralls,
+      yumeMinidollPirate,
+      yumeMinidollChef,
+    ],
+    variants: [
+      {
+        id: "mock-variant-yume-minidoll-pink-dress",
+        title: "Robe rose à nœuds",
+        availableForSale: true,
+        quantityAvailable: 12,
+        price: money("9.00"),
+        compareAtPrice: null,
+        selectedOptions: [{ name: "Tenue", value: "Robe rose à nœuds" }],
+        image: yumeMinidollPinkDress,
+      },
+      {
+        id: "mock-variant-yume-minidoll-rockstar",
+        title: "Rockstar gingham",
+        availableForSale: true,
+        quantityAvailable: 10,
+        price: money("9.00"),
+        compareAtPrice: null,
+        selectedOptions: [{ name: "Tenue", value: "Rockstar gingham" }],
+        image: yumeMinidollRockstar,
+      },
+      {
+        id: "mock-variant-yume-minidoll-denim",
+        title: "Veste denim",
+        availableForSale: true,
+        quantityAvailable: 13,
+        price: money("9.00"),
+        compareAtPrice: null,
+        selectedOptions: [{ name: "Tenue", value: "Veste denim" }],
+        image: yumeMinidollDenim,
+      },
+      {
+        id: "mock-variant-yume-minidoll-yellow-heart",
+        title: "Top jaune sac cœur",
+        availableForSale: true,
+        quantityAvailable: 9,
+        price: money("9.00"),
+        compareAtPrice: null,
+        selectedOptions: [{ name: "Tenue", value: "Top jaune sac cœur" }],
+        image: yumeMinidollYellowHeart,
+      },
+      {
+        id: "mock-variant-yume-minidoll-cheerleader",
+        title: "Pom-pom girl",
+        availableForSale: true,
+        quantityAvailable: 14,
+        price: money("9.00"),
+        compareAtPrice: null,
+        selectedOptions: [{ name: "Tenue", value: "Pom-pom girl" }],
+        image: yumeMinidollCheerleader,
+      },
+      {
+        id: "mock-variant-yume-minidoll-overalls",
+        title: "Salopette bleue",
+        availableForSale: true,
+        quantityAvailable: 11,
+        price: money("9.00"),
+        compareAtPrice: null,
+        selectedOptions: [{ name: "Tenue", value: "Salopette bleue" }],
+        image: yumeMinidollOveralls,
+      },
+      {
+        id: "mock-variant-yume-minidoll-pirate",
+        title: "Pirate",
+        availableForSale: true,
+        quantityAvailable: 8,
+        price: money("9.00"),
+        compareAtPrice: null,
+        selectedOptions: [{ name: "Tenue", value: "Pirate" }],
+        image: yumeMinidollPirate,
+      },
+      {
+        id: "mock-variant-yume-minidoll-chef",
+        title: "Chef tablier pomme",
+        availableForSale: true,
+        quantityAvailable: 11,
+        price: money("9.00"),
+        compareAtPrice: null,
+        selectedOptions: [{ name: "Tenue", value: "Chef tablier pomme" }],
+        image: yumeMinidollChef,
+      },
+    ],
+  },
+
+  // ─── YuMe Hello Kitty & Friends — Raincoat Series ───────────────
+  {
+    id: "mock-product-yume-raincoat-series",
+    handle: "yume-hello-kitty-raincoat-series",
+    title: "Porte-clé YuMe Raincoat — Hello Kitty & Friends",
+    description:
+      "Porte-cle figurine en imperméable coloré, série officielle Sanrio sous licence YuMe. Cinq personnages au choix.",
+    descriptionHtml:
+      "<p>Mini figurine Sanrio enveloppée dans son imperméable assorti, dragonne arc-en-ciel + nuage. Parfait pour les jours pluvieux ou comme charm de sac. Officielle Sanrio sous licence YuMe.</p><p>Cinq personnages au choix : Hello Kitty, My Melody, Pompompurin, Kuromi, Pochacco.</p>",
+    productType: "Figurines",
+    category: "figurines",
+    tags: ["figurines", "kawaii", "sanrio", "yume", "impermeable", "porte-cle", "nouveaute"],
+    badges: ["Nouveaute", "Selection atelier"],
+    availableForSale: true,
+    totalInventory: 60,
+    price: money("12.00"),
+    compareAtPrice: null,
+    featuredImage: yumeRaincoatCollection,
+    images: [
+      yumeRaincoatCollection,
+      yumeRaincoatHelloKitty,
+      yumeRaincoatMyMelody,
+      yumeRaincoatPompompurin,
+      yumeRaincoatKuromi,
+      yumeRaincoatPochacco,
+    ],
+    variants: [
+      {
+        id: "mock-variant-yume-raincoat-hello-kitty",
+        title: "Hello Kitty",
+        availableForSale: true,
+        quantityAvailable: 14,
+        price: money("12.00"),
+        compareAtPrice: null,
+        selectedOptions: [{ name: "Personnage", value: "Hello Kitty" }],
+        image: yumeRaincoatHelloKitty,
+      },
+      {
+        id: "mock-variant-yume-raincoat-my-melody",
+        title: "My Melody",
+        availableForSale: true,
+        quantityAvailable: 12,
+        price: money("12.00"),
+        compareAtPrice: null,
+        selectedOptions: [{ name: "Personnage", value: "My Melody" }],
+        image: yumeRaincoatMyMelody,
+      },
+      {
+        id: "mock-variant-yume-raincoat-pompompurin",
+        title: "Pompompurin",
+        availableForSale: true,
+        quantityAvailable: 11,
+        price: money("12.00"),
+        compareAtPrice: null,
+        selectedOptions: [{ name: "Personnage", value: "Pompompurin" }],
+        image: yumeRaincoatPompompurin,
+      },
+      {
+        id: "mock-variant-yume-raincoat-kuromi",
+        title: "Kuromi",
+        availableForSale: true,
+        quantityAvailable: 13,
+        price: money("12.00"),
+        compareAtPrice: null,
+        selectedOptions: [{ name: "Personnage", value: "Kuromi" }],
+        image: yumeRaincoatKuromi,
+      },
+      {
+        id: "mock-variant-yume-raincoat-pochacco",
+        title: "Pochacco",
+        availableForSale: true,
+        quantityAvailable: 10,
+        price: money("12.00"),
+        compareAtPrice: null,
+        selectedOptions: [{ name: "Personnage", value: "Pochacco" }],
+        image: yumeRaincoatPochacco,
+      },
+    ],
+  },
+
+  // ─── One Piece — YuMe Pocket Hero Window Box ────────────────────
+  // Petits porte-clés figurines One Piece (sous licence Toei). Trois
+  // personnages disponibles à ce stade ; la photo de groupe montre la
+  // ligne complète (Luffy, Nami, Sanji, Usopp, Zoro, Chopper) — les 3
+  // autres seront ajoutés quand on aura les photos individuelles.
+  {
+    id: "mock-product-yume-onepiece-pocket-hero",
+    handle: "yume-one-piece-pocket-hero",
+    title: "Porte-clé YuMe One Piece — Pocket Hero",
+    description:
+      "Porte-cle figurine One Piece, série officielle Toei sous licence YuMe Pocket Hero. Trois personnages au choix.",
+    descriptionHtml:
+      "<p>Mini figurine chibi du Mugiwara crew, livrée dans son window box collectionneur. Officielle Toei Animation sous licence YuMe Pocket Hero.</p><p>Trois personnages disponibles : Chopper, Monkey D. Luffy, Roronoa Zoro.</p>",
+    productType: "Figurines",
+    category: "figurines",
+    tags: ["figurines", "one-piece", "anime", "yume", "manga", "porte-cle", "best-seller"],
+    badges: ["Best-seller", "Edition limitee"],
+    availableForSale: true,
+    totalInventory: 36,
+    price: money("11.00"),
+    compareAtPrice: null,
+    featuredImage: yumeOnepieceCollection,
+    images: [yumeOnepieceCollection, yumeOnepieceChopper, yumeOnepieceLuffy, yumeOnepieceZoro],
+    variants: [
+      {
+        id: "mock-variant-yume-onepiece-chopper",
+        title: "Chopper",
+        availableForSale: true,
+        quantityAvailable: 12,
+        price: money("11.00"),
+        compareAtPrice: null,
+        selectedOptions: [{ name: "Personnage", value: "Chopper" }],
+        image: yumeOnepieceChopper,
+      },
+      {
+        id: "mock-variant-yume-onepiece-luffy",
+        title: "Monkey D. Luffy",
+        availableForSale: true,
+        quantityAvailable: 14,
+        price: money("11.00"),
+        compareAtPrice: null,
+        selectedOptions: [{ name: "Personnage", value: "Monkey D. Luffy" }],
+        image: yumeOnepieceLuffy,
+      },
+      {
+        id: "mock-variant-yume-onepiece-zoro",
+        title: "Roronoa Zoro",
+        availableForSale: true,
+        quantityAvailable: 10,
+        price: money("11.00"),
+        compareAtPrice: null,
+        selectedOptions: [{ name: "Personnage", value: "Roronoa Zoro" }],
+        image: yumeOnepieceZoro,
+      },
+    ],
+  },
+
+  // ─── Molang — Scooter Series ────────────────────────────────────
+  {
+    id: "mock-product-yume-molang-scooter",
+    handle: "yume-molang-scooter-keychain",
+    title: "Porte-clé YuMe Molang — Scooter",
+    description:
+      "Porte-cle Molang sur scooter coloré + breloque arc-en-ciel, série officielle YuMe. Quatre couleurs au choix.",
+    descriptionHtml:
+      "<p>Le petit lapin blanc tout doux (Molang) au volant de son scooter mignon. Dragonne assortie au scooter, breloque arc-en-ciel-fleur en bonus. Officielle YuMe.</p><p>Quatre couleurs disponibles : violet, bleu, vert menthe, rose.</p>",
+    productType: "Figurines",
+    category: "figurines",
+    tags: ["figurines", "kawaii", "molang", "yume", "scooter", "porte-cle", "lapin"],
+    badges: ["Selection atelier"],
+    availableForSale: true,
+    totalInventory: 48,
+    price: money("13.00"),
+    compareAtPrice: null,
+    featuredImage: yumeMolangScooterCollection,
+    images: [
+      yumeMolangScooterCollection,
+      yumeMolangScooterPurple,
+      yumeMolangScooterBlue,
+      yumeMolangScooterGreen,
+      yumeMolangScooterPink,
+    ],
+    variants: [
+      {
+        id: "mock-variant-yume-molang-scooter-purple",
+        title: "Violet",
+        availableForSale: true,
+        quantityAvailable: 12,
+        price: money("13.00"),
+        compareAtPrice: null,
+        selectedOptions: [{ name: "Couleur", value: "Violet" }],
+        image: yumeMolangScooterPurple,
+      },
+      {
+        id: "mock-variant-yume-molang-scooter-blue",
+        title: "Bleu",
+        availableForSale: true,
+        quantityAvailable: 13,
+        price: money("13.00"),
+        compareAtPrice: null,
+        selectedOptions: [{ name: "Couleur", value: "Bleu" }],
+        image: yumeMolangScooterBlue,
+      },
+      {
+        id: "mock-variant-yume-molang-scooter-green",
+        title: "Vert menthe",
+        availableForSale: true,
+        quantityAvailable: 11,
+        price: money("13.00"),
+        compareAtPrice: null,
+        selectedOptions: [{ name: "Couleur", value: "Vert menthe" }],
+        image: yumeMolangScooterGreen,
+      },
+      {
+        id: "mock-variant-yume-molang-scooter-pink",
+        title: "Rose",
+        availableForSale: true,
+        quantityAvailable: 12,
+        price: money("13.00"),
+        compareAtPrice: null,
+        selectedOptions: [{ name: "Couleur", value: "Rose" }],
+        image: yumeMolangScooterPink,
+      },
+    ],
+  },
+
+  // ─── Molang — Snack Time Series ─────────────────────────────────
+  {
+    id: "mock-product-yume-molang-snack-time",
+    handle: "yume-molang-snack-time-keychain",
+    title: "Porte-clé YuMe Molang — Snack Time",
+    description:
+      "Porte-cle Molang en mode goûter, série officielle YuMe. Quatre gourmandises au choix.",
+    descriptionHtml:
+      "<p>Molang en pleine pause goûter : glace italienne, donut, cupcake ou tasse à thé. Mini-charm gourmand assorti accroché à la dragonne (cône de glace, bretzel, frites…). Officielle YuMe.</p><p>Quatre styles au choix : Glace, Donut, Tasse à thé, Cupcake.</p>",
+    productType: "Figurines",
+    category: "figurines",
+    tags: ["figurines", "kawaii", "molang", "yume", "snack", "gourmand", "porte-cle", "nouveaute"],
+    badges: ["Nouveaute"],
+    availableForSale: true,
+    totalInventory: 44,
+    price: money("13.00"),
+    compareAtPrice: null,
+    featuredImage: yumeMolangSnackCollection,
+    images: [
+      yumeMolangSnackCollection,
+      yumeMolangSnackIcecream,
+      yumeMolangSnackDonut,
+      yumeMolangSnackTeacup,
+      yumeMolangSnackCupcake,
+    ],
+    variants: [
+      {
+        id: "mock-variant-yume-molang-snack-icecream",
+        title: "Glace",
+        availableForSale: true,
+        quantityAvailable: 11,
+        price: money("13.00"),
+        compareAtPrice: null,
+        selectedOptions: [{ name: "Gourmandise", value: "Glace" }],
+        image: yumeMolangSnackIcecream,
+      },
+      {
+        id: "mock-variant-yume-molang-snack-donut",
+        title: "Donut",
+        availableForSale: true,
+        quantityAvailable: 12,
+        price: money("13.00"),
+        compareAtPrice: null,
+        selectedOptions: [{ name: "Gourmandise", value: "Donut" }],
+        image: yumeMolangSnackDonut,
+      },
+      {
+        id: "mock-variant-yume-molang-snack-teacup",
+        title: "Tasse à thé",
+        availableForSale: true,
+        quantityAvailable: 10,
+        price: money("13.00"),
+        compareAtPrice: null,
+        selectedOptions: [{ name: "Gourmandise", value: "Tasse à thé" }],
+        image: yumeMolangSnackTeacup,
+      },
+      {
+        id: "mock-variant-yume-molang-snack-cupcake",
+        title: "Cupcake",
+        availableForSale: true,
+        quantityAvailable: 11,
+        price: money("13.00"),
+        compareAtPrice: null,
+        selectedOptions: [{ name: "Gourmandise", value: "Cupcake" }],
+        image: yumeMolangSnackCupcake,
+      },
+    ],
   },
 ];
