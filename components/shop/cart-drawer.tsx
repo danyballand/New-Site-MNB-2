@@ -94,7 +94,13 @@ export function CartDrawer() {
             <div className="mnb-cart-lines">
               {items.map((item) => (
                 <div className="mnb-cart-line" key={item.merchandiseId}>
-                  <Image src={item.image.url} alt={item.image.altText} width={82} height={82} />
+                  <Image
+                    src={item.image.url}
+                    alt={item.image.altText}
+                    width={82}
+                    height={82}
+                    unoptimized={item.image.url.endsWith(".jpeg")}
+                  />
                   <div>
                     <Link href={`/shop/produit/${item.productHandle}`} onClick={() => setOpen(false)}>
                       {item.productTitle}

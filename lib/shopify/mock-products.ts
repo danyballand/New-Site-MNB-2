@@ -1,50 +1,54 @@
-import type { ShopProduct } from "@/lib/shopify/types";
+import type { ShopImage, ShopProduct } from "@/lib/shopify/types";
 
 const money = (amount: string) => ({ amount, currencyCode: "EUR" });
 
-const productAsset = (file: string, altText: string) => ({
-  url: `/shop/products/${file}`,
-  altText,
-  width: 2048,
-  height: 2048,
-});
+const productAsset = (file: string, altText: string, sizeOverride?: number): ShopImage => {
+  const size = sizeOverride ?? (file.endsWith(".webp") ? 1400 : file.endsWith(".jpeg") ? 1080 : 2048);
 
-const angeArgentImage = productAsset("mnb_ange_argent_v1_2048.png", "Piece ange argent My Nice Bracelet");
+  return {
+    url: `/shop/products/${file}`,
+    altText,
+    width: size,
+    height: size,
+  };
+};
+
+const angeArgentImage = productAsset("mnb_ange_argent_v1_1400.webp", "Piece ange argent My Nice Bracelet");
 const coeurBlancNacreImage = productAsset(
-  "mnb_coeur_blanc_nacre_v1_2048.png",
+  "mnb_coeur_blanc_nacre_v1_1400.webp",
   "Piece coeur blanc nacre My Nice Bracelet",
 );
 const coeurJauneIrisImage = productAsset(
-  "mnb_coeur_jaune_iris_motif_coeur_v1_2048.png",
+  "mnb_coeur_jaune_iris_motif_coeur_v1_1400.webp",
   "Piece coeur jaune iris motif coeur My Nice Bracelet",
 );
 const etoileBleuTransparentImage = productAsset(
-  "mnb_etoile_bleu_transparent_v1_2048.png",
+  "mnb_etoile_bleu_transparent_v1_1400.webp",
   "Piece etoile bleu transparent My Nice Bracelet",
 );
-const fleurBlancIrisImage = productAsset("mnb_fleur_blanc_iris_v1_2048.png", "Piece fleur blanc iris My Nice Bracelet");
+const fleurBlancIrisImage = productAsset("mnb_fleur_blanc_iris_v1_1400.webp", "Piece fleur blanc iris My Nice Bracelet");
 const lapinTransparentIrisImage = productAsset(
-  "mnb_lapin_transparent_iris_v1_2048.png",
+  "mnb_lapin_transparent_iris_v1_1400.webp",
   "Piece lapin transparent iris My Nice Bracelet",
 );
 const oursonVertMentheImage = productAsset(
-  "mnb_ourson_vert_menthe_transparent_v1_2048.png",
+  "mnb_ourson_vert_menthe_transparent_v1_1400.webp",
   "Piece ourson vert menthe transparent My Nice Bracelet",
 );
 const papillonVertIrisImage = productAsset(
-  "mnb_papillon_vert_iris_v1_2048.png",
+  "mnb_papillon_vert_iris_v1_1400.webp",
   "Piece papillon vert iris My Nice Bracelet",
 );
 const papillonVertPastelImage = productAsset(
-  "mnb_papillon_vert_pastel_v1_2048.png",
+  "mnb_papillon_vert_pastel_v1_1400.webp",
   "Piece papillon vert pastel My Nice Bracelet",
 );
 const perleCubeTransparentVertImage = productAsset(
-  "mnb_perle_cube_transparent_vert_v1_2048.png",
+  "mnb_perle_cube_transparent_vert_v1_1400.webp",
   "Perle cube transparent vert My Nice Bracelet",
 );
 const perleCubeVertAnisImage = productAsset(
-  "mnb_perle_cube_vert_anis_facette_v1_2048.png",
+  "mnb_perle_cube_vert_anis_facette_v1_1400.webp",
   "Perle cube vert anis facette My Nice Bracelet",
 );
 
@@ -61,26 +65,218 @@ const yumeHelloKittyImage = productAsset(
   "mnb_yume_hello_kitty_camping_v1.jpeg",
   "Porte-clé lampe camping Hello Kitty YuMe",
 );
+const yumeHelloKittyPackshotImage = {
+  ...productAsset(
+    "mnb_yume_hello_kitty_packshot_mynicebracelet_v1.png",
+    "Packshot porte-clé lampe camping Hello Kitty YuMe",
+    1400,
+  ),
+  label: "Packshot",
+};
+const yumeHelloKittyDetailImage = {
+  ...productAsset(
+    "mnb_yume_hello_kitty_detail_macro_mynicebracelet_v1.png",
+    "Detail macro porte-clé lampe camping Hello Kitty YuMe",
+    1400,
+  ),
+  label: "Detail",
+};
+const yumeHelloKittyScaleImage = {
+  ...productAsset(
+    "mnb_yume_hello_kitty_echelle_main_mynicebracelet_v1.png",
+    "Echelle en main porte-clé lampe camping Hello Kitty YuMe",
+    1400,
+  ),
+  label: "Echelle",
+};
+const yumeHelloKittyContextImage = {
+  ...productAsset(
+    "mnb_yume_hello_kitty_contexte_atelier_mynicebracelet_v1.png",
+    "Contexte atelier porte-clé lampe camping Hello Kitty YuMe",
+    1400,
+  ),
+  label: "Atelier",
+};
 const yumeMyMelodyImage = productAsset(
   "mnb_yume_my_melody_camping_v1.jpeg",
   "Porte-clé lampe camping My Melody YuMe",
 );
+const yumeMyMelodyPackshotImage = {
+  ...productAsset(
+    "mnb_yume_my_melody_packshot_mynicebracelet_v1.png",
+    "Packshot porte-clé lampe camping My Melody YuMe",
+    1400,
+  ),
+  label: "Packshot",
+};
+const yumeMyMelodyDetailImage = {
+  ...productAsset(
+    "mnb_yume_my_melody_detail_macro_mynicebracelet_v1.png",
+    "Detail macro porte-clé lampe camping My Melody YuMe",
+    1400,
+  ),
+  label: "Detail",
+};
+const yumeMyMelodyScaleImage = {
+  ...productAsset(
+    "mnb_yume_my_melody_echelle_main_mynicebracelet_v1.png",
+    "Echelle en main porte-clé lampe camping My Melody YuMe",
+    1400,
+  ),
+  label: "Echelle",
+};
+const yumeMyMelodyContextImage = {
+  ...productAsset(
+    "mnb_yume_my_melody_contexte_atelier_mynicebracelet_v1.png",
+    "Contexte atelier porte-clé lampe camping My Melody YuMe",
+    1400,
+  ),
+  label: "Atelier",
+};
 const yumeCinnamorollImage = productAsset(
   "mnb_yume_cinnamoroll_camping_v1.jpeg",
   "Porte-clé lampe camping Cinnamoroll YuMe",
 );
+const yumeCinnamorollPackshotImage = {
+  ...productAsset(
+    "mnb_yume_cinnamoroll_packshot_mynicebracelet_v1.png",
+    "Packshot porte-clé lampe camping Cinnamoroll YuMe",
+    1024,
+  ),
+  label: "Packshot",
+};
+const yumeCinnamorollDetailImage = {
+  ...productAsset(
+    "mnb_yume_cinnamoroll_detail_macro_mynicebracelet_v1.png",
+    "Detail macro porte-clé lampe camping Cinnamoroll YuMe",
+    1024,
+  ),
+  label: "Detail",
+};
+const yumeCinnamorollScaleImage = {
+  ...productAsset(
+    "mnb_yume_cinnamoroll_echelle_main_mynicebracelet_v1.png",
+    "Echelle en main porte-clé lampe camping Cinnamoroll YuMe",
+    1024,
+  ),
+  label: "Echelle",
+};
+const yumeCinnamorollContextImage = {
+  ...productAsset(
+    "mnb_yume_cinnamoroll_contexte_atelier_mynicebracelet_v1.png",
+    "Contexte atelier porte-clé lampe camping Cinnamoroll YuMe",
+    1024,
+  ),
+  label: "Atelier",
+};
 const yumePompompurinImage = productAsset(
   "mnb_yume_pompompurin_camping_v1.jpeg",
   "Porte-clé lampe camping Pompompurin YuMe",
 );
+const yumePompompurinPackshotImage = {
+  ...productAsset(
+    "mnb_yume_pompompurin_packshot_mynicebracelet_v1.png",
+    "Packshot porte-clé lampe camping Pompompurin YuMe",
+    1024,
+  ),
+  label: "Packshot",
+};
+const yumePompompurinDetailImage = {
+  ...productAsset(
+    "mnb_yume_pompompurin_detail_macro_mynicebracelet_v1.png",
+    "Detail macro porte-clé lampe camping Pompompurin YuMe",
+    1024,
+  ),
+  label: "Detail",
+};
+const yumePompompurinScaleImage = {
+  ...productAsset(
+    "mnb_yume_pompompurin_echelle_main_mynicebracelet_v1.png",
+    "Echelle en main porte-clé lampe camping Pompompurin YuMe",
+    1024,
+  ),
+  label: "Echelle",
+};
+const yumePompompurinContextImage = {
+  ...productAsset(
+    "mnb_yume_pompompurin_contexte_atelier_mynicebracelet_v1.png",
+    "Contexte atelier porte-clé lampe camping Pompompurin YuMe",
+    1024,
+  ),
+  label: "Atelier",
+};
 const yumePochaccoImage = productAsset(
   "mnb_yume_pochacco_camping_v1.jpeg",
   "Porte-clé lampe camping Pochacco YuMe",
 );
+const yumePochaccoPackshotImage = {
+  ...productAsset(
+    "mnb_yume_pochacco_packshot_mynicebracelet_v1.png",
+    "Packshot porte-clé lampe camping Pochacco YuMe",
+    1024,
+  ),
+  label: "Packshot",
+};
+const yumePochaccoDetailImage = {
+  ...productAsset(
+    "mnb_yume_pochacco_detail_macro_mynicebracelet_v1.png",
+    "Detail macro porte-clé lampe camping Pochacco YuMe",
+    1024,
+  ),
+  label: "Detail",
+};
+const yumePochaccoScaleImage = {
+  ...productAsset(
+    "mnb_yume_pochacco_echelle_main_mynicebracelet_v1.png",
+    "Echelle en main porte-clé lampe camping Pochacco YuMe",
+    1024,
+  ),
+  label: "Echelle",
+};
+const yumePochaccoContextImage = {
+  ...productAsset(
+    "mnb_yume_pochacco_contexte_atelier_mynicebracelet_v1.png",
+    "Contexte atelier porte-clé lampe camping Pochacco YuMe",
+    1024,
+  ),
+  label: "Atelier",
+};
 const yumeKuromiImage = productAsset(
   "mnb_yume_kuromi_camping_v1.jpeg",
   "Porte-clé lampe camping Kuromi YuMe",
 );
+const yumeKuromiPackshotImage = {
+  ...productAsset(
+    "mnb_yume_kuromi_packshot_mynicebracelet_v1.png",
+    "Packshot porte-clé lampe camping Kuromi YuMe",
+    1024,
+  ),
+  label: "Packshot",
+};
+const yumeKuromiDetailImage = {
+  ...productAsset(
+    "mnb_yume_kuromi_detail_macro_mynicebracelet_v1.png",
+    "Detail macro porte-clé lampe camping Kuromi YuMe",
+    1024,
+  ),
+  label: "Detail",
+};
+const yumeKuromiScaleImage = {
+  ...productAsset(
+    "mnb_yume_kuromi_echelle_main_mynicebracelet_v1.png",
+    "Echelle en main porte-clé lampe camping Kuromi YuMe",
+    1024,
+  ),
+  label: "Echelle",
+};
+const yumeKuromiContextImage = {
+  ...productAsset(
+    "mnb_yume_kuromi_contexte_atelier_mynicebracelet_v1.png",
+    "Contexte atelier porte-clé lampe camping Kuromi YuMe",
+    1024,
+  ),
+  label: "Atelier",
+};
 
 // ─── Balloon Series ──────────────────────────────────────────────
 const yumeBalloonCollection = productAsset(
@@ -91,14 +287,70 @@ const yumeBalloonHelloKitty = productAsset(
   "mnb_yume_balloon_hello_kitty_v1.jpeg",
   "Porte-clé Hello Kitty sur ballon-cheval rose YuMe",
 );
-const yumeBalloonMyMelody = productAsset(
-  "mnb_yume_balloon_my_melody_v1.jpeg",
-  "Porte-clé My Melody sur ballon-cheval rose YuMe",
-);
-const yumeBalloonCinnamoroll = productAsset(
-  "mnb_yume_balloon_cinnamoroll_v1.jpeg",
-  "Porte-clé Cinnamoroll sur ballon-cheval bleu YuMe",
-);
+const yumeBalloonMyMelodyPackshotImage = {
+  ...productAsset(
+    "mnb_yume_balloon_my_melody_packshot_mynicebracelet_v1.png",
+    "Packshot porte-clé My Melody sur ballon-cheval rose YuMe",
+    1400,
+  ),
+  label: "Packshot",
+};
+const yumeBalloonMyMelodyDetailImage = {
+  ...productAsset(
+    "mnb_yume_balloon_my_melody_detail_macro_mynicebracelet_v1.png",
+    "Detail macro porte-clé My Melody sur ballon-cheval rose YuMe",
+    1400,
+  ),
+  label: "Detail",
+};
+const yumeBalloonMyMelodyScaleImage = {
+  ...productAsset(
+    "mnb_yume_balloon_my_melody_echelle_main_mynicebracelet_v1.png",
+    "Echelle en main porte-clé My Melody sur ballon-cheval rose YuMe",
+    1400,
+  ),
+  label: "Echelle",
+};
+const yumeBalloonMyMelodyContextImage = {
+  ...productAsset(
+    "mnb_yume_balloon_my_melody_contexte_atelier_mynicebracelet_v1.png",
+    "Contexte atelier porte-clé My Melody sur ballon-cheval rose YuMe",
+    1400,
+  ),
+  label: "Atelier",
+};
+const yumeBalloonCinnamorollPackshotImage = {
+  ...productAsset(
+    "mnb_yume_balloon_cinnamoroll_packshot_mynicebracelet_v1.png",
+    "Packshot porte-clé Cinnamoroll sur ballon-cheval bleu YuMe",
+    1400,
+  ),
+  label: "Packshot",
+};
+const yumeBalloonCinnamorollDetailImage = {
+  ...productAsset(
+    "mnb_yume_balloon_cinnamoroll_detail_macro_mynicebracelet_v1.png",
+    "Detail macro porte-clé Cinnamoroll sur ballon-cheval bleu YuMe",
+    1400,
+  ),
+  label: "Detail",
+};
+const yumeBalloonCinnamorollScaleImage = {
+  ...productAsset(
+    "mnb_yume_balloon_cinnamoroll_echelle_main_mynicebracelet_v1.png",
+    "Echelle en main porte-clé Cinnamoroll sur ballon-cheval bleu YuMe",
+    1400,
+  ),
+  label: "Echelle",
+};
+const yumeBalloonCinnamorollContextImage = {
+  ...productAsset(
+    "mnb_yume_balloon_cinnamoroll_contexte_atelier_mynicebracelet_v1.png",
+    "Contexte atelier porte-clé Cinnamoroll sur ballon-cheval bleu YuMe",
+    1400,
+  ),
+  label: "Atelier",
+};
 const yumeBalloonPompompurin = productAsset(
   "mnb_yume_balloon_pompompurin_v1.jpeg",
   "Porte-clé Pompompurin sur ballon-cheval jaune YuMe",
@@ -690,7 +942,14 @@ export const mockProducts: ShopProduct[] = [
         price: money("12.00"),
         compareAtPrice: null,
         selectedOptions: [{ name: "Personnage", value: "Hello Kitty" }],
-        image: yumeHelloKittyImage,
+        image: yumeHelloKittyPackshotImage,
+        images: [
+          yumeHelloKittyPackshotImage,
+          yumeHelloKittyDetailImage,
+          yumeHelloKittyScaleImage,
+          yumeHelloKittyContextImage,
+          { ...yumeCollectionImage, label: "Collection" },
+        ],
       },
       {
         id: "mock-variant-yume-my-melody",
@@ -700,7 +959,14 @@ export const mockProducts: ShopProduct[] = [
         price: money("12.00"),
         compareAtPrice: null,
         selectedOptions: [{ name: "Personnage", value: "My Melody" }],
-        image: yumeMyMelodyImage,
+        image: yumeMyMelodyPackshotImage,
+        images: [
+          yumeMyMelodyPackshotImage,
+          yumeMyMelodyDetailImage,
+          yumeMyMelodyScaleImage,
+          yumeMyMelodyContextImage,
+          { ...yumeCollectionImage, label: "Collection" },
+        ],
       },
       {
         id: "mock-variant-yume-cinnamoroll",
@@ -710,7 +976,14 @@ export const mockProducts: ShopProduct[] = [
         price: money("12.00"),
         compareAtPrice: null,
         selectedOptions: [{ name: "Personnage", value: "Cinnamoroll" }],
-        image: yumeCinnamorollImage,
+        image: yumeCinnamorollPackshotImage,
+        images: [
+          yumeCinnamorollPackshotImage,
+          yumeCinnamorollDetailImage,
+          yumeCinnamorollScaleImage,
+          yumeCinnamorollContextImage,
+          { ...yumeCollectionImage, label: "Collection" },
+        ],
       },
       {
         id: "mock-variant-yume-pompompurin",
@@ -720,7 +993,14 @@ export const mockProducts: ShopProduct[] = [
         price: money("12.00"),
         compareAtPrice: null,
         selectedOptions: [{ name: "Personnage", value: "Pompompurin" }],
-        image: yumePompompurinImage,
+        image: yumePompompurinPackshotImage,
+        images: [
+          yumePompompurinPackshotImage,
+          yumePompompurinDetailImage,
+          yumePompompurinScaleImage,
+          yumePompompurinContextImage,
+          { ...yumeCollectionImage, label: "Collection" },
+        ],
       },
       {
         id: "mock-variant-yume-pochacco",
@@ -730,7 +1010,14 @@ export const mockProducts: ShopProduct[] = [
         price: money("12.00"),
         compareAtPrice: null,
         selectedOptions: [{ name: "Personnage", value: "Pochacco" }],
-        image: yumePochaccoImage,
+        image: yumePochaccoPackshotImage,
+        images: [
+          yumePochaccoPackshotImage,
+          yumePochaccoDetailImage,
+          yumePochaccoScaleImage,
+          yumePochaccoContextImage,
+          { ...yumeCollectionImage, label: "Collection" },
+        ],
       },
       {
         id: "mock-variant-yume-kuromi",
@@ -740,7 +1027,14 @@ export const mockProducts: ShopProduct[] = [
         price: money("12.00"),
         compareAtPrice: null,
         selectedOptions: [{ name: "Personnage", value: "Kuromi" }],
-        image: yumeKuromiImage,
+        image: yumeKuromiPackshotImage,
+        images: [
+          yumeKuromiPackshotImage,
+          yumeKuromiDetailImage,
+          yumeKuromiScaleImage,
+          yumeKuromiContextImage,
+          { ...yumeCollectionImage, label: "Collection" },
+        ],
       },
     ],
   },
@@ -768,8 +1062,8 @@ export const mockProducts: ShopProduct[] = [
     images: [
       yumeBalloonCollection,
       yumeBalloonHelloKitty,
-      yumeBalloonMyMelody,
-      yumeBalloonCinnamoroll,
+      yumeBalloonMyMelodyPackshotImage,
+      yumeBalloonCinnamorollPackshotImage,
       yumeBalloonPompompurin,
       yumeBalloonKuromi,
     ],
@@ -792,7 +1086,14 @@ export const mockProducts: ShopProduct[] = [
         price: money("12.00"),
         compareAtPrice: null,
         selectedOptions: [{ name: "Personnage", value: "My Melody" }],
-        image: yumeBalloonMyMelody,
+        image: yumeBalloonMyMelodyPackshotImage,
+        images: [
+          yumeBalloonMyMelodyPackshotImage,
+          yumeBalloonMyMelodyDetailImage,
+          yumeBalloonMyMelodyScaleImage,
+          yumeBalloonMyMelodyContextImage,
+          { ...yumeBalloonCollection, label: "Collection" },
+        ],
       },
       {
         id: "mock-variant-yume-balloon-cinnamoroll",
@@ -802,7 +1103,14 @@ export const mockProducts: ShopProduct[] = [
         price: money("12.00"),
         compareAtPrice: null,
         selectedOptions: [{ name: "Personnage", value: "Cinnamoroll" }],
-        image: yumeBalloonCinnamoroll,
+        image: yumeBalloonCinnamorollPackshotImage,
+        images: [
+          yumeBalloonCinnamorollPackshotImage,
+          yumeBalloonCinnamorollDetailImage,
+          yumeBalloonCinnamorollScaleImage,
+          yumeBalloonCinnamorollContextImage,
+          { ...yumeBalloonCollection, label: "Collection" },
+        ],
       },
       {
         id: "mock-variant-yume-balloon-pompompurin",

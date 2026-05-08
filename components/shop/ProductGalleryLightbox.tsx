@@ -3,11 +3,13 @@
 import Image from 'next/image';
 import { ChevronLeft, ChevronRight, X } from 'lucide-react';
 import { useCallback, useEffect, useRef, useState } from 'react';
-import type { ShopImage } from '@/lib/shopify/types';
+import { HeroModelViewer } from '@/components/shop/HeroModelViewer';
+import type { ShopImage, ShopProductModel } from '@/lib/shopify/types';
 import { cn } from '@/lib/utils/cn';
 
 interface ProductGalleryLightboxProps {
   images: ShopImage[];
+  models?: ShopProductModel[];
 }
 
 /**
@@ -21,44 +23,112 @@ interface ProductGalleryLightboxProps {
  *   - Thumbnail strip at the bottom for direct jump
  *   - ESC / backdrop click / X button to close
  */
-export function ProductGalleryLightbox({ images }: ProductGalleryLightboxProps) {
+export function ProductGalleryLightbox({ images, models = [] }: ProductGalleryLightboxProps) {
   const [openIdx, setOpenIdx] = useState<number | null>(null);
+  const [mode, setMode] = useState<'photos' | 'model'>('photos');
+  const [activeIdx, setActiveIdx] = useState(0);
+  const hasModel = models.length > 0;
+  const activeImage = images[activeIdx] ?? images[0];
 
   return (
     <>
-      <div className="mnb-product-gallery">
-        {images.map((image, index) => (
-          <button
-            key={`${image.url}-${index}`}
-            type="button"
-            onClick={() => setOpenIdx(index)}
-            aria-label={`Agrandir ${image.altText || `image ${index + 1}`}`}
-            // No background / border : keep the visual identical to
-            // the previous bare-<Image> layout. The button is just
-            // the click target.
-            className="block w-full cursor-zoom-in border-0 bg-transparent p-0 m-0 [&>img]:transition-transform [&:hover>img]:scale-[1.01]"
-          >
-            <Image
-              className={[
-                index === 0 ? 'is-featured' : '',
-                image.url.startsWith('/shop/products/') ? 'is-product-asset' : '',
-              ]
-                .filter(Boolean)
-                .join(' ')}
-              src={image.url}
-              alt={image.altText}
-              width={image.width ?? 1200}
-              height={image.height ?? 1500}
-              priority={index === 0}
-              sizes={index === 0 ? '(max-width: 980px) 100vw, 58vw' : '(max-width: 980px) 50vw, 28vw'}
-              // Bypass /_next/image — les photos produit JPEG (~25 KB
-              // chacune après normalize_minidoll) sont déjà tight, et
-              // l'absence de cache de transformation évite les images
-              // périmées après un re-traitement disque.
-              unoptimized
+      <div className="mnb-product-media">
+        {hasModel && (
+          <div className="mnb-product-media-tabs" aria-label="Media produit">
+            <button
+              type="button"
+              className={mode === 'photos' ? 'is-selected' : ''}
+              onClick={() => setMode('photos')}
+              aria-pressed={mode === 'photos'}
+            >
+              Photos
+            </button>
+            <button
+              type="button"
+              className={mode === 'model' ? 'is-selected' : ''}
+              onClick={() => setMode('model')}
+              aria-pressed={mode === 'model'}
+            >
+              3D
+            </button>
+          </div>
+        )}
+
+        {mode === 'model' && hasModel ? (
+          <div className="mnb-product-model-stage">
+            <HeroModelViewer
+              models={models}
+              alt={models[0]?.alt ?? 'Modele 3D My Nice Bracelet'}
+              className="absolute inset-0"
             />
-          </button>
-        ))}
+          </div>
+        ) : (
+          <div className="mnb-product-gallery mnb-product-gallery--focused">
+            {activeImage ? (
+              <button
+                key={`${activeImage.url}-${activeIdx}`}
+                type="button"
+                onClick={() => setOpenIdx(activeIdx)}
+                aria-label={`Agrandir ${activeImage.altText || `image ${activeIdx + 1}`}`}
+                className="mnb-product-gallery-main"
+              >
+                <Image
+                  className={[
+                    'is-featured',
+                    activeImage.url.startsWith('/shop/products/') ? 'is-product-asset' : '',
+                  ]
+                    .filter(Boolean)
+                    .join(' ')}
+                  src={activeImage.url}
+                  alt={activeImage.altText}
+                  width={activeImage.width ?? 1200}
+                  height={activeImage.height ?? 1500}
+                  priority
+                  sizes="(max-width: 980px) 100vw, 58vw"
+                  unoptimized={activeImage.url.endsWith('.jpeg')}
+                />
+              </button>
+            ) : null}
+
+            {(images.length > 1 || hasModel) && (
+              <div className="mnb-product-gallery-thumbs" aria-label="Choisir un visuel produit">
+                {images.map((image, index) => (
+                  <button
+                    key={`${image.url}-${index}`}
+                    type="button"
+                    onClick={() => {
+                      setActiveIdx(index);
+                      setMode('photos');
+                    }}
+                    aria-current={index === activeIdx && mode === 'photos'}
+                    className={index === activeIdx && mode === 'photos' ? 'is-selected' : ''}
+                  >
+                    <Image
+                      src={image.url}
+                      alt=""
+                      width={120}
+                      height={120}
+                      sizes="88px"
+                      unoptimized={image.url.endsWith('.jpeg')}
+                    />
+                    <span>{getMediaLabel(image, index)}</span>
+                  </button>
+                ))}
+                {hasModel && (
+                  <button
+                    type="button"
+                    onClick={() => setMode('model')}
+                    aria-current={mode === 'model'}
+                    className={mode === 'model' ? 'is-selected' : ''}
+                  >
+                    <span className="mnb-product-gallery-3d-thumb">3D</span>
+                    <span>3D</span>
+                  </button>
+                )}
+              </div>
+            )}
+          </div>
+        )}
       </div>
 
       {openIdx !== null && (
@@ -70,6 +140,26 @@ export function ProductGalleryLightbox({ images }: ProductGalleryLightboxProps) 
       )}
     </>
   );
+}
+
+function getMediaLabel(image: ShopImage, index: number) {
+  if (image.label) {
+    return image.label;
+  }
+
+  if (index === 0) {
+    return 'Produit';
+  }
+
+  if (index === 1) {
+    return 'Detail';
+  }
+
+  if (index === 2) {
+    return 'Echelle';
+  }
+
+  return 'Collection';
 }
 
 /* ──────────────────────────────────────────────────────────────────
@@ -92,21 +182,29 @@ function Lightbox({
 
   const current = images[idx];
 
-  const goPrev = useCallback(() => {
-    setIdx((i) => (i - 1 + images.length) % images.length);
-  }, [images.length]);
-
-  const goNext = useCallback(() => {
-    setIdx((i) => (i + 1) % images.length);
-  }, [images.length]);
-
-  // Reset zoom + pan whenever the active image changes : a fresh
-  // image always opens at fit-to-screen, no carry-over from the
-  // previous slide.
-  useEffect(() => {
+  const resetView = useCallback(() => {
+    dragRef.current = null;
     setScale(1);
     setOffset({ x: 0, y: 0 });
-  }, [idx]);
+  }, []);
+
+  const goPrev = useCallback(() => {
+    resetView();
+    setIdx((i) => (i - 1 + images.length) % images.length);
+  }, [images.length, resetView]);
+
+  const goNext = useCallback(() => {
+    resetView();
+    setIdx((i) => (i + 1) % images.length);
+  }, [images.length, resetView]);
+
+  const goTo = useCallback(
+    (nextIdx: number) => {
+      resetView();
+      setIdx(nextIdx);
+    },
+    [resetView],
+  );
 
   // Body scroll lock so the page underneath doesn't move when the
   // user wheels/zooms inside the modal.
@@ -140,12 +238,11 @@ function Lightbox({
     // listener. Instead React's passive wheel still updates state,
     // and the page can't scroll because body overflow is locked.
     const delta = -e.deltaY * 0.0025;
-    setScale((s) => {
-      const next = Math.max(1, Math.min(4, s + delta));
-      // Snap back to centered when fully zoomed out.
-      if (next === 1) setOffset({ x: 0, y: 0 });
-      return next;
-    });
+    const next = Math.max(1, Math.min(4, scale + delta));
+    setScale(next);
+    if (next === 1) {
+      setOffset({ x: 0, y: 0 });
+    }
   }
 
   function handleImageClick(e: React.MouseEvent<HTMLImageElement>) {
@@ -292,7 +389,7 @@ function Lightbox({
             <button
               key={`${img.url}-${i}`}
               type="button"
-              onClick={() => setIdx(i)}
+              onClick={() => goTo(i)}
               aria-label={`Aller à l'image ${i + 1}`}
               aria-current={i === idx}
               className={cn(

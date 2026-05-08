@@ -41,6 +41,13 @@ export type ShopImage = {
   altText: string;
   width?: number;
   height?: number;
+  label?: "Produit" | "Detail" | "Echelle" | "Collection" | "Packshot" | string;
+};
+
+export type ShopProductModel = {
+  src: string;
+  label: string;
+  alt?: string;
 };
 
 export type ShopSelectedOption = {
@@ -60,6 +67,8 @@ export type ShopProductVariant = {
    *  visual variant picker (e.g. choose your character from a series).
    *  When undefined, the product's `featuredImage` is used everywhere. */
   image?: ShopImage;
+  images?: ShopImage[];
+  models?: ShopProductModel[];
 };
 
 export type ShopProduct = {
@@ -78,6 +87,7 @@ export type ShopProduct = {
   compareAtPrice?: ShopMoney | null;
   featuredImage: ShopImage;
   images: ShopImage[];
+  models?: ShopProductModel[];
   variants: ShopProductVariant[];
 };
 

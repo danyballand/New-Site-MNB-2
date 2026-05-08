@@ -11,7 +11,6 @@ import type { ShopDataResult } from "@/lib/shopify/types";
  * If a dev-only "live vs. mock" hint is ever needed, expose it via
  * the browser DevTools (e.g. a console.log) rather than the layout.
  */
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-export function SourceBanner({ result: _result }: { result: ShopDataResult<unknown> }) {
+export function SourceBanner(_props: { result: ShopDataResult<unknown> }) {
   return null;
 }

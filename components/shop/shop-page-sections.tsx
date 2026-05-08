@@ -249,6 +249,7 @@ export function ShopLanding({
                         fill
                         sizes="(max-width: 980px) 35vw, 18vw"
                         className="object-contain transition-transform duration-500 group-hover:scale-[1.05]"
+                        unoptimized={cover.url.endsWith(".jpeg")}
                       />
                     </div>
                   </div>

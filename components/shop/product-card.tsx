@@ -54,6 +54,7 @@ export function ProductCard({ product }: { product: ShopProduct }) {
           alt={product.featuredImage.altText}
           fill
           sizes="(max-width: 680px) 50vw, (max-width: 980px) 33vw, 25vw"
+          unoptimized={product.featuredImage.url.endsWith(".jpeg")}
         />
         <span>{getCategoryLabel(product.category)}</span>
       </Link>

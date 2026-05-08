@@ -7,10 +7,19 @@ import type { ShopProduct } from "@/lib/shopify/types";
 import { formatMoney } from "@/lib/shopify/utils";
 import { useShopCart } from "@/components/shop/shop-provider";
 
-export function ProductPurchasePanel({ product }: { product: ShopProduct }) {
+export function ProductPurchasePanel({
+  product,
+  selectedVariantId,
+  onSelectedVariantChange,
+}: {
+  product: ShopProduct;
+  selectedVariantId?: string;
+  onSelectedVariantChange?: (variantId: string) => void;
+}) {
   const { addItem } = useShopCart();
   const firstAvailableVariant = product.variants.find((variant) => variant.availableForSale) ?? product.variants[0];
-  const [variantId, setVariantId] = useState(firstAvailableVariant?.id ?? "");
+  const [localVariantId, setLocalVariantId] = useState(firstAvailableVariant?.id ?? "");
+  const variantId = selectedVariantId ?? localVariantId;
   const [quantity, setQuantity] = useState(1);
   const selectedVariant = useMemo(
     () => product.variants.find((variant) => variant.id === variantId) ?? firstAvailableVariant,
@@ -45,6 +54,11 @@ export function ProductPurchasePanel({ product }: { product: ShopProduct }) {
       : selectedVariant.quantityAvailable > 8
         ? "En stock"
         : `${selectedVariant.quantityAvailable} restant${selectedVariant.quantityAvailable > 1 ? "s" : ""}`;
+
+  function selectVariant(nextVariantId: string) {
+    setLocalVariantId(nextVariantId);
+    onSelectedVariantChange?.(nextVariantId);
+  }
 
   function addToCart() {
     if (!selectedVariant || !isAvailable) {
@@ -85,7 +99,7 @@ export function ProductPurchasePanel({ product }: { product: ShopProduct }) {
             // Visual variant picker : grid of thumbnails with the
             // currently-selected one ringed. Used when each variant
             // carries an `image` (e.g. character series).
-            <div className="grid grid-cols-3 sm:grid-cols-3 gap-2 md:gap-3">
+            <div className="mnb-variant-image-grid">
               {product.variants.map((variant) => {
                 const selected = variant.id === variantId;
                 const optionLabel = variant.selectedOptions[0]?.value ?? variant.title;
@@ -93,15 +107,14 @@ export function ProductPurchasePanel({ product }: { product: ShopProduct }) {
                   <button
                     key={variant.id}
                     type="button"
-                    onClick={() => setVariantId(variant.id)}
+                    onClick={() => selectVariant(variant.id)}
                     disabled={!variant.availableForSale}
                     aria-pressed={selected}
                     className={[
-                      "group relative flex flex-col items-center gap-1.5 p-2 rounded-2xl border transition-all",
-                      "disabled:opacity-40 disabled:cursor-not-allowed",
+                      "mnb-variant-image-option",
                       selected
-                        ? "border-[#3D5A73] bg-white shadow-md"
-                        : "border-[rgba(45,55,72,0.10)] bg-[#FBF8F2] hover:border-[#A8BED4] hover:bg-white",
+                        ? "is-selected"
+                        : "",
                     ].join(" ")}
                   >
                     {/* Square thumbnail with object-contain. Source
@@ -113,7 +126,7 @@ export function ProductPurchasePanel({ product }: { product: ShopProduct }) {
                         the same proportion of the frame, so contain
                         keeps the full content visible without size
                         discrepancy across variants. */}
-                    <div className="relative aspect-square w-full overflow-hidden rounded-xl bg-white">
+                    <div className="mnb-variant-image-thumb">
                       {variant.image ? (
                         <Image
                           src={variant.image.url}
@@ -131,21 +144,19 @@ export function ProductPurchasePanel({ product }: { product: ShopProduct }) {
                         />
                       ) : null}
                     </div>
-                    <span className="text-[10px] md:text-[11px] font-black uppercase tracking-tight text-[#2D3748] text-center leading-tight">
-                      {optionLabel}
-                    </span>
+                    <span>{optionLabel}</span>
                   </button>
                 );
               })}
             </div>
           ) : (
-            <div>
+            <div className="mnb-variant-button-list">
               {product.variants.map((variant) => (
                 <button
                   className={variant.id === variantId ? "is-selected" : ""}
                   disabled={!variant.availableForSale}
                   key={variant.id}
-                  onClick={() => setVariantId(variant.id)}
+                  onClick={() => selectVariant(variant.id)}
                   type="button"
                 >
                   {variant.title}
