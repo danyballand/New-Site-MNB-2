@@ -1,130 +1,274 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import { cn } from '@/lib/utils/cn';
 
 /**
- * Thin client-side wrapper around Google's `<model-viewer>` web
- * component. The library auto-registers the custom element on import,
- * but the import has to happen client-side (it touches `window`),
- * hence `'use client'` + a `useEffect` dynamic import.
+ * Wrapper React autour du web-component <model-viewer> de Google.
  *
- * Two usage modes :
- *   - Single model    : pass `src` (legacy / simple case).
- *   - Multiple models : pass `models={[{ src, label }, …]}` and a small
- *                       pill switcher renders at the bottom.
+ * Layouts supportés :
+ *   - "row"      (défaut) : flex row, viewers répartis horizontalement.
+ *   - "triangle" (3 modèles) : composition asymétrique avec un modèle
+ *                  AU PREMIER PLAN au centre-bas, et deux modèles
+ *                  derrière lui à gauche/droite. Donne une profondeur
+ *                  "vitrine" sans avoir besoin d'un vrai compositing
+ *                  3D unifié.
  *
- * We intentionally don't pass props through TypeScript JSX typing —
- * the custom-element attributes are forwarded as-is via
- * `dangerouslySetInnerHTML` of an inline element. Cleaner than
- * declaring global JSX intrinsic elements just for this one use.
+ * Mouse tracking :
+ *   On n'utilise PAS `auto-rotate`. Chaque viewer écoute la position
+ *   globale de la souris et oriente sa caméra pour donner l'illusion
+ *   que la figurine "regarde" le curseur. Le calcul est local à chaque
+ *   viewer (chaque figurine se base sur SA propre position dans la
+ *   viewport), donc trois figurines vont toutes les trois suivre le
+ *   curseur en restant indépendantes.
+ *
+ *   Le lerp progressif (8 % par frame) évite les saccades quand le
+ *   curseur passe brusquement d'un côté à l'autre.
+ *
+ *   Convention model-viewer : phi = 90° = caméra au niveau "équateur"
+ *   (vue horizontale). phi < 90° = caméra au-dessus du modèle (on voit
+ *   le dessus du crâne, le modèle paraît "regarder vers le bas").
+ *   phi > 90° = caméra sous le modèle (on voit le menton, le modèle
+ *   paraît "regarder vers le haut"). Pour que la souris vers le HAUT
+ *   fasse RELEVER les yeux du modèle, on doit donc INCRÉMENTER phi
+ *   quand relY est négatif → formule `phi = base - relY * range`.
  */
 interface ModelEntry {
   src: string;
-  label: string;
+  label?: string;
 }
 
 interface HeroModelViewerProps {
-  /** Single model URL (kept for back-compat with one-model callsites). */
   src?: string;
-  /** Multi-model picker — when 2+ entries are passed, a switcher renders. */
   models?: ModelEntry[];
   alt?: string;
   className?: string;
+  layout?: 'row' | 'triangle';
 }
 
-export function HeroModelViewer({ src, models, alt = '', className }: HeroModelViewerProps) {
-  // Normalize to a list internally : if a caller passes only `src`
-  // we wrap it as a one-entry array. The picker is only shown when
-  // `entries.length > 1`.
-  const entries: ModelEntry[] = models && models.length > 0 ? models : src ? [{ src, label: '1' }] : [];
+const TRACK_THETA_MAX = 28;     // ±28° yaw — net mais naturel
+const TRACK_PHI_BASE = 88;      // baseline légèrement sous l'horizontal pour voir un soupçon de chin
+const TRACK_PHI_RANGE = 14;     // ±14° pitch — laisse le modèle pencher la tête sans forcer
+const TRACK_REFERENCE_FRAC = 0.5;
 
-  const [activeIdx, setActiveIdx] = useState(0);
+// Positions pré-calculées pour le layout triangle. Chaque entrée
+// décrit un viewer en pourcentage du conteneur, avec son z-index pour
+// l'ordre d'empilement (HK devant, les deux autres derrière).
+//   slot 0 = front center-bottom (modèle "héros")
+//   slot 1 = back-left
+//   slot 2 = back-right
+//
+// Espacement : on a écarté les arrière-plans en allant en NÉGATIF sur
+// left/right (ils débordent légèrement du conteneur, pas grave parce
+// qu'on les laisse couper, ça renforce l'effet "vitrine"). Vertical :
+// les back sont plus haut, le front descend plus bas → triangle net.
+const TRIANGLE_POSITIONS = [
+  // HK devant : centré, légèrement plus petit que dans la version
+  // initiale pour ne plus écraser totalement les back.
+  { left: '28%', top: '20%', width: '44%', height: '80%', zIndex: 20 },
+  // Penguin (back-left) : pousse vers l'extérieur (left négatif) pour
+  // créer un vrai écart entre lui et HK. Plus haut et plus petit.
+  { left: '-6%', top: '-2%', width: '46%', height: '64%', zIndex: 10 },
+  // Kuromi (back-right) : symétrique.
+  { right: '-6%', top: '-2%', width: '46%', height: '64%', zIndex: 10 },
+] as const;
+
+// Paramètres ressort/amortissement par viewer. Chaque mascotte a sa
+// propre "personnalité" cinétique :
+//   - stiffness (raideur) : plus c'est haut, plus la tête réagit vite.
+//   - damping (amortissement) : <1, plus c'est BAS, plus la vélocité
+//     se conserve → mouvement avec inertie qui peut overshooter.
+// HK est la plus vive (raideur ↑, damping ↓) ; Penguin lent et
+// pondéré ; Kuromi entre les deux. Combinaison choisie pour que
+// quand la souris bouge, les 3 ne convergent pas en même temps —
+// HK arrive en premier, Penguin traîne, Kuromi suit.
+const SPRING_PARAMS: { stiffness: number; damping: number }[] = [
+  { stiffness: 0.085, damping: 0.78 },  // HK (front) — vive
+  { stiffness: 0.045, damping: 0.86 },  // Penguin (back-left) — pondérée
+  { stiffness: 0.062, damping: 0.82 },  // Kuromi (back-right) — intermédiaire
+];
+
+export function HeroModelViewer({ src, models, alt = '', className, layout = 'row' }: HeroModelViewerProps) {
+  const entries: ModelEntry[] = models && models.length > 0 ? models : src ? [{ src }] : [];
+
+  const wrapperRefs = useRef<(HTMLDivElement | null)[]>([]);
+  // État ressort par viewer : position courante + vélocité (en deg/frame).
+  // La cible est recalculée chaque frame depuis la position souris ;
+  // la vélocité agit comme un filtre passe-bas qui crée l'inertie.
+  const currentOrbits = useRef<{ theta: number; phi: number }[]>([]);
+  const orbitVelocities = useRef<{ theta: number; phi: number }[]>([]);
+  const mousePos = useRef({ x: 0, y: 0 });
 
   useEffect(() => {
-    // Side-effect import : registers <model-viewer> with the custom
-    // elements registry the first time the component mounts. Idempotent
-    // — the library guards against double-registration.
-    import('@google/model-viewer').catch(() => {
-      // Swallow load errors so a network blip on a CDN doesn't crash
-      // the whole hero. The fallback is "no 3D" which is acceptable.
-    });
+    import('@google/model-viewer').catch(() => {});
   }, []);
+
+  useEffect(() => {
+    currentOrbits.current = entries.map(() => ({ theta: 0, phi: TRACK_PHI_BASE }));
+    orbitVelocities.current = entries.map(() => ({ theta: 0, phi: 0 }));
+  }, [entries.length]);
+
+  useEffect(() => {
+    if (entries.length === 0) return;
+
+    function onMove(e: MouseEvent) {
+      mousePos.current = { x: e.clientX, y: e.clientY };
+    }
+    window.addEventListener('mousemove', onMove);
+    mousePos.current = { x: window.innerWidth / 2, y: window.innerHeight / 2 };
+
+    let raf = 0;
+    function tick() {
+      const { x: mx, y: my } = mousePos.current;
+      const refX = window.innerWidth * TRACK_REFERENCE_FRAC;
+      const refY = window.innerHeight * TRACK_REFERENCE_FRAC;
+
+      wrapperRefs.current.forEach((wrapper, i) => {
+        if (!wrapper) return;
+        const mv = wrapper.querySelector('model-viewer');
+        if (!mv) return;
+
+        const rect = wrapper.getBoundingClientRect();
+        const cx = rect.left + rect.width / 2;
+        const cy = rect.top + rect.height / 2;
+
+        const relX = Math.max(-1, Math.min(1, (mx - cx) / refX));
+        const relY = Math.max(-1, Math.min(1, (my - cy) / refY));
+
+        // Cible : où la mascotte VEUT regarder. Recalculée chaque frame
+        // depuis la position souris.
+        //   theta < 0 quand la souris est à droite → caméra à gauche
+        //     → modèle tourne la tête à droite ✓
+        //   phi > base quand la souris est en haut → caméra plus bas
+        //     → modèle lève les yeux ✓
+        const targetTheta = -relX * TRACK_THETA_MAX;
+        const targetPhi = TRACK_PHI_BASE - relY * TRACK_PHI_RANGE;
+
+        // Système ressort par viewer : la vélocité accumule la force
+        // de rappel vers la cible (× stiffness) puis subit un
+        // amortissement (× damping). Résultat : chaque mascotte a sa
+        // propre cinétique — HK réagit vif, Penguin pondéré, Kuromi
+        // entre les deux. Casse le synchronisme zombi.
+        const cur = currentOrbits.current[i];
+        const vel = orbitVelocities.current[i];
+        const params = SPRING_PARAMS[i % SPRING_PARAMS.length]!;
+
+        vel.theta = vel.theta * params.damping + (targetTheta - cur.theta) * params.stiffness;
+        vel.phi = vel.phi * params.damping + (targetPhi - cur.phi) * params.stiffness;
+        cur.theta += vel.theta;
+        cur.phi += vel.phi;
+
+        mv.setAttribute('camera-orbit', `${cur.theta.toFixed(2)}deg ${cur.phi.toFixed(2)}deg auto`);
+      });
+
+      raf = requestAnimationFrame(tick);
+    }
+    raf = requestAnimationFrame(tick);
+
+    return () => {
+      window.removeEventListener('mousemove', onMove);
+      cancelAnimationFrame(raf);
+    };
+  }, [entries.length]);
 
   if (entries.length === 0) return null;
 
-  const active = entries[Math.min(activeIdx, entries.length - 1)]!;
+  const isTriangle = layout === 'triangle' && entries.length === 3;
 
-  // Hand-rolled HTML so we don't have to declare a global JSX
-  // intrinsic for `<model-viewer>`. The element is recognised at
-  // runtime once the import above runs.
-  // The `key`-style swap is achieved by re-rendering the inner HTML
-  // when `active.src` changes — model-viewer reloads automatically
-  // when its `src` attribute changes.
-  const modelViewerMarkup = `
-    <model-viewer
-      src="${active.src}"
-      alt="${alt.replace(/"/g, '&quot;')}"
-      camera-controls
-      auto-rotate
-      auto-rotate-delay="500"
-      rotation-per-second="20deg"
-      interaction-prompt="none"
-      shadow-intensity="0.6"
-      shadow-softness="0.9"
-      exposure="1.05"
-      environment-image="neutral"
-      style="width:100%;height:100%;background:transparent;--poster-color:transparent;"
-    ></model-viewer>
-  `;
+  function buildViewerMarkup(entry: ModelEntry) {
+    // Note : pas de `camera-controls`. On s'occupe nous-mêmes du
+    // camera-orbit dans la boucle de mouse tracking — laisser
+    // camera-controls activé permettrait à l'utilisateur de drag le
+    // modèle avec la souris, ce qui se mélange désagréablement avec
+    // notre tracking automatique (le modèle "fight" entre l'input
+    // utilisateur et notre logique). On désactive tout, le hero est
+    // strictement contemplatif.
+    //
+    // pointer-events:none sur le model-viewer fait que le wrapper
+    // div capte le click (pas le canvas WebGL), donc l'animation de
+    // saut au clic se déclenche correctement.
+    return `
+      <model-viewer
+        src="${entry.src}"
+        alt="${(alt + (entry.label ? ' — ' + entry.label : '')).replace(/"/g, '&quot;')}"
+        interaction-prompt="none"
+        shadow-intensity="0.55"
+        shadow-softness="0.9"
+        exposure="1.05"
+        environment-image="neutral"
+        camera-orbit="0deg ${TRACK_PHI_BASE}deg auto"
+        style="width:100%;height:100%;background:transparent;--poster-color:transparent;pointer-events:none;"
+      ></model-viewer>
+    `;
+  }
 
+  // Click handler : déclenche l'animation de saut sur le wrapper.
+  // On retire la classe puis force un reflow (lecture de offsetHeight)
+  // avant de la rajouter — pattern standard pour redémarrer une
+  // animation CSS sur clic répété sans avoir à attendre la fin du
+  // cycle précédent.
+  function handleViewerClick(i: number) {
+    const wrapper = wrapperRefs.current[i];
+    if (!wrapper) return;
+    wrapper.classList.remove('mnb-mascotte-jump');
+    void wrapper.offsetHeight;
+    wrapper.classList.add('mnb-mascotte-jump');
+  }
+
+  if (isTriangle) {
+    // Triangle : positionnement absolu pour empiler la figurine de
+    // devant par-dessus celles de derrière. Chaque viewer reste
+    // indépendant pour le mouse tracking (chacun calcule depuis son
+    // propre centre, donc ils bougent en parallèle mais avec des
+    // angles différents selon leur position).
+    //
+    // Structure 2 niveaux : outer div = `className` du caller intact
+    // (en pratique `absolute inset-0` pour remplir la colonne hero) ;
+    // inner div = `relative w-full h-full` qui établit le contexte
+    // de positionnement pour les enfants `absolute`. Si on mélange
+    // `relative` + `absolute inset-0` sur le même élément, Tailwind
+    // applique l'une ou l'autre selon l'ordre des règles dans le
+    // bundle et la div peut se collapser à 0×0 — bug observé.
+    return (
+      <div className={className}>
+        <div className="relative w-full h-full">
+          {entries.map((entry, i) => {
+            const pos = TRIANGLE_POSITIONS[i];
+            if (!pos) return null;
+            return (
+              <div
+                key={entry.src}
+                ref={(el) => { wrapperRefs.current[i] = el; }}
+                onClick={() => handleViewerClick(i)}
+                className="absolute cursor-pointer"
+                style={pos}
+                dangerouslySetInnerHTML={{ __html: buildViewerMarkup(entry) }}
+              />
+            );
+          })}
+        </div>
+      </div>
+    );
+  }
+
+  // Layout par défaut : row centrée, items-end pour aligner les pieds.
   return (
-    // Outer div keeps whatever sizing/position the caller asked for
-    // (typically `absolute inset-0` to fill a hero column). We do NOT
-    // mix `relative` on the same element — Tailwind's `relative` and
-    // `absolute` utilities collide (both define `position`) and the
-    // wrapper would collapse to zero size, dragging the pill switcher
-    // to a random spot on the page.
     <div className={className}>
-      {/* Inner positioning context — relative so the absolute children
-          (model viewer + switcher) anchor inside this box. */}
-      <div className="relative w-full h-full">
-        <div
-          className="absolute inset-0"
-          // The wrapper carries layout sizing ; the inline web
-          // component fills it. `dangerouslySetInnerHTML` is safe here
-          // because `src`/`alt` are interpolated literals from props,
-          // not raw user input.
-          dangerouslySetInnerHTML={{ __html: modelViewerMarkup }}
-        />
-
-        {entries.length > 1 && (
-          // Pill switcher : floats at the bottom of the viewer, sits
-          // above the model thanks to z-10 so click events land on the
-          // pills, not on the canvas.
-          <div className="absolute bottom-2 left-1/2 -translate-x-1/2 z-10 flex gap-1.5 rounded-full bg-white/85 backdrop-blur-sm px-1.5 py-1 shadow-md ring-1 ring-black/5">
-            {entries.map((entry, i) => {
-              const selected = i === activeIdx;
-              return (
-                <button
-                  key={entry.src}
-                  type="button"
-                  onClick={() => setActiveIdx(i)}
-                  aria-pressed={selected}
-                  aria-label={`Afficher modèle ${entry.label}`}
-                  className={cn(
-                    'min-w-[32px] px-3 h-7 rounded-full text-[11px] font-black uppercase tracking-wider transition-colors',
-                    selected
-                      ? 'bg-[#3D5A73] text-white shadow-sm'
-                      : 'text-[#2D3748] hover:bg-black/5',
-                  )}
-                >
-                  {entry.label}
-                </button>
-              );
-            })}
-          </div>
+      <div
+        className={cn(
+          'relative flex h-full w-full',
+          entries.length === 1 ? 'items-center justify-center' : 'items-end justify-center gap-1 md:gap-2',
         )}
+      >
+        {entries.map((entry, i) => (
+          <div
+            key={entry.src}
+            ref={(el) => { wrapperRefs.current[i] = el; }}
+            onClick={() => handleViewerClick(i)}
+            className="relative flex-1 h-full min-w-0 cursor-pointer"
+            dangerouslySetInnerHTML={{ __html: buildViewerMarkup(entry) }}
+          />
+        ))}
       </div>
     </div>
   );

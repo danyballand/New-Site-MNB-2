@@ -4,6 +4,27 @@
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
+/* Animation de saut pour les mascottes 3D du hero (HeroModelViewer).
+   Squash-and-stretch classique :
+     - 0   %  : repos
+     - 18  %  : pré-écrasement (préparation au saut, scaleY < 1)
+     - 46  %  : apex (translateY négatif + léger étirement vertical)
+     - 72  %  : ré-écrasement à l'atterrissage
+     - 100 %  : retour au repos
+   transform-origin: bottom → la figurine s'écrase depuis ses pieds,
+   pas son centre, ce qui donne un mouvement naturel. */
+@keyframes mnb-mascotte-jump {
+  0%   { transform: translateY(0)     scaleY(1); }
+  18%  { transform: translateY(0)     scaleY(0.94); }
+  46%  { transform: translateY(-22px) scaleY(1.03); }
+  72%  { transform: translateY(0)     scaleY(0.96); }
+  100% { transform: translateY(0)     scaleY(1); }
+}
+.mnb-mascotte-jump {
+  animation: mnb-mascotte-jump 620ms var(--ease);
+  transform-origin: bottom center;
+}
+
 *
 {
   box-sizing: border-box;

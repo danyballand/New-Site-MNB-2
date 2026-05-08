@@ -8,3 +8,9 @@ dist/
 .DS_Store
 coverage/
 *.tsbuildinfo
+
+# Photos brutes supplier en attente de traitement (~370 MB de JPG
+# 6000x4000). Une fois la photo intégrée au catalogue elle est
+# resizée + sauvée dans public/shop/products/ ; le dossier source
+# n'a jamais besoin de partir sur le repo.
+public/shop/products/perles_a_ajouter/

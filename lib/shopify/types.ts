@@ -1,11 +1,29 @@
 export const SHOPIFY_API_VERSION = "2026-04";
 
+/**
+ * Catégories surfacées dans la navigation `/shop`. Quatre buckets
+ * volontairement disjoints :
+ *
+ *   - perles                       → tout ce qui s'enfile dans un
+ *     bracelet (rondes, cubes, fleurs, étoiles, cœurs, animaux
+ *     résine — toutes percées pour passer au fil)
+ *   - pierres semi-précieuses      → pierres naturelles
+ *   - porte-cles                   → produits finis avec sangle +
+ *     mousqueton (Sanrio licensed)
+ *   - figurines                    → figurines collection autonomes
+ *     (Mini-Doll Hello Kitty…) — 3D, ni bracelet ni keychain
+ *
+ * Note historique : ce qui était listé en "charmes" dans une version
+ * précédente (cœurs, étoiles, fleurs, animaux résine) a été basculé
+ * en "perles" — ces pièces sont fonctionnellement des perles non
+ * rondes, percées pour s'enfiler. Le mot "charme" était un faux ami.
+ */
 export const shopCategories = [
   {
     key: "perles",
-    label: "Perles & figurines",
+    label: "Perles",
     href: "/shop/perles",
-    description: "Perles en mini-lots pour completer une creation My Nice Bracelet sans effet mercerie.",
+    description: "Perles à enfiler — rondes, cubes, fleurs, étoiles, cœurs, animaux. Vendues en lots dégressifs.",
   },
   {
     key: "pierres",
@@ -14,10 +32,16 @@ export const shopCategories = [
     description: "Pierres naturelles et semi-precieuses selectionnees pour des harmonies douces.",
   },
   {
+    key: "porte-cles",
+    label: "Porte-cles Sanrio",
+    href: "/shop/porte-cles",
+    description: "Porte-cles licensed Sanrio (Hello Kitty, Kuromi…) avec sangle + anneau.",
+  },
+  {
     key: "figurines",
-    label: "Figurines kawaii",
-    href: "/shop/figurines-kawaii",
-    description: "Figurines kawaii premium pour signer un bijou, une attache ou un porte-cle.",
+    label: "Figurines",
+    href: "/shop/figurines",
+    description: "Figurines collection autonomes — Mini-Doll Hello Kitty, mascottes décoratives.",
   },
 ] as const;
 

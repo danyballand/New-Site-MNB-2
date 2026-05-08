@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
-import { ArrowRight, Gem, Package, Sparkles, WandSparkles } from "lucide-react";
+import { ArrowRight, Gem, KeyRound, Sparkles, WandSparkles } from "lucide-react";
 import { ProductGrid } from "@/components/shop/product-grid";
 import { SourceBanner } from "@/components/shop/source-banner";
 import { HeroModelViewer } from "@/components/shop/HeroModelViewer";
@@ -25,45 +25,70 @@ const MAIN_HOST = "https://mynicebracelet.com";
 type QuickEntry = {
   title: string;
   eyebrow: string;
-  body: string;
   href: string;
   type?: ShopProductType;
   icon: typeof WandSparkles;
+  /** Optional explicit cover image URL. When set, overrides the
+   *  default behavior (which picks the first product of the category).
+   *  Use this when the auto-pick lands on a non-representative photo
+   *  (e.g. quartz-rose pierres tile that ended up showing a yellow
+   *  heart bead because the legacy mock pointed there). */
+  coverImage?: { url: string; alt: string };
   external?: boolean;
 };
 
+// Quatre tuiles "rayon" alignées sur les 4 buckets de
+// `shopCategories` (lib/shopify/types.ts). Plus de `body` (les sous-
+// textes en italique étaient des micro-paragraphes redondants — le
+// titre + l'eyebrow + le compteur de produits suffisent à indiquer
+// la promesse de chaque rayon). Chaque tuile force son `coverImage`
+// pour ne pas dépendre du tirage aléatoire de la première fiche du
+// catalogue (qui pouvait afficher une mauvaise photo, ex. cœur jaune
+// pour les pierres).
 const quickEntries: QuickEntry[] = [
   {
     title: "Perles",
-    eyebrow: "Je veux composer une base",
-    body: "Perles pastel, nacrees ou transparentes, vendues au nombre de pieces.",
+    eyebrow: "Je compose une base",
     href: "/shop/perles",
     type: "perles",
     icon: WandSparkles,
+    coverImage: {
+      url: "/shop/products/mnb_perle_fleur_rose_iris_v1.jpg",
+      alt: "Selection perles My Nice Bracelet",
+    },
   },
   {
-    title: "Pierres semi-precieuses",
-    eyebrow: "Je veux une matiere plus bijou",
-    body: "Quartz, amethyste et pierres naturelles selectionnees par l'atelier.",
+    title: "Pierres naturelles",
+    eyebrow: "Je veux une matiere bijou",
     href: "/shop/pierres-semi-precieuses",
     type: "pierres",
     icon: Gem,
+    coverImage: {
+      url: "/shop/products/mnb_perle_oeil_de_tigre_dore_v1.jpg",
+      alt: "Selection pierres semi-precieuses My Nice Bracelet",
+    },
   },
   {
-    title: "Figurines kawaii",
-    eyebrow: "Je veux une piece coup de coeur",
-    body: "Coeurs, etoiles, fleurs et figurines douces pour personnaliser une creation.",
-    href: "/shop/figurines-kawaii",
+    title: "Porte-cles Sanrio",
+    eyebrow: "Je veux un objet fini",
+    href: "/shop/porte-cles",
+    type: "porte-cles",
+    icon: KeyRound,
+    coverImage: {
+      url: "/shop/products/mnb_yume_camping_collection_v1.jpeg",
+      alt: "Selection porte-cles Sanrio My Nice Bracelet",
+    },
+  },
+  {
+    title: "Figurines",
+    eyebrow: "Je veux une mascotte",
+    href: "/shop/figurines",
     type: "figurines",
     icon: Sparkles,
-  },
-  {
-    title: "Kits & bracelets prets",
-    eyebrow: "Je veux une creation prete a porter",
-    body: "Bracelets composes par l'atelier, livres assembles et prets a offrir — sans assembler chez soi.",
-    href: `${MAIN_HOST}/kits`,
-    icon: Package,
-    external: true,
+    coverImage: {
+      url: "/shop/products/mnb_yume_minidoll_collection_v1.jpeg",
+      alt: "Selection figurines Mini-Doll My Nice Bracelet",
+    },
   },
 ];
 
@@ -128,6 +153,7 @@ export function ShopLanding({
   const categoryCtaLabels: Partial<Record<ShopProductType, string>> = {
     perles: "Voir les perles",
     pierres: "Voir les pierres",
+    "porte-cles": "Voir les porte-cles",
     figurines: "Voir les figurines",
   };
   const primaryCtaLabel = activeType ? categoryCtaLabels[activeType] ?? "Voir la collection" : "Voir la selection";
@@ -153,8 +179,10 @@ export function ShopLanding({
         <div className="container mx-auto px-4 md:px-6 grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-center">
           {/* Copy column — kept tight on purpose. The eyebrow + h1
               + one short lead sentence + CTA pair carry the whole
-              hero ; the rayon tiles below do the detailing. */}
-          <div className="lg:col-span-7">
+              hero ; the rayon tiles below do the detailing.
+              col-span-6 (au lieu de 7) pour laisser place à la
+              colonne modèles 3D côté droit (col-span-6 aussi → 12/12). */}
+          <div className="lg:col-span-6">
             <p className="text-[10px] md:text-[11px] font-black uppercase tracking-[0.32em] text-[#3D5A73] mb-5">
               Boutique de l&apos;atelier
             </p>
@@ -183,19 +211,24 @@ export function ShopLanding({
             </div>
           </div>
 
-          {/* Visual column : 3D Hello Kitty model that auto-rotates
-              and supports drag-to-orbit. Replaces the previous
-              4-bubble flat-lay — gives the hero a richer, more
-              "boutique signature" feel. The pastel blob behind the
-              model (siblings sit in the parent <section>) frames it
-              without an explicit card. */}
-          <div className="lg:col-span-5 relative aspect-square max-w-[460px] mx-auto w-full">
+          {/* Visual column : trois mascottes 3D en composition triangle.
+              Hello Kitty au premier plan (centre-bas), Penguin à
+              gauche derrière, Kuromi à droite derrière. L'ordre des
+              entrées correspond aux slots du layout :
+                index 0 = front center-bottom
+                index 1 = back-left
+                index 2 = back-right
+              Chacune suit le curseur du regard depuis sa propre
+              position (cf. HeroModelViewer mouse tracking). */}
+          <div className="lg:col-span-6 relative aspect-[6/5] max-w-[640px] mx-auto w-full">
             <HeroModelViewer
+              layout="triangle"
               models={[
-                { src: '/shop/models/hello_kitty.glb', label: '1' },
-                { src: '/shop/models/hello_kitty_2.glb', label: '2' },
+                { src: '/shop/models/hello_kitty_cheerleader.glb', label: 'Hello Kitty' },
+                { src: '/shop/models/winking_penguin.glb', label: 'Penguin' },
+                { src: '/shop/models/kuromi_maid.glb', label: 'Kuromi' },
               ]}
-              alt="Modèle 3D Hello Kitty — boutique My Nice Bracelet"
+              alt="Mascottes 3D Hello Kitty, Penguin et Kuromi — boutique My Nice Bracelet"
               className="absolute inset-0"
             />
           </div>
@@ -217,9 +250,13 @@ export function ShopLanding({
             const count = entry.type
               ? overviewProducts.filter((p) => p.category === entry.type).length
               : null;
-            const cover = entry.type
-              ? overviewProducts.find((p) => p.category === entry.type)?.featuredImage
-              : undefined;
+            // Cover image priority : `coverImage` explicite > première
+            // fiche du catalogue > rien (icône glyph en fallback).
+            const cover = entry.coverImage
+              ? { url: entry.coverImage.url, altText: entry.coverImage.alt }
+              : entry.type
+                ? overviewProducts.find((p) => p.category === entry.type)?.featuredImage
+                : undefined;
             // Per-category soft tint so the 4 tiles read as a set
             // but each has its own personality.
             const tints = [
@@ -240,7 +277,7 @@ export function ShopLanding({
               <>
                 {/* Cover image (uses the first product photo of the
                     category as a stand-in product visual) */}
-                {cover && entry.type ? (
+                {cover ? (
                   <div className="absolute inset-x-0 top-0 h-[60%] flex items-center justify-center pointer-events-none">
                     <div className="relative w-[78%] h-[88%]">
                       <Image
@@ -249,7 +286,7 @@ export function ShopLanding({
                         fill
                         sizes="(max-width: 980px) 35vw, 18vw"
                         className="object-contain transition-transform duration-500 group-hover:scale-[1.05]"
-                        unoptimized={cover.url.endsWith(".jpeg")}
+                        unoptimized={cover.url.endsWith(".jpeg") || cover.url.endsWith(".jpg")}
                       />
                     </div>
                   </div>
@@ -261,17 +298,17 @@ export function ShopLanding({
                   </div>
                 )}
 
-                {/* Bottom content : label + caption */}
+                {/* Bottom content : label + count.
+                    Le micro-texte italique a été retire (cf. type
+                    QuickEntry — plus de field `body`) ; le titre +
+                    eyebrow + le compteur portent toute l'info. */}
                 <div className="relative z-10 px-4 md:px-5 pb-4 md:pb-5 pt-3 bg-gradient-to-t from-white/95 via-white/70 to-transparent">
                   <p className="text-[8px] md:text-[9px] font-black uppercase tracking-[0.22em] text-[#3D5A73]/75 mb-1.5">
                     {entry.eyebrow}
                   </p>
-                  <h3 className="font-serif text-[15px] md:text-[18px] font-black uppercase leading-[1.05] tracking-tight text-[#2D3748] mb-2">
+                  <h3 className="font-serif text-[16px] md:text-[20px] font-black uppercase leading-[1.05] tracking-tight text-[#2D3748] mb-2.5">
                     {entry.title}
                   </h3>
-                  <p className="text-[10px] md:text-[11px] italic text-[#5A6878] leading-snug line-clamp-2 mb-2">
-                    {entry.body}
-                  </p>
                   <p className="inline-flex items-center gap-1.5 text-[9px] md:text-[10px] font-black uppercase tracking-[0.18em] text-[#3D5A73]">
                     {entry.external
                       ? "Site principal"

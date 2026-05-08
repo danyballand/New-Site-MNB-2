@@ -429,10 +429,16 @@ function inferCategory(productType: string, tags: string[]): ShopProductType {
     return "recharges";
   }
 
+  // Perles : matériau brut pour composer un bracelet (vendu en lots
+  // de pièces). Match avant les autres catégories parce que "perle"
+  // est le mot le plus discriminant — un produit avec "perle" dans
+  // ses tags va presque toujours dans cette catégorie.
   if (source.includes("perle") || source.includes("bead")) {
     return "perles";
   }
 
+  // Pierres semi-précieuses : matériau bijou. Plus restrictif que
+  // perles parce qu'on liste les noms de pierres connus.
   if (
     source.includes("pierre") ||
     source.includes("stone") ||
@@ -440,15 +446,47 @@ function inferCategory(productType: string, tags: string[]): ShopProductType {
     source.includes("semi precieuse") ||
     source.includes("semi-precious") ||
     source.includes("amethyste") ||
+    source.includes("rhodonite") ||
+    source.includes("jaspe") ||
+    source.includes("quartz") ||
     source.includes("turquoise")
   ) {
     return "pierres";
   }
 
-  if (source.includes("figurine") || source.includes("kawaii")) {
+  // Mini-Doll Hello Kitty : seul produit qu'on classe en "figurines"
+  // (autonome, debout, pas de strap). Test AVANT porte-cles pour
+  // intercepter explicitement parce que Mini-Doll a aussi des tags
+  // Sanrio génériques qui le ferait basculer en porte-cles sinon.
+  if (source.includes("mini-doll") || source.includes("mini doll")) {
     return "figurines";
   }
 
+  // Porte-clés Sanrio licensed (YuMe + autres). Tous les autres
+  // produits Sanrio (camping lamp, balloon, raincoat, snack time,
+  // scooter, one-piece pocket hero) ont un strap → porte-cles.
+  if (
+    source.includes("yume") ||
+    source.includes("sanrio") ||
+    source.includes("porte-cle") ||
+    source.includes("porte cle") ||
+    source.includes("keychain") ||
+    source.includes("hello kitty") ||
+    source.includes("kuromi") ||
+    source.includes("my melody") ||
+    source.includes("cinnamoroll") ||
+    source.includes("pompompurin") ||
+    source.includes("pochacco") ||
+    source.includes("molang") ||
+    source.includes("one piece")
+  ) {
+    return "porte-cles";
+  }
+
+  // Tout le reste = perles (catch-all). L'ancienne catégorie "charmes"
+  // (cœurs, étoiles, fleurs, animaux résine) a été basculée ici parce
+  // que ces pièces sont fonctionnellement des perles non-rondes,
+  // toutes percées pour s'enfiler dans un bracelet.
   return "perles";
 }
 
