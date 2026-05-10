@@ -487,10 +487,38 @@ const yumeBalloonCollection = productAsset(
   "mnb_yume_balloon_collection_v1.jpeg",
   "Collection YuMe Hello Kitty Balloon Series",
 );
-const yumeBalloonHelloKitty = productAsset(
-  "mnb_yume_balloon_hello_kitty_v1.jpeg",
-  "Porte-clé Hello Kitty sur ballon-cheval rose YuMe",
-);
+const yumeBalloonHelloKittyPackshotImage = {
+  ...productAsset(
+    "mnb_yume_balloon_hello_kitty_packshot_mynicebracelet_v1.png",
+    "Packshot porte-clé Hello Kitty sur ballon-cheval rose YuMe",
+    1024,
+  ),
+  label: "Packshot",
+};
+const yumeBalloonHelloKittyDetailImage = {
+  ...productAsset(
+    "mnb_yume_balloon_hello_kitty_detail_macro_mynicebracelet_v1.png",
+    "Detail macro porte-clé Hello Kitty sur ballon-cheval rose YuMe",
+    1024,
+  ),
+  label: "Detail",
+};
+const yumeBalloonHelloKittyScaleImage = {
+  ...productAsset(
+    "mnb_yume_balloon_hello_kitty_echelle_main_mynicebracelet_v1.png",
+    "Echelle en main porte-clé Hello Kitty sur ballon-cheval rose YuMe",
+    1024,
+  ),
+  label: "Echelle",
+};
+const yumeBalloonHelloKittyContextImage = {
+  ...productAsset(
+    "mnb_yume_balloon_hello_kitty_contexte_atelier_mynicebracelet_v1.png",
+    "Contexte atelier porte-clé Hello Kitty sur ballon-cheval rose YuMe",
+    1024,
+  ),
+  label: "Atelier",
+};
 const yumeBalloonMyMelodyPackshotImage = {
   ...productAsset(
     "mnb_yume_balloon_my_melody_packshot_mynicebracelet_v1.png",
@@ -555,19 +583,248 @@ const yumeBalloonCinnamorollContextImage = {
   ),
   label: "Atelier",
 };
-const yumeBalloonPompompurin = productAsset(
-  "mnb_yume_balloon_pompompurin_v1.jpeg",
-  "Porte-clé Pompompurin sur ballon-cheval jaune YuMe",
-);
-const yumeBalloonKuromi = productAsset(
-  "mnb_yume_balloon_kuromi_v1.jpeg",
-  "Porte-clé Kuromi sur ballon-cheval rose YuMe",
-);
+const yumeBalloonPompompurinPackshotImage = {
+  ...productAsset(
+    "mnb_yume_balloon_pompompurin_packshot_mynicebracelet_v1.png",
+    "Packshot porte-clé Pompompurin sur ballon-cheval jaune YuMe",
+    1024,
+  ),
+  label: "Packshot",
+};
+const yumeBalloonPompompurinDetailImage = {
+  ...productAsset(
+    "mnb_yume_balloon_pompompurin_detail_macro_mynicebracelet_v1.png",
+    "Detail macro porte-clé Pompompurin sur ballon-cheval jaune YuMe",
+    1024,
+  ),
+  label: "Detail",
+};
+const yumeBalloonPompompurinScaleImage = {
+  ...productAsset(
+    "mnb_yume_balloon_pompompurin_echelle_main_mynicebracelet_v1.png",
+    "Echelle en main porte-clé Pompompurin sur ballon-cheval jaune YuMe",
+    1024,
+  ),
+  label: "Echelle",
+};
+const yumeBalloonPompompurinContextImage = {
+  ...productAsset(
+    "mnb_yume_balloon_pompompurin_contexte_atelier_mynicebracelet_v1.png",
+    "Contexte atelier porte-clé Pompompurin sur ballon-cheval jaune YuMe",
+    1024,
+  ),
+  label: "Atelier",
+};
+const yumeBalloonKuromiPackshotImage = {
+  ...productAsset(
+    "mnb_yume_balloon_kuromi_packshot_mynicebracelet_v1.png",
+    "Packshot porte-clé Kuromi sur ballon-cheval violet YuMe",
+    1024,
+  ),
+  label: "Packshot",
+};
+const yumeBalloonKuromiDetailImage = {
+  ...productAsset(
+    "mnb_yume_balloon_kuromi_detail_macro_mynicebracelet_v1.png",
+    "Detail macro porte-clé Kuromi sur ballon-cheval violet YuMe",
+    1024,
+  ),
+  label: "Detail",
+};
+const yumeBalloonKuromiScaleImage = {
+  ...productAsset(
+    "mnb_yume_balloon_kuromi_echelle_main_mynicebracelet_v1.png",
+    "Echelle en main porte-clé Kuromi sur ballon-cheval violet YuMe",
+    1024,
+  ),
+  label: "Echelle",
+};
+const yumeBalloonKuromiContextImage = {
+  ...productAsset(
+    "mnb_yume_balloon_kuromi_contexte_atelier_mynicebracelet_v1.png",
+    "Contexte atelier porte-clé Kuromi sur ballon-cheval violet YuMe",
+    1024,
+  ),
+  label: "Atelier",
+};
 
-// ─── Light-Up Star Series ────────────────────────────────────────
+// ─── Nuage Series ────────────────────────────────────────────────
+const yumeNuageHelloKittyPackshotImage = {
+  ...productAsset(
+    "mnb_yume_nuage_hello_kitty_packshot_mynicebracelet_hd_2800.png",
+    "Packshot porte-clé Hello Kitty sur nuage jaune YuMe",
+    2800,
+  ),
+  label: "Packshot",
+};
+const yumeNuageHelloKittyDetailImage = {
+  ...productAsset(
+    "mnb_yume_nuage_hello_kitty_detail_macro_mynicebracelet_hd_2800.png",
+    "Detail macro porte-clé Hello Kitty sur nuage jaune YuMe",
+    2800,
+  ),
+  label: "Detail",
+};
+const yumeNuageHelloKittyScaleImage = {
+  ...productAsset(
+    "mnb_yume_nuage_hello_kitty_echelle_main_mynicebracelet_hd_2800.png",
+    "Echelle en main porte-clé Hello Kitty sur nuage jaune YuMe",
+    2800,
+  ),
+  label: "Echelle",
+};
+const yumeNuageHelloKittyContextImage = {
+  ...productAsset(
+    "mnb_yume_nuage_hello_kitty_contexte_atelier_mynicebracelet_hd_2800.png",
+    "Contexte atelier porte-clé Hello Kitty sur nuage jaune YuMe",
+    2800,
+  ),
+  label: "Atelier",
+};
+const yumeNuageKuromiPackshotImage = {
+  ...productAsset(
+    "mnb_yume_nuage_kuromi_packshot_mynicebracelet_hd_2800.png",
+    "Packshot porte-clé Kuromi sur nuage jaune YuMe",
+    2800,
+  ),
+  label: "Packshot",
+};
+const yumeNuageKuromiDetailImage = {
+  ...productAsset(
+    "mnb_yume_nuage_kuromi_detail_macro_mynicebracelet_hd_2800.png",
+    "Detail macro porte-clé Kuromi sur nuage jaune YuMe",
+    2800,
+  ),
+  label: "Detail",
+};
+const yumeNuageKuromiScaleImage = {
+  ...productAsset(
+    "mnb_yume_nuage_kuromi_echelle_main_mynicebracelet_hd_2800.png",
+    "Echelle en main porte-clé Kuromi sur nuage jaune YuMe",
+    2800,
+  ),
+  label: "Echelle",
+};
+const yumeNuageKuromiContextImage = {
+  ...productAsset(
+    "mnb_yume_nuage_kuromi_contexte_atelier_mynicebracelet_hd_2800.png",
+    "Contexte atelier porte-clé Kuromi sur nuage jaune YuMe",
+    2800,
+  ),
+  label: "Atelier",
+};
+
+const yumeNuageCinnamorollPackshotImage = {
+  ...productAsset(
+    "mnb_yume_nuage_cinnamoroll_packshot_mynicebracelet_hd_2800.png",
+    "Packshot porte-clé Cinnamoroll sur nuage jaune YuMe",
+    2800,
+  ),
+  label: "Packshot",
+};
+const yumeNuageCinnamorollDetailImage = {
+  ...productAsset(
+    "mnb_yume_nuage_cinnamoroll_detail_macro_mynicebracelet_hd_2800.png",
+    "Detail macro porte-clé Cinnamoroll sur nuage jaune YuMe",
+    2800,
+  ),
+  label: "Detail",
+};
+const yumeNuageCinnamorollScaleImage = {
+  ...productAsset(
+    "mnb_yume_nuage_cinnamoroll_echelle_main_mynicebracelet_hd_2800.png",
+    "Echelle en main porte-clé Cinnamoroll sur nuage jaune YuMe",
+    2800,
+  ),
+  label: "Echelle",
+};
+const yumeNuageCinnamorollContextImage = {
+  ...productAsset(
+    "mnb_yume_nuage_cinnamoroll_contexte_atelier_mynicebracelet_hd_2800.png",
+    "Contexte atelier porte-clé Cinnamoroll sur nuage jaune YuMe",
+    2800,
+  ),
+  label: "Atelier",
+};
+
+const yumeNuageMyMelodyPackshotImage = {
+  ...productAsset(
+    "mnb_yume_nuage_my_melody_packshot_mynicebracelet_hd_2800.png",
+    "Packshot porte-clé My Melody sur nuage jaune YuMe",
+    2800,
+  ),
+  label: "Packshot",
+};
+const yumeNuageMyMelodyDetailImage = {
+  ...productAsset(
+    "mnb_yume_nuage_my_melody_detail_macro_mynicebracelet_hd_2800.png",
+    "Detail macro porte-clé My Melody sur nuage jaune YuMe",
+    2800,
+  ),
+  label: "Detail",
+};
+const yumeNuageMyMelodyScaleImage = {
+  ...productAsset(
+    "mnb_yume_nuage_my_melody_echelle_main_mynicebracelet_hd_2800.png",
+    "Echelle en main porte-clé My Melody sur nuage jaune YuMe",
+    2800,
+  ),
+  label: "Echelle",
+};
+const yumeNuageMyMelodyContextImage = {
+  ...productAsset(
+    "mnb_yume_nuage_my_melody_contexte_atelier_mynicebracelet_hd_2800.png",
+    "Contexte atelier porte-clé My Melody sur nuage jaune YuMe",
+    2800,
+  ),
+  label: "Atelier",
+};
+
+const yumeNuagePochaccoPackshotImage = {
+  ...productAsset(
+    "mnb_yume_nuage_pochacco_packshot_mynicebracelet_hd_2800.png",
+    "Packshot porte-clé Pochacco sur nuage jaune YuMe",
+    2800,
+  ),
+  label: "Packshot",
+};
+const yumeNuagePochaccoDetailImage = {
+  ...productAsset(
+    "mnb_yume_nuage_pochacco_detail_macro_mynicebracelet_hd_2800.png",
+    "Detail macro porte-clé Pochacco sur nuage jaune YuMe",
+    2800,
+  ),
+  label: "Detail",
+};
+const yumeNuagePochaccoScaleImage = {
+  ...productAsset(
+    "mnb_yume_nuage_pochacco_echelle_main_mynicebracelet_hd_2800.png",
+    "Echelle en main porte-clé Pochacco sur nuage jaune YuMe",
+    2800,
+  ),
+  label: "Echelle",
+};
+const yumeNuagePochaccoContextImage = {
+  ...productAsset(
+    "mnb_yume_nuage_pochacco_contexte_atelier_mynicebracelet_hd_2800.png",
+    "Contexte atelier porte-clé Pochacco sur nuage jaune YuMe",
+    2800,
+  ),
+  label: "Atelier",
+};
+const yumeNuageCollectionImage = {
+  ...productAsset(
+    "mnb_yume_star_collection_v1.jpeg",
+    "Collection YuMe Hello Kitty & Friends Nuage",
+    640,
+  ),
+  label: "Collection",
+};
+
+// ─── Star Series ────────────────────────────────────────────────
 const yumeStarCollection = productAsset(
   "mnb_yume_star_collection_v1.jpeg",
-  "Collection YuMe Hello Kitty Light-Up Star Series",
+  "Collection YuMe Hello Kitty & Friends Light-Up Star",
 );
 const yumeStarHelloKitty = productAsset(
   "mnb_yume_star_hello_kitty_v1.jpeg",
@@ -591,24 +848,106 @@ const yumeStarCinnamoroll = productAsset(
 );
 
 // ─── 5cm Mini-Doll Cute Outfit Series ────────────────────────────
-// Photos pré-recadrées par scripts/normalize_minidoll.py (Hello Kitty
-// au centre, ~86 % de la hauteur).
 const yumeMinidollCollection = productAsset(
   "mnb_yume_minidoll_collection_v1.jpeg",
   "Collection YuMe Hello Kitty 5cm Mini-Doll Cute Outfit",
 );
-const yumeMinidollPinkDress = productAsset(
-  "mnb_yume_minidoll_pink_dress_v1.jpeg",
-  "Mini-Doll Hello Kitty robe rose YuMe",
-);
-const yumeMinidollRockstar = productAsset(
-  "mnb_yume_minidoll_rockstar_v1.jpeg",
-  "Mini-Doll Hello Kitty rockstar YuMe",
-);
-const yumeMinidollDenim = productAsset(
-  "mnb_yume_minidoll_denim_v1.jpeg",
-  "Mini-Doll Hello Kitty veste denim YuMe",
-);
+const yumeMinidollPinkDressPackshotImage = {
+  ...productAsset(
+    "mnb_yume_minidoll_pink_dress_packshot_mynicebracelet_v2.png",
+    "Packshot Mini-Doll Hello Kitty robe rose à nœuds YuMe",
+    1600,
+  ),
+  label: "Packshot",
+};
+const yumeMinidollPinkDressDetailImage = {
+  ...productAsset(
+    "mnb_yume_minidoll_pink_dress_detail_macro_mynicebracelet_v2.png",
+    "Detail macro Mini-Doll Hello Kitty robe rose à nœuds YuMe",
+    1600,
+  ),
+  label: "Detail",
+};
+const yumeMinidollPinkDressScaleImage = {
+  ...productAsset(
+    "mnb_yume_minidoll_pink_dress_echelle_mynicebracelet_v2.png",
+    "Echelle en main Mini-Doll Hello Kitty robe rose à nœuds YuMe",
+    1600,
+  ),
+  label: "Echelle",
+};
+const yumeMinidollPinkDressContextImage = {
+  ...productAsset(
+    "mnb_yume_minidoll_pink_dress_contexte_mynicebracelet_v2.png",
+    "Contexte collection Mini-Doll Hello Kitty robe rose à nœuds YuMe",
+    1600,
+  ),
+  label: "Atelier",
+};
+const yumeMinidollRockstarPackshotImage = {
+  ...productAsset(
+    "mnb_yume_minidoll_rockstar_packshot_mynicebracelet_v2.png",
+    "Packshot Mini-Doll Hello Kitty rockstar gingham YuMe",
+    1600,
+  ),
+  label: "Packshot",
+};
+const yumeMinidollRockstarDetailImage = {
+  ...productAsset(
+    "mnb_yume_minidoll_rockstar_detail_macro_mynicebracelet_v2.png",
+    "Detail macro Mini-Doll Hello Kitty rockstar gingham YuMe",
+    1600,
+  ),
+  label: "Detail",
+};
+const yumeMinidollRockstarScaleImage = {
+  ...productAsset(
+    "mnb_yume_minidoll_rockstar_echelle_mynicebracelet_v2.png",
+    "Echelle en main Mini-Doll Hello Kitty rockstar gingham YuMe",
+    1600,
+  ),
+  label: "Echelle",
+};
+const yumeMinidollRockstarContextImage = {
+  ...productAsset(
+    "mnb_yume_minidoll_rockstar_contexte_mynicebracelet_v2.png",
+    "Contexte collection Mini-Doll Hello Kitty rockstar gingham YuMe",
+    1600,
+  ),
+  label: "Atelier",
+};
+const yumeMinidollDenimPackshotImage = {
+  ...productAsset(
+    "mnb_yume_minidoll_denim_packshot_mynicebracelet_v2.png",
+    "Packshot Mini-Doll Hello Kitty veste denim YuMe",
+    1600,
+  ),
+  label: "Packshot",
+};
+const yumeMinidollDenimDetailImage = {
+  ...productAsset(
+    "mnb_yume_minidoll_denim_detail_macro_mynicebracelet_v2.png",
+    "Detail macro Mini-Doll Hello Kitty veste denim YuMe",
+    1600,
+  ),
+  label: "Detail",
+};
+const yumeMinidollDenimScaleImage = {
+  ...productAsset(
+    "mnb_yume_minidoll_denim_echelle_mynicebracelet_v2.png",
+    "Echelle en main Mini-Doll Hello Kitty veste denim YuMe",
+    1600,
+  ),
+  label: "Echelle",
+};
+const yumeMinidollDenimContextImage = {
+  ...productAsset(
+    "mnb_yume_minidoll_denim_contexte_mynicebracelet_v2.png",
+    "Contexte collection Mini-Doll Hello Kitty veste denim YuMe",
+    1600,
+  ),
+  label: "Atelier",
+};
 const yumeMinidollYellowHeart = productAsset(
   "mnb_yume_minidoll_yellow_heart_v1.jpeg",
   "Mini-Doll Hello Kitty top jaune sac cœur YuMe",
@@ -673,6 +1012,104 @@ const yumeOnepieceZoro = productAsset(
   "mnb_yume_onepiece_zoro_v1.jpeg",
   "Porte-clé One Piece Zoro YuMe Pocket Hero",
 );
+
+// ─── YuMe Rainbow Strap Series ──────────────────────────────────
+const yumeCharacterStrapMyMelodyPackshotImage = {
+  ...productAsset(
+    "mnb_yume_character_strap_my_melody_packshot_mynicebracelet_v1.png",
+    "Packshot porte-clé My Melody dragonne rose YuMe",
+    1200,
+  ),
+  label: "Packshot",
+};
+const yumeCharacterStrapMyMelodyDetailImage = {
+  ...productAsset(
+    "mnb_yume_character_strap_my_melody_detail_macro_mynicebracelet_v1.png",
+    "Detail macro porte-clé My Melody dragonne rose YuMe",
+    1200,
+  ),
+  label: "Detail",
+};
+const yumeCharacterStrapMyMelodyScaleImage = {
+  ...productAsset(
+    "mnb_yume_character_strap_my_melody_echelle_main_mynicebracelet_v1.png",
+    "Echelle en main porte-clé My Melody dragonne rose YuMe",
+    1200,
+  ),
+  label: "Echelle",
+};
+const yumeCharacterStrapMyMelodyContextImage = {
+  ...productAsset(
+    "mnb_yume_character_strap_my_melody_contexte_collection_mynicebracelet_v1.png",
+    "Contexte collection porte-clé My Melody dragonne rose YuMe",
+    1200,
+  ),
+  label: "Atelier",
+};
+const yumeCharacterStrapPochaccoPackshotImage = {
+  ...productAsset(
+    "mnb_yume_character_strap_pochacco_packshot_mynicebracelet_v1.png",
+    "Packshot porte-clé Pochacco dragonne bleue YuMe",
+    1200,
+  ),
+  label: "Packshot",
+};
+const yumeCharacterStrapPochaccoDetailImage = {
+  ...productAsset(
+    "mnb_yume_character_strap_pochacco_detail_macro_mynicebracelet_v1.png",
+    "Detail macro porte-clé Pochacco dragonne bleue YuMe",
+    1200,
+  ),
+  label: "Detail",
+};
+const yumeCharacterStrapPochaccoScaleImage = {
+  ...productAsset(
+    "mnb_yume_character_strap_pochacco_echelle_main_mynicebracelet_v1.png",
+    "Echelle en main porte-clé Pochacco dragonne bleue YuMe",
+    1200,
+  ),
+  label: "Echelle",
+};
+const yumeCharacterStrapPochaccoContextImage = {
+  ...productAsset(
+    "mnb_yume_character_strap_pochacco_contexte_collection_mynicebracelet_v1.png",
+    "Contexte collection porte-clé Pochacco dragonne bleue YuMe",
+    1200,
+  ),
+  label: "Atelier",
+};
+const yumeCharacterStrapChopperPackshotImage = {
+  ...productAsset(
+    "mnb_yume_character_strap_chopper_packshot_mynicebracelet_v1.png",
+    "Packshot porte-clé Chopper dragonne bleue YuMe",
+    1200,
+  ),
+  label: "Packshot",
+};
+const yumeCharacterStrapChopperDetailImage = {
+  ...productAsset(
+    "mnb_yume_character_strap_chopper_detail_macro_mynicebracelet_v1.png",
+    "Detail macro porte-clé Chopper dragonne bleue YuMe",
+    1200,
+  ),
+  label: "Detail",
+};
+const yumeCharacterStrapChopperScaleImage = {
+  ...productAsset(
+    "mnb_yume_character_strap_chopper_echelle_main_mynicebracelet_v1.png",
+    "Echelle en main porte-clé Chopper dragonne bleue YuMe",
+    1200,
+  ),
+  label: "Echelle",
+};
+const yumeCharacterStrapChopperContextImage = {
+  ...productAsset(
+    "mnb_yume_character_strap_chopper_contexte_collection_mynicebracelet_v1.png",
+    "Contexte collection porte-clé Chopper dragonne bleue YuMe",
+    1200,
+  ),
+  label: "Atelier",
+};
 
 // ─── Molang Scooter Series ───────────────────────────────────────
 const yumeMolangScooterCollection = productAsset(
@@ -3343,11 +3780,11 @@ export const mockProducts: ShopProduct[] = [
     featuredImage: yumeBalloonCollection,
     images: [
       yumeBalloonCollection,
-      yumeBalloonHelloKitty,
+      yumeBalloonHelloKittyPackshotImage,
       yumeBalloonMyMelodyPackshotImage,
       yumeBalloonCinnamorollPackshotImage,
-      yumeBalloonPompompurin,
-      yumeBalloonKuromi,
+      yumeBalloonPompompurinPackshotImage,
+      yumeBalloonKuromiPackshotImage,
     ],
     variants: [
       {
@@ -3358,7 +3795,14 @@ export const mockProducts: ShopProduct[] = [
         price: money("12.00"),
         compareAtPrice: null,
         selectedOptions: [{ name: "Personnage", value: "Hello Kitty" }],
-        image: yumeBalloonHelloKitty,
+        image: yumeBalloonHelloKittyPackshotImage,
+        images: [
+          yumeBalloonHelloKittyPackshotImage,
+          yumeBalloonHelloKittyDetailImage,
+          yumeBalloonHelloKittyScaleImage,
+          yumeBalloonHelloKittyContextImage,
+          { ...yumeBalloonCollection, label: "Collection" },
+        ],
       },
       {
         id: "mock-variant-yume-balloon-my-melody",
@@ -3402,7 +3846,14 @@ export const mockProducts: ShopProduct[] = [
         price: money("12.00"),
         compareAtPrice: null,
         selectedOptions: [{ name: "Personnage", value: "Pompompurin" }],
-        image: yumeBalloonPompompurin,
+        image: yumeBalloonPompompurinPackshotImage,
+        images: [
+          yumeBalloonPompompurinPackshotImage,
+          yumeBalloonPompompurinDetailImage,
+          yumeBalloonPompompurinScaleImage,
+          yumeBalloonPompompurinContextImage,
+          { ...yumeBalloonCollection, label: "Collection" },
+        ],
       },
       {
         id: "mock-variant-yume-balloon-kuromi",
@@ -3412,37 +3863,53 @@ export const mockProducts: ShopProduct[] = [
         price: money("12.00"),
         compareAtPrice: null,
         selectedOptions: [{ name: "Personnage", value: "Kuromi" }],
-        image: yumeBalloonKuromi,
+        image: yumeBalloonKuromiPackshotImage,
+        images: [
+          yumeBalloonKuromiPackshotImage,
+          yumeBalloonKuromiDetailImage,
+          yumeBalloonKuromiScaleImage,
+          yumeBalloonKuromiContextImage,
+          { ...yumeBalloonCollection, label: "Collection" },
+        ],
       },
     ],
   },
 
-  // ─── YuMe Hello Kitty & Friends — Light-Up Star Series ──────────
-  // 5 personnages assis sur étoiles lumineuses (LED).
+  // ─── YuMe Hello Kitty & Friends — Nuage Series ─────────────────
+  // Route historique conservee, photos remplacees par la serie Nuage.
   {
     id: "mock-product-yume-star-series",
     handle: "yume-hello-kitty-light-up-star-series",
-    title: "Porte-clé YuMe Light-Up Star — Hello Kitty & Friends",
+    title: "Porte-clé YuMe Nuage — Hello Kitty & Friends",
     description:
-      "Porte-cle figurine sur étoile lumineuse, série officielle Sanrio sous licence YuMe. Cinq personnages au choix.",
+      "Porte-cle figurine sur nuage lumineux, série officielle Sanrio sous licence YuMe. Cinq personnages au choix.",
     descriptionHtml:
-      "<p>Mini figurine assise sur une étoile jaune translucide qui s'illumine via une LED interne. Dragonne pastel aux couleurs du personnage. Officielle Sanrio sous licence YuMe.</p><p>Cinq personnages au choix : Hello Kitty, Kuromi, Pochacco, My Melody, Cinnamoroll.</p>",
+      "<p>Mini figurine assise sur un nuage jaune translucide qui s'illumine via une LED interne. Dragonne pastel aux couleurs du personnage. Officielle Sanrio sous licence YuMe.</p><p>Cinq personnages au choix : Hello Kitty, My Melody, Cinnamoroll, Pochacco, Kuromi.</p>",
     productType: "Figurines",
+    // Résolution conflit : Dany a rebrandé le produit "Star series" →
+    // "Nuage series" (correspond à la vraie photo : figurine sur un
+    // nuage lumineux, pas sur une étoile). Je garde son rename
+    // (title/desc/tags "nuage") mais bascule la category de
+    // "figurines" → "porte-cles" parce que le produit a une sangle +
+    // anneau (cf. taxonomie : sangle = porte-clé, sans sangle =
+    // figurine debout). Toutes les autres séries YuMe avec strap
+    // (camping, balloon, raincoat, snack, scooter, one-piece) sont
+    // déjà classées en porte-cles ; cohérence d'ensemble.
     category: "porte-cles",
-    tags: ["figurines", "kawaii", "sanrio", "yume", "etoile", "lumineux", "porte-cle"],
+    tags: ["figurines", "kawaii", "sanrio", "yume", "nuage", "lumineux", "porte-cle"],
     badges: ["Best-seller", "Selection atelier"],
     availableForSale: true,
     totalInventory: 70,
     price: money("14.00"),
     compareAtPrice: null,
-    featuredImage: yumeStarCollection,
+    featuredImage: yumeNuageCollectionImage,
     images: [
-      yumeStarCollection,
-      yumeStarHelloKitty,
-      yumeStarKuromi,
-      yumeStarPochacco,
-      yumeStarMyMelody,
-      yumeStarCinnamoroll,
+      yumeNuageCollectionImage,
+      yumeNuageHelloKittyPackshotImage,
+      yumeNuageKuromiPackshotImage,
+      yumeNuageCinnamorollPackshotImage,
+      yumeNuageMyMelodyPackshotImage,
+      yumeNuagePochaccoPackshotImage,
     ],
     variants: [
       {
@@ -3453,37 +3920,31 @@ export const mockProducts: ShopProduct[] = [
         price: money("14.00"),
         compareAtPrice: null,
         selectedOptions: [{ name: "Personnage", value: "Hello Kitty" }],
-        image: yumeStarHelloKitty,
-      },
-      {
-        id: "mock-variant-yume-star-kuromi",
-        title: "Kuromi",
-        availableForSale: true,
-        quantityAvailable: 13,
-        price: money("14.00"),
-        compareAtPrice: null,
-        selectedOptions: [{ name: "Personnage", value: "Kuromi" }],
-        image: yumeStarKuromi,
-      },
-      {
-        id: "mock-variant-yume-star-pochacco",
-        title: "Pochacco",
-        availableForSale: true,
-        quantityAvailable: 11,
-        price: money("14.00"),
-        compareAtPrice: null,
-        selectedOptions: [{ name: "Personnage", value: "Pochacco" }],
-        image: yumeStarPochacco,
+        image: yumeNuageHelloKittyPackshotImage,
+        images: [
+          yumeNuageHelloKittyPackshotImage,
+          yumeNuageHelloKittyDetailImage,
+          yumeNuageHelloKittyScaleImage,
+          yumeNuageHelloKittyContextImage,
+          yumeNuageCollectionImage,
+        ],
       },
       {
         id: "mock-variant-yume-star-my-melody",
         title: "My Melody",
         availableForSale: true,
-        quantityAvailable: 15,
+        quantityAvailable: 13,
         price: money("14.00"),
         compareAtPrice: null,
         selectedOptions: [{ name: "Personnage", value: "My Melody" }],
-        image: yumeStarMyMelody,
+        image: yumeNuageMyMelodyPackshotImage,
+        images: [
+          yumeNuageMyMelodyPackshotImage,
+          yumeNuageMyMelodyDetailImage,
+          yumeNuageMyMelodyScaleImage,
+          yumeNuageMyMelodyContextImage,
+          yumeNuageCollectionImage,
+        ],
       },
       {
         id: "mock-variant-yume-star-cinnamoroll",
@@ -3493,15 +3954,53 @@ export const mockProducts: ShopProduct[] = [
         price: money("14.00"),
         compareAtPrice: null,
         selectedOptions: [{ name: "Personnage", value: "Cinnamoroll" }],
-        image: yumeStarCinnamoroll,
+        image: yumeNuageCinnamorollPackshotImage,
+        images: [
+          yumeNuageCinnamorollPackshotImage,
+          yumeNuageCinnamorollDetailImage,
+          yumeNuageCinnamorollScaleImage,
+          yumeNuageCinnamorollContextImage,
+          yumeNuageCollectionImage,
+        ],
+      },
+      {
+        id: "mock-variant-yume-star-pochacco",
+        title: "Pochacco",
+        availableForSale: true,
+        quantityAvailable: 11,
+        price: money("14.00"),
+        compareAtPrice: null,
+        selectedOptions: [{ name: "Personnage", value: "Pochacco" }],
+        image: yumeNuagePochaccoPackshotImage,
+        images: [
+          yumeNuagePochaccoPackshotImage,
+          yumeNuagePochaccoDetailImage,
+          yumeNuagePochaccoScaleImage,
+          yumeNuagePochaccoContextImage,
+          yumeNuageCollectionImage,
+        ],
+      },
+      {
+        id: "mock-variant-yume-star-kuromi",
+        title: "Kuromi",
+        availableForSale: true,
+        quantityAvailable: 13,
+        price: money("14.00"),
+        compareAtPrice: null,
+        selectedOptions: [{ name: "Personnage", value: "Kuromi" }],
+        image: yumeNuageKuromiPackshotImage,
+        images: [
+          yumeNuageKuromiPackshotImage,
+          yumeNuageKuromiDetailImage,
+          yumeNuageKuromiScaleImage,
+          yumeNuageKuromiContextImage,
+          yumeNuageCollectionImage,
+        ],
       },
     ],
   },
 
   // ─── YuMe Hello Kitty 5cm Mini-Doll Cute Outfit Series ──────────
-  // Une fiche regroupant 8 tenues différentes de Hello Kitty (figurine
-  // 5 cm). Folders 3 + 4 du dossier sources : doublons retirés (5
-  // photos identiques entre les 2), 8 tenues uniques restantes.
   {
     id: "mock-product-yume-minidoll-outfit-series",
     handle: "yume-hello-kitty-mini-doll-cute-outfit",
@@ -3521,9 +4020,9 @@ export const mockProducts: ShopProduct[] = [
     featuredImage: yumeMinidollCollection,
     images: [
       yumeMinidollCollection,
-      yumeMinidollPinkDress,
-      yumeMinidollRockstar,
-      yumeMinidollDenim,
+      yumeMinidollPinkDressPackshotImage,
+      yumeMinidollRockstarPackshotImage,
+      yumeMinidollDenimPackshotImage,
       yumeMinidollYellowHeart,
       yumeMinidollCheerleader,
       yumeMinidollOveralls,
@@ -3539,7 +4038,13 @@ export const mockProducts: ShopProduct[] = [
         price: money("9.00"),
         compareAtPrice: null,
         selectedOptions: [{ name: "Tenue", value: "Robe rose à nœuds" }],
-        image: yumeMinidollPinkDress,
+        image: yumeMinidollPinkDressPackshotImage,
+        images: [
+          yumeMinidollPinkDressPackshotImage,
+          yumeMinidollPinkDressDetailImage,
+          yumeMinidollPinkDressScaleImage,
+          yumeMinidollPinkDressContextImage,
+        ],
       },
       {
         id: "mock-variant-yume-minidoll-rockstar",
@@ -3549,7 +4054,13 @@ export const mockProducts: ShopProduct[] = [
         price: money("9.00"),
         compareAtPrice: null,
         selectedOptions: [{ name: "Tenue", value: "Rockstar gingham" }],
-        image: yumeMinidollRockstar,
+        image: yumeMinidollRockstarPackshotImage,
+        images: [
+          yumeMinidollRockstarPackshotImage,
+          yumeMinidollRockstarDetailImage,
+          yumeMinidollRockstarScaleImage,
+          yumeMinidollRockstarContextImage,
+        ],
       },
       {
         id: "mock-variant-yume-minidoll-denim",
@@ -3559,7 +4070,13 @@ export const mockProducts: ShopProduct[] = [
         price: money("9.00"),
         compareAtPrice: null,
         selectedOptions: [{ name: "Tenue", value: "Veste denim" }],
-        image: yumeMinidollDenim,
+        image: yumeMinidollDenimPackshotImage,
+        images: [
+          yumeMinidollDenimPackshotImage,
+          yumeMinidollDenimDetailImage,
+          yumeMinidollDenimScaleImage,
+          yumeMinidollDenimContextImage,
+        ],
       },
       {
         id: "mock-variant-yume-minidoll-yellow-heart",
@@ -3747,6 +4264,81 @@ export const mockProducts: ShopProduct[] = [
         compareAtPrice: null,
         selectedOptions: [{ name: "Personnage", value: "Roronoa Zoro" }],
         image: yumeOnepieceZoro,
+      },
+    ],
+  },
+
+  // ─── YuMe Rainbow Strap — My Melody, Pochacco & Chopper ────────
+  {
+    id: "mock-product-yume-character-strap-series",
+    handle: "yume-character-strap-series",
+    title: "Porte-clé YuMe Rainbow Strap — My Melody, Pochacco & Chopper",
+    description:
+      "Porte-cle figurine avec dragonne pastel, attache métallique et charm personnage. Trois modèles au choix.",
+    descriptionHtml:
+      "<p>Porte-cle figurine avec dragonne silicone pastel, petit motif arc-en-ciel ou nœud, et attache métallique dorée. Une série colorée à accrocher sur un sac, une trousse ou un jeu de clés.</p><p>Trois modèles au choix : My Melody rose, Pochacco bleu, Chopper bleu.</p>",
+    productType: "Figurines",
+    category: "figurines",
+    tags: ["figurines", "kawaii", "sanrio", "one-piece", "anime", "yume", "dragonne", "porte-cle"],
+    badges: ["Nouveaute", "Selection atelier"],
+    availableForSale: true,
+    totalInventory: 36,
+    price: money("12.00"),
+    compareAtPrice: null,
+    featuredImage: yumeCharacterStrapMyMelodyPackshotImage,
+    images: [
+      yumeCharacterStrapMyMelodyPackshotImage,
+      yumeCharacterStrapPochaccoPackshotImage,
+      yumeCharacterStrapChopperPackshotImage,
+    ],
+    variants: [
+      {
+        id: "mock-variant-yume-character-strap-my-melody",
+        title: "My Melody",
+        availableForSale: true,
+        quantityAvailable: 12,
+        price: money("12.00"),
+        compareAtPrice: null,
+        selectedOptions: [{ name: "Personnage", value: "My Melody" }],
+        image: yumeCharacterStrapMyMelodyPackshotImage,
+        images: [
+          yumeCharacterStrapMyMelodyPackshotImage,
+          yumeCharacterStrapMyMelodyDetailImage,
+          yumeCharacterStrapMyMelodyScaleImage,
+          yumeCharacterStrapMyMelodyContextImage,
+        ],
+      },
+      {
+        id: "mock-variant-yume-character-strap-pochacco",
+        title: "Pochacco",
+        availableForSale: true,
+        quantityAvailable: 12,
+        price: money("12.00"),
+        compareAtPrice: null,
+        selectedOptions: [{ name: "Personnage", value: "Pochacco" }],
+        image: yumeCharacterStrapPochaccoPackshotImage,
+        images: [
+          yumeCharacterStrapPochaccoPackshotImage,
+          yumeCharacterStrapPochaccoDetailImage,
+          yumeCharacterStrapPochaccoScaleImage,
+          yumeCharacterStrapPochaccoContextImage,
+        ],
+      },
+      {
+        id: "mock-variant-yume-character-strap-chopper",
+        title: "Chopper",
+        availableForSale: true,
+        quantityAvailable: 12,
+        price: money("12.00"),
+        compareAtPrice: null,
+        selectedOptions: [{ name: "Personnage", value: "Chopper" }],
+        image: yumeCharacterStrapChopperPackshotImage,
+        images: [
+          yumeCharacterStrapChopperPackshotImage,
+          yumeCharacterStrapChopperDetailImage,
+          yumeCharacterStrapChopperScaleImage,
+          yumeCharacterStrapChopperContextImage,
+        ],
       },
     ],
   },
