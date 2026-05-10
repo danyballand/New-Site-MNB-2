@@ -2310,7 +2310,23 @@ textarea {
 
 .mnb-section-head h2 {
   max-width: 780px;
-  font-size: clamp(2rem, 3.4vw, 3.2rem);
+  /* Avant : clamp(2rem, 3.4vw, 3.2rem) — surdimensionné, surtout
+     quand le H2 portait toute la phrase descriptive. Maintenant que
+     le H2 ne porte que le LABEL court (ex. "Porte-cles Sanrio"), une
+     échelle plus modeste avec line-height confortable suffit. */
+  font-size: clamp(1.5rem, 2.6vw, 2.2rem);
+  line-height: 1.1;
+  letter-spacing: -0.005em;
+}
+
+.mnb-section-lead {
+  max-width: 720px;
+  margin: 10px 0 0;
+  color: var(--mnb-muted);
+  font-size: 0.98rem;
+  font-style: normal;
+  line-height: 1.55;
+  text-transform: none;
 }
 
 .mnb-product-detail {

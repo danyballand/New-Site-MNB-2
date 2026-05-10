@@ -346,10 +346,18 @@ export function ShopLanding({
         <div className="mnb-section-head">
           <div>
             <p className="mnb-kicker">{activeType ? "Collection" : "Selection de l'atelier"}</p>
-            <h2>
-              {currentCategory?.description ??
-                "Perles, pierres et figurines que nous aimons associer en atelier"}
-            </h2>
+            {/* H2 = label court (ex. "Porte-cles Sanrio"). La phrase
+                descriptive (anciennement le H2 lui-même, beaucoup
+                trop long et resserré dans clamp(2-3.2rem)) bascule
+                en sous-titre en `mnb-section-lead` sous le H2. */}
+            <h2>{currentCategory?.label ?? "Sélection de l'atelier"}</h2>
+            {(currentCategory?.description ??
+              "Perles, pierres et figurines que nous aimons associer en atelier — à la pièce ou en lot.") ? (
+              <p className="mnb-section-lead">
+                {currentCategory?.description ??
+                  "Perles, pierres et figurines que nous aimons associer en atelier — à la pièce ou en lot."}
+              </p>
+            ) : null}
           </div>
           <span>
             {displayProducts.length} produit{displayProducts.length > 1 ? "s" : ""}
