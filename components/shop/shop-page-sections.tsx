@@ -1,7 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { ArrowRight, Gem, KeyRound, Sparkles, WandSparkles } from "lucide-react";
-import { ProductGrid } from "@/components/shop/product-grid";
+import { ShopFilterableGrid } from "@/components/shop/shop-filterable-grid";
 import { SourceBanner } from "@/components/shop/source-banner";
 import { HeroModelViewer } from "@/components/shop/HeroModelViewer";
 import { getShopProducts } from "@/lib/shopify/client";
@@ -24,7 +24,6 @@ const MAIN_HOST = "https://mynicebracelet.com";
 
 type QuickEntry = {
   title: string;
-  eyebrow: string;
   href: string;
   type?: ShopProductType;
   icon: typeof WandSparkles;
@@ -48,7 +47,6 @@ type QuickEntry = {
 const quickEntries: QuickEntry[] = [
   {
     title: "Perles",
-    eyebrow: "Je compose une base",
     href: "/shop/perles",
     type: "perles",
     icon: WandSparkles,
@@ -59,7 +57,6 @@ const quickEntries: QuickEntry[] = [
   },
   {
     title: "Pierres naturelles",
-    eyebrow: "Je veux une matiere bijou",
     href: "/shop/pierres-semi-precieuses",
     type: "pierres",
     icon: Gem,
@@ -70,7 +67,6 @@ const quickEntries: QuickEntry[] = [
   },
   {
     title: "Porte-cles Sanrio",
-    eyebrow: "Je veux un objet fini",
     href: "/shop/porte-cles",
     type: "porte-cles",
     icon: KeyRound,
@@ -81,7 +77,6 @@ const quickEntries: QuickEntry[] = [
   },
   {
     title: "Figurines",
-    eyebrow: "Je veux une mascotte",
     href: "/shop/figurines",
     type: "figurines",
     icon: Sparkles,
@@ -140,16 +135,14 @@ export function ShopLanding({
   //  remplacé par <HeroModelViewer> avec un GLB 3D de Hello Kitty —
   //  les variables heroProducts / heroPreviewHandles ne sont plus
   //  nécessaires.)
-  const atelierSelection = boutiqueProducts
-    .filter((product) => product.badges.includes("Selection atelier"))
-    .slice(0, 6);
+  // atelierSelection (filtre "Selection atelier") supprimé : la
+  // section "Les pieces les plus faciles a associer" qui l'utilisait
+  // a été retirée comme doublon de la grille principale.
   const title = currentCategory?.label ?? "Perles, figurines & kits";
-  const lead =
-    currentCategory?.description ??
-    // Tightened to a single short sentence — the rayon tiles below
-    // already detail each option, no need to describe all three
-    // here. Keeps the hero airy.
-    "Les pièces et kits de l'atelier, à la pièce ou en lot — expédié de Paris.";
+  // Lead retiré : sur la home /shop, le titre + les tuiles rayon
+  // détaillent déjà l'offre — un sous-titre supplémentaire faisait
+  // doublon. Sur les pages catégorie, la phrase descriptive est
+  // affichée plus bas en .mnb-section-lead sous le H2 du rayon.
   const categoryCtaLabels: Partial<Record<ShopProductType, string>> = {
     perles: "Voir les perles",
     pierres: "Voir les pierres",
@@ -157,9 +150,13 @@ export function ShopLanding({
     figurines: "Voir les figurines",
   };
   const primaryCtaLabel = activeType ? categoryCtaLabels[activeType] ?? "Voir la collection" : "Voir la selection";
+  // secondaryCta : seulement sur les pages catégorie (lien retour
+  // vers /shop). Sur la home, le 2e bouton "Voir toutes les pieces"
+  // pointait vers #selection — même cible que le primary "Voir la
+  // sélection" → doublon inutile, retiré.
   const secondaryCta = activeType
     ? { href: "/shop", label: "Voir toute la boutique" }
-    : { href: "#selection", label: "Voir toutes les pieces" };
+    : null;
 
   return (
     <main className="mnb-shop-main">
@@ -189,10 +186,7 @@ export function ShopLanding({
             <h1 className="font-serif text-[2.4rem] sm:text-5xl lg:text-[4rem] xl:text-[4.4rem] font-black leading-[0.96] tracking-tight text-[#2D3748] uppercase mb-5">
               {title}
             </h1>
-            <p className="text-base md:text-lg text-[#5A6878] max-w-lg leading-relaxed mb-8">
-              {lead}
-            </p>
-            <div className="flex flex-wrap gap-3">
+            <div className="flex flex-wrap gap-3 mt-2">
               {/* Reuse the existing .mnb-button / .mnb-button-primary
                   classes from globals.css. Tag-level rule
                   `a { color: inherit }` (line 27 of globals) was
@@ -205,9 +199,11 @@ export function ShopLanding({
                 {primaryCtaLabel}
                 <ArrowRight size={16} />
               </Link>
-              <Link className="mnb-button" href={secondaryCta.href}>
-                {secondaryCta.label}
-              </Link>
+              {secondaryCta ? (
+                <Link className="mnb-button" href={secondaryCta.href}>
+                  {secondaryCta.label}
+                </Link>
+              ) : null}
             </div>
           </div>
 
@@ -243,8 +239,13 @@ export function ShopLanding({
         serif label, and a hover scale effect. */}
       <section
         aria-label="Choisir son rayon"
-        className="container mx-auto px-4 md:px-6 mb-16 md:mb-20"
+        className="max-w-[1080px] mx-auto px-4 md:px-6 mb-16 md:mb-20"
       >
+        {/* max-w-[1080px] (au lieu du `container` Tailwind ~1280px sur xl)
+            → cards plus étroits sur grand écran (de ~308px à ~258px wide).
+            Combiné à la réduction du padding interne (`px-5 md:px-7` plus
+            bas), ça donne des tuiles plus compactes avec moins de marge
+            cream visible autour de la photo. */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
           {quickEntries.map((entry, index) => {
             const count = entry.type
@@ -267,6 +268,16 @@ export function ShopLanding({
             ] as const;
             const tint = tints[index] ?? tints[0];
             const cardClasses = cn(
+              // aspect [4/5] : card plus tall que large. Avec width
+              // figée (max-w-[1080px] / 4 ≈ 258px) et padding photo
+              // figé (`px-7` = 28px chaque côté), augmenter la
+              // hauteur du card augmente la hauteur du wrapper photo
+              // (`h-[60%]`) — la width du wrapper reste constante →
+              // le wrapper se rapproche du carré (~258-56 = 202 wide,
+              // 322×0.6 = 193 tall → aspect 1.05 ≈ carré). Effet de
+              // bord positif : le padding latéral (en absolu inchangé)
+              // pèse moins en proportion du wrapper, donc la marge
+              // gauche/droite cream paraît visuellement plus discrète.
               "group relative flex flex-col justify-end aspect-[4/5] rounded-[28px] overflow-hidden",
               "bg-gradient-to-br shadow-[0_14px_36px_-12px_rgba(45,55,72,0.2)]",
               "transition-all duration-300 hover:-translate-y-1",
@@ -278,14 +289,24 @@ export function ShopLanding({
                 {/* Cover image (uses the first product photo of the
                     category as a stand-in product visual) */}
                 {cover ? (
-                  <div className="absolute inset-x-0 top-0 h-[60%] flex items-center justify-center pointer-events-none">
-                    <div className="relative w-[78%] h-[88%]">
+                  <div className="absolute inset-x-0 top-0 h-[60%] pointer-events-none px-5 md:px-7 pt-3">
+                    {/* Padding `px-8 md:px-10 pt-4` (32→40px latéral,
+                        16px en haut) sur le wrapper externe → fond du
+                        tile bien visible sur les côtés, photo "posée"
+                        au centre. Padding latéral encore renforcé
+                        (utilisateur veut + sur les côtés) → rapproche
+                        le wrapper interne d'un ratio carré → photo
+                        carrée 1400×1400 préservée par object-cover
+                        avec très peu de crop top/bottom. Responsive
+                        (md:px-10) pour éviter d'étouffer la photo
+                        sur mobile où les cards sont déjà étroites. */}
+                    <div className="relative w-full h-full rounded-3xl overflow-hidden">
                       <Image
                         src={cover.url}
                         alt=""
                         fill
-                        sizes="(max-width: 980px) 35vw, 18vw"
-                        className="object-contain transition-transform duration-500 group-hover:scale-[1.05]"
+                        sizes="(max-width: 980px) 45vw, 22vw"
+                        className="object-cover transition-transform duration-500 group-hover:scale-[1.05]"
                         unoptimized={cover.url.endsWith(".jpeg") || cover.url.endsWith(".jpg")}
                       />
                     </div>
@@ -298,14 +319,13 @@ export function ShopLanding({
                   </div>
                 )}
 
-                {/* Bottom content : label + count.
-                    Le micro-texte italique a été retire (cf. type
-                    QuickEntry — plus de field `body`) ; le titre +
-                    eyebrow + le compteur portent toute l'info. */}
+                {/* Bottom content : titre + count.
+                    Eyebrow "Je veux un objet fini" / "Je compose une
+                    base" etc. retiré — le titre court + le compteur
+                    suffisent, la phrase d'intention au-dessus du
+                    titre faisait trop "interview emoji" pour une
+                    tuile catégorie. */}
                 <div className="relative z-10 px-4 md:px-5 pb-4 md:pb-5 pt-3 bg-gradient-to-t from-white/95 via-white/70 to-transparent">
-                  <p className="text-[8px] md:text-[9px] font-black uppercase tracking-[0.22em] text-[#3D5A73]/75 mb-1.5">
-                    {entry.eyebrow}
-                  </p>
                   <h3 className="font-serif text-[16px] md:text-[20px] font-black uppercase leading-[1.05] tracking-tight text-[#2D3748] mb-2.5">
                     {entry.title}
                   </h3>
@@ -349,7 +369,11 @@ export function ShopLanding({
             {/* H2 = label court (ex. "Porte-cles Sanrio"). La phrase
                 descriptive (anciennement le H2 lui-même, beaucoup
                 trop long et resserré dans clamp(2-3.2rem)) bascule
-                en sous-titre en `mnb-section-lead` sous le H2. */}
+                en sous-titre en `mnb-section-lead` sous le H2. Le
+                compteur "X produits" a été déplacé dans la toolbar
+                de `<ShopFilterableGrid>` pour refléter le compte
+                FILTRÉ en temps réel (le compteur dans le header
+                affichait toujours le total non filtré). */}
             <h2>{currentCategory?.label ?? "Sélection de l'atelier"}</h2>
             {(currentCategory?.description ??
               "Perles, pierres et figurines que nous aimons associer en atelier — à la pièce ou en lot.") ? (
@@ -359,24 +383,14 @@ export function ShopLanding({
               </p>
             ) : null}
           </div>
-          <span>
-            {displayProducts.length} produit{displayProducts.length > 1 ? "s" : ""}
-          </span>
         </div>
-        <ProductGrid products={displayProducts} />
+        <ShopFilterableGrid products={displayProducts} />
       </section>
 
-      {atelierSelection.length > 0 && !activeType ? (
-        <section className="mnb-shop-section">
-          <div className="mnb-section-head">
-            <div>
-              <p className="mnb-kicker">Vu a l&apos;atelier</p>
-              <h2>Les pieces les plus faciles a associer</h2>
-            </div>
-          </div>
-          <ProductGrid products={atelierSelection} />
-        </section>
-      ) : null}
+      {/* Section "Vu a l'atelier — Les pieces les plus faciles a
+          associer" retirée : faisait doublon avec la grille
+          principale ci-dessus (mêmes produits filtrés sur le badge
+          "Selection atelier"). La grille principale suffit. */}
 
     </main>
   );

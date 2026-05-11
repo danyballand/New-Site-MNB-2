@@ -1582,6 +1582,14 @@ textarea {
 }
 
 .mnb-product-card {
+  /* flex column : permet au body de remplir tout l'espace
+     restant après l'image, et au bottom row (prix + bouton)
+     d'être poussé en bas via margin-top:auto. Combiné avec
+     `align-items: stretch` (default du grid parent), tous les
+     cards d'une même ligne ont la même hauteur → prix alignés
+     sur la baseline du card le plus haut (titre 3 lignes). */
+  display: flex;
+  flex-direction: column;
   overflow: hidden;
   border: 1px solid rgba(45, 55, 72, 0.08);
   border-radius: 44px;
@@ -1610,6 +1618,13 @@ textarea {
 .mnb-product-image-link {
   aspect-ratio: 1 / 0.78;
   background: var(--mnb-cream-line);
+  /* La photo prend toute la largeur de la card (pas de margin), mais
+     a son propre border-radius pour arrondir SES quatre coins. Le
+     card parent (radius 44px, overflow hidden) clip déjà les coins
+     TOP au passage. Le radius ici (28px) joue surtout sur les coins
+     BAS de la photo (où elle ne touche pas l'edge du card). */
+  border-radius: 28px;
+  overflow: hidden;
 }
 
 .mnb-product-image-link img {
@@ -1656,7 +1671,23 @@ textarea {
 }
 
 .mnb-product-card-body {
+  /* flex column avec flex:1 → le body grandit pour remplir
+     toute la hauteur restante du card (après l'image). Cela
+     donne au `margin-top: auto` sur `.mnb-product-card-bottom`
+     un container où grandir → le bottom est poussé en bas
+     du body, peu importe la longueur du titre. */
+  display: flex;
+  flex: 1;
+  flex-direction: column;
   padding: 20px 22px 24px;
+}
+
+/* Pousse le prix + bouton en bas du body, indépendamment de la
+   longueur du titre (1, 2 ou 3 lignes). Combiné au flex:1 du body
+   ci-dessus et au stretch du grid parent, tous les prix d'une
+   même ligne s'alignent sur la baseline. */
+.mnb-product-card-bottom {
+  margin-top: auto;
 }
 
 .mnb-product-card h3 {
@@ -1681,6 +1712,25 @@ textarea {
   color: var(--mnb-ink);
   font-family: Georgia, Cambria, "Times New Roman", Times, serif;
   font-weight: 900;
+  /* Empêche "à partir de 12,00 €" de wrap sur 2 lignes dans les
+     cards étroites (256-280px wide). Le prefix .mnb-from-prefix
+     ci-dessous est déjà plus petit, l'ensemble tient sur 1 ligne. */
+  white-space: nowrap;
+}
+
+/* "à partir de" — petit label en amont du prix sur les produits
+   à variantes (lots de 20/50/100/250/500 pcs). Sans-serif léger
+   pour laisser le serif gras au prix lui-même. */
+.mnb-product-card-bottom strong .mnb-from-prefix {
+  display: inline;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  font-size: 0.62rem;
+  font-weight: 700;
+  font-style: normal;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--mnb-muted);
+  margin-right: 3px;
 }
 
 .mnb-editorial-grid {
@@ -3209,3 +3259,489 @@ textarea {
     min-height: 210px;
   }
 }
+
+/* ─────────────────────────────────────────────────────────────────
+   SHOP : Filterable grid (sidebar desktop / drawer mobile, sort
+   dropdown, active filter pills). Tout est piloté par le composant
+   client `components/shop/shop-filterable-grid.tsx`. Styles séparés
+   ici pour rester en harmonie visuelle avec le reste de la boutique
+   (cream, blue, ink) plutôt que d'injecter du Tailwind inline.
+   ───────────────────────────────────────────────────────────────── */
+
+.mnb-shop-controls {
+  margin-top: 4px;
+}
+
+/* Toolbar (count, filter button mobile, sort dropdown) */
+.mnb-shop-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 14px;
+  padding: 10px 16px;
+  border: 1px solid var(--mnb-cream-line);
+  border-radius: 16px;
+  background: #fff;
+  box-shadow: 0 6px 18px rgba(45, 55, 72, 0.05);
+}
+
+.mnb-toolbar-filter-btn {
+  display: none; /* visible only on mobile (cf. media query below) */
+  align-items: center;
+  gap: 7px;
+  border: 1px solid var(--mnb-cream-line);
+  border-radius: 999px;
+  padding: 7px 13px;
+  background: #fff;
+  color: var(--mnb-ink);
+  font-size: 0.8rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: border-color 160ms var(--ease);
+}
+
+.mnb-toolbar-filter-btn:hover {
+  border-color: rgba(61, 90, 115, 0.4);
+}
+
+.mnb-toolbar-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
+  margin-left: 2px;
+  border-radius: 999px;
+  background: var(--mnb-blue);
+  color: #fff;
+  font-size: 0.68rem;
+  font-weight: 900;
+}
+
+.mnb-toolbar-count {
+  flex: 1;
+  color: var(--mnb-muted);
+  font-size: 0.86rem;
+  font-weight: 700;
+}
+
+.mnb-sort-dropdown {
+  position: relative;
+}
+
+.mnb-sort-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  border: 1px solid var(--mnb-cream-line);
+  border-radius: 999px;
+  padding: 7px 13px;
+  background: #fff;
+  color: var(--mnb-ink);
+  font-size: 0.8rem;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: border-color 160ms var(--ease);
+}
+
+.mnb-sort-btn:hover {
+  border-color: rgba(61, 90, 115, 0.4);
+}
+
+.mnb-sort-btn svg.is-open {
+  transform: rotate(180deg);
+  transition: transform 200ms var(--ease);
+}
+
+.mnb-sort-menu {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 6px);
+  display: flex;
+  flex-direction: column;
+  min-width: 220px;
+  padding: 6px;
+  border: 1px solid var(--mnb-cream-line);
+  border-radius: 16px;
+  background: #fff;
+  box-shadow: 0 18px 42px rgba(45, 55, 72, 0.16);
+  z-index: 50;
+}
+
+.mnb-sort-menu button {
+  display: block;
+  width: 100%;
+  text-align: left;
+  padding: 9px 13px;
+  border: 0;
+  border-radius: 10px;
+  background: transparent;
+  color: var(--mnb-ink);
+  font-size: 0.84rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 120ms var(--ease);
+}
+
+.mnb-sort-menu button:hover {
+  background: rgba(61, 90, 115, 0.08);
+}
+
+.mnb-sort-menu button.is-active {
+  background: rgba(61, 90, 115, 0.14);
+  color: var(--mnb-blue);
+  font-weight: 900;
+}
+
+/* Active filter pills (sous la toolbar, au-dessus de la grid) */
+.mnb-active-filters {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 7px;
+  margin-bottom: 18px;
+}
+
+.mnb-active-filters button {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  border: 1px solid rgba(61, 90, 115, 0.32);
+  border-radius: 999px;
+  padding: 5px 9px 5px 11px;
+  background: rgba(61, 90, 115, 0.08);
+  color: var(--mnb-blue);
+  font-size: 0.74rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 140ms var(--ease);
+}
+
+.mnb-active-filters button:hover {
+  background: rgba(61, 90, 115, 0.18);
+}
+
+.mnb-active-filters button.mnb-clear-all {
+  border-color: transparent;
+  background: transparent;
+  color: var(--mnb-muted);
+  text-decoration: underline;
+  padding: 5px 8px;
+}
+
+.mnb-active-filters button.mnb-clear-all:hover {
+  background: transparent;
+  color: var(--mnb-ink);
+}
+
+.mnb-active-swatch {
+  display: inline-block;
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+/* Layout : sidebar + grid */
+.mnb-shop-layout {
+  display: grid;
+  grid-template-columns: 240px 1fr;
+  gap: 32px;
+  align-items: start;
+}
+
+.mnb-shop-sidebar {
+  position: sticky;
+  top: 92px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  max-height: calc(100vh - 110px);
+  overflow-y: auto;
+  padding: 4px 8px 4px 0;
+}
+
+/* scrollbar discrète pour la sidebar */
+.mnb-shop-sidebar::-webkit-scrollbar {
+  width: 6px;
+}
+.mnb-shop-sidebar::-webkit-scrollbar-thumb {
+  background: rgba(45, 55, 72, 0.16);
+  border-radius: 999px;
+}
+
+.mnb-shop-grid-wrap {
+  min-width: 0; /* CSS grid fix — empêche overflow horizontal */
+}
+
+.mnb-filter-section h3 {
+  margin: 0 0 10px;
+  font-size: 0.72rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--mnb-ink);
+}
+
+/* Chips (badges) */
+.mnb-filter-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.mnb-filter-chips button {
+  border: 1px solid var(--mnb-cream-line);
+  border-radius: 999px;
+  padding: 5px 11px;
+  background: #fff;
+  color: var(--mnb-muted);
+  font-size: 0.74rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 140ms var(--ease);
+}
+
+.mnb-filter-chips button:hover {
+  border-color: rgba(61, 90, 115, 0.4);
+  color: var(--mnb-blue);
+}
+
+.mnb-filter-chips button.is-active {
+  border-color: var(--mnb-blue);
+  background: rgba(61, 90, 115, 0.14);
+  color: var(--mnb-blue);
+}
+
+/* Swatches (couleur) */
+.mnb-filter-swatches {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 9px;
+}
+
+.mnb-filter-swatches button {
+  width: 30px;
+  height: 30px;
+  border: 2px solid #fff;
+  border-radius: 50%;
+  box-shadow: 0 0 0 1px var(--mnb-cream-line);
+  cursor: pointer;
+  transition: all 160ms var(--ease);
+  padding: 0;
+}
+
+.mnb-filter-swatches button:hover {
+  transform: scale(1.14);
+}
+
+.mnb-filter-swatches button.is-active {
+  box-shadow: 0 0 0 2px var(--mnb-blue);
+  transform: scale(1.08);
+}
+
+/* Checkboxes (forme, matière) */
+.mnb-filter-checks {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.mnb-filter-checks label {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  font-size: 0.84rem;
+  font-weight: 600;
+  color: var(--mnb-muted);
+  cursor: pointer;
+  transition: color 140ms var(--ease);
+}
+
+.mnb-filter-checks label:hover {
+  color: var(--mnb-ink);
+}
+
+.mnb-filter-checks input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  accent-color: var(--mnb-blue);
+  cursor: pointer;
+}
+
+/* Range price slider */
+.mnb-filter-price {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.mnb-filter-price input[type="range"] {
+  width: 100%;
+  accent-color: var(--mnb-blue);
+  cursor: pointer;
+}
+
+.mnb-filter-price-values {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--mnb-ink);
+}
+
+.mnb-filter-price-values span:first-child {
+  color: var(--mnb-muted);
+  font-weight: 600;
+}
+
+/* ─── Mobile drawer (bottom sheet) ───────────────────────────── */
+
+.mnb-shop-drawer-backdrop {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 100;
+  animation: mnb-fade-in 200ms var(--ease);
+}
+
+@keyframes mnb-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.mnb-shop-drawer {
+  width: 100%;
+  max-width: 520px;
+  max-height: 88vh;
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+  border-radius: 22px 22px 0 0;
+  overflow: hidden;
+  animation: mnb-slide-up 260ms var(--ease);
+}
+
+@keyframes mnb-slide-up {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+
+.mnb-shop-drawer-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 22px;
+  border-bottom: 1px solid var(--mnb-cream-line);
+}
+
+.mnb-shop-drawer-head h2 {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 900;
+  color: var(--mnb-ink);
+}
+
+.mnb-shop-drawer-head button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  background: transparent;
+  border: 0;
+  border-radius: 50%;
+  cursor: pointer;
+  color: var(--mnb-muted);
+  transition: background 140ms var(--ease);
+}
+
+.mnb-shop-drawer-head button:hover {
+  background: var(--mnb-cream-line);
+  color: var(--mnb-ink);
+}
+
+.mnb-shop-drawer-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 26px;
+}
+
+.mnb-shop-drawer-foot {
+  display: flex;
+  gap: 10px;
+  padding: 14px 22px 22px;
+  border-top: 1px solid var(--mnb-cream-line);
+}
+
+.mnb-shop-drawer-foot button {
+  flex: 1;
+  min-height: 44px;
+  border: 1px solid var(--mnb-cream-line);
+  border-radius: 12px;
+  background: #fff;
+  color: var(--mnb-ink);
+  font-size: 0.86rem;
+  font-weight: 800;
+  cursor: pointer;
+  transition: all 140ms var(--ease);
+}
+
+.mnb-shop-drawer-foot button:hover {
+  border-color: rgba(61, 90, 115, 0.4);
+}
+
+.mnb-shop-drawer-foot button.primary {
+  border-color: var(--mnb-blue);
+  background: var(--mnb-blue);
+  color: #fff;
+}
+
+.mnb-shop-drawer-foot button.primary:hover {
+  background: var(--mnb-blue);
+  border-color: var(--mnb-blue);
+}
+
+/* ─── Responsive : sidebar caché sur tablette/mobile, drawer button visible ─── */
+
+@media (max-width: 979px) {
+  .mnb-shop-layout {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+  .mnb-shop-sidebar {
+    display: none;
+  }
+  .mnb-toolbar-filter-btn {
+    display: inline-flex;
+  }
+}
+
+@media (max-width: 540px) {
+  .mnb-shop-toolbar {
+    padding: 9px 12px;
+    gap: 8px;
+  }
+  .mnb-toolbar-count {
+    font-size: 0.78rem;
+    flex: 0 1 auto;
+  }
+  .mnb-sort-btn span {
+    /* on cache le label "Tri :" trop bavard sur petit écran et on
+       garde juste l'option active — le bouton reste explicite avec
+       l'icône ArrowDownUp à gauche. */
+    max-width: 90px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}
+

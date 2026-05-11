@@ -5,7 +5,7 @@ import Image from "next/image";
 import { ArrowRight, ShoppingBag } from "lucide-react";
 import { useRouter } from "next/navigation";
 import type { ShopProduct } from "@/lib/shopify/types";
-import { formatMoney, getCategoryLabel } from "@/lib/shopify/utils";
+import { formatMoney } from "@/lib/shopify/utils";
 import { useShopCart } from "@/components/shop/shop-provider";
 
 export function ProductCard({ product }: { product: ShopProduct }) {
@@ -56,22 +56,30 @@ export function ProductCard({ product }: { product: ShopProduct }) {
           sizes="(max-width: 680px) 50vw, (max-width: 980px) 33vw, 25vw"
           unoptimized={product.featuredImage.url.endsWith(".jpeg")}
         />
-        <span>{getCategoryLabel(product.category)}</span>
+        {/* Badge catégorie en overlay retiré : la page elle-même
+            indique déjà la catégorie active (filter bar + H2 du
+            rayon), donc une pastille redondante par card alourdissait
+            la lecture. */}
       </Link>
       <div className="mnb-product-card-body">
-        <div className="mnb-product-badges">
-          {product.badges.map((badge) => (
-            <span key={badge}>{badge}</span>
-          ))}
-          {!isAvailable ? <span>Epuisé</span> : null}
-        </div>
+        {/* Carte épurée : juste titre + bottom (prix + flèche).
+            Description retirée (texte secondaire bruyant qui faisait
+            doublon avec la fiche produit). Badges retirés aussi —
+            l'utilisateur les juge optionnels sur la grille. Le seul
+            badge fonctionnel "Epuisé" reste, déplacé dans le bottom
+            row pour signaler l'indispo sans réintroduire le rang de
+            pastilles au-dessus du titre. */}
         <Link href={`/shop/produit/${product.handle}`}>
           <h3>{product.title}</h3>
         </Link>
-        <p>{product.description}</p>
         <div className="mnb-product-card-bottom">
           <strong>
-            {requiresChoice ? "A partir de " : ""}
+            {/* "A partir de" wrappé dans un span dédié — plus petit
+                que le prix, en lowercase, sans le poids serif du
+                strong. Évite que la chaîne "A partir de 12,00 €"
+                déborde sur 2 lignes dans les cards étroites de la
+                grille. Le prix reste prominant en serif gras. */}
+            {requiresChoice ? <span className="mnb-from-prefix">à partir de </span> : null}
             {formatMoney(product.price)}
           </strong>
           <button
