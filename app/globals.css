@@ -1799,18 +1799,58 @@ textarea {
 }
 
 .mnb-product-lead {
+  /* Sous-titre de la fiche produit (texte juste sous le H1).
+     Densifié de la même façon que `.mnb-product-story` : couleur
+     ink (au lieu de muted), taille 1.05rem (un poil + grosse que
+     les détails atelier à 1rem pour marquer la hiérarchie lead
+     > body), weight 500 pour la présence sans être trop bold,
+     line-height 1.55 (un peu plus serré qu'un body classique
+     car c'est un teaser court de 1-2 phrases). */
   margin-top: 12px;
-  color: var(--mnb-muted);
-  font-size: 0.95rem;
+  color: var(--mnb-ink);
+  font-size: 1.05rem;
   font-style: normal;
-  line-height: 1.65;
+  font-weight: 500;
+  line-height: 1.55;
   max-width: 56ch;
 }
 
 .mnb-product-story {
-  color: var(--mnb-muted);
+  /* Densifié : la version précédente était en `var(--mnb-muted)` +
+     `font-size: 0.92rem` (héritée des règles base ligne 865+) →
+     texte délavé qui se faisait avaler par le reste de la fiche.
+     Maintenant : couleur ink (sombre, contrasté), taille bumpée à
+     1rem (16px) sur la description et 0.96rem sur les bullets
+     (légère hiérarchie pour que la description produit-spécifique
+     ressorte un poil plus que les bullets atelier générique). */
+  color: var(--mnb-ink);
   font-style: normal;
-  line-height: 1.6;
+  font-size: 1rem;
+  line-height: 1.65;
+}
+
+.mnb-shop .mnb-product-story > div :where(p, li) {
+  /* Override la règle base ligne 872 (0.92rem + couleur héritée).
+     `.mnb-shop` ancestor selector → seulement dans la boutique. */
+  color: var(--mnb-ink);
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+.mnb-shop .mnb-product-story ul {
+  /* Visuellement distingué de la description par un petit padding
+     top + une thin line cream-line — la "promesse atelier" devient
+     un sous-bloc identifiable plutôt qu'une suite de bullets
+     collés au paragraphe précédent. */
+  margin-top: 22px;
+  padding-top: 18px;
+  border-top: 1px solid var(--mnb-cream-line);
+}
+
+.mnb-shop .mnb-product-story li {
+  color: var(--mnb-ink);
+  font-size: 0.96rem;
+  font-weight: 500;
 }
 
 .mnb-purchase-panel {

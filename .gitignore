@@ -14,3 +14,4 @@ coverage/
 # resizée + sauvée dans public/shop/products/ ; le dossier source
 # n'a jamais besoin de partir sur le repo.
 public/shop/products/perles_a_ajouter/
+public/shop/products/perles_a_ajouter2/

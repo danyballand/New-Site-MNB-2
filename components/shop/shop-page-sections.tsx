@@ -51,7 +51,12 @@ const quickEntries: QuickEntry[] = [
     type: "perles",
     icon: WandSparkles,
     coverImage: {
-      url: "/shop/products/mnb_perle_fleur_rose_iris_v1.jpg",
+      // Cover du rayon Perles : la photo du produit "Perles Nacrees
+      // Atelier" (cube vert anis facetté), plus représentative
+      // visuellement que l'ancienne fleur rose iris seule sur fond
+      // blanc. Le fichier est en .webp (résolution 1400px), géré
+      // nativement par next/image.
+      url: "/shop/products/mnb_perle_cube_vert_anis_facette_v1_1400.webp",
       alt: "Selection perles My Nice Bracelet",
     },
   },
@@ -61,8 +66,12 @@ const quickEntries: QuickEntry[] = [
     type: "pierres",
     icon: Gem,
     coverImage: {
-      url: "/shop/products/mnb_perle_oeil_de_tigre_dore_v1.jpg",
-      alt: "Selection pierres semi-precieuses My Nice Bracelet",
+      // Cover du rayon Pierres : photo du produit "Pierre Jaspe Vert
+      // Mousse" — pierre verte tachée naturelle, visuellement plus
+      // représentative du rayon que l'ancienne "perle oeil de tigre
+      // doree" (qui était une perle, pas une pierre naturelle).
+      url: "/shop/products/mnb_pierre_jaspe_vert_mousse_v1.jpg",
+      alt: "Selection pierres naturelles My Nice Bracelet",
     },
   },
   {
@@ -301,12 +310,26 @@ export function ShopLanding({
                         (md:px-10) pour éviter d'étouffer la photo
                         sur mobile où les cards sont déjà étroites. */}
                     <div className="relative w-full h-full rounded-3xl overflow-hidden">
+                      {/* object-contain (au lieu de object-cover) : les
+                          photos source sont toutes 1:1 (1080 ou 1400 px²)
+                          mais le wrapper varie légèrement entre 1.05 et
+                          1.20 d'aspect selon le viewport (mobile 2 cols
+                          vs desktop 4 cols). object-cover rognait alors
+                          5-15% en haut/bas, ce qui était invisible sur
+                          les photos à sujet centré (bead unique sur
+                          fond blanc) mais COUPAIT le contenu utile sur
+                          les collection shots (porte-clés en haut +
+                          figurines en bas). object-contain garantit
+                          que l'intégralité de la photo est visible ;
+                          le léger espace transparent qui apparaît sur
+                          les côtés se fond avec le gradient pastel du
+                          tile. */}
                       <Image
                         src={cover.url}
                         alt=""
                         fill
                         sizes="(max-width: 980px) 45vw, 22vw"
-                        className="object-cover transition-transform duration-500 group-hover:scale-[1.05]"
+                        className="object-contain transition-transform duration-500 group-hover:scale-[1.05]"
                         unoptimized={cover.url.endsWith(".jpeg") || cover.url.endsWith(".jpg")}
                       />
                     </div>
@@ -329,13 +352,18 @@ export function ShopLanding({
                   <h3 className="font-serif text-[16px] md:text-[20px] font-black uppercase leading-[1.05] tracking-tight text-[#2D3748] mb-2.5">
                     {entry.title}
                   </h3>
-                  <p className="inline-flex items-center gap-1.5 text-[9px] md:text-[10px] font-black uppercase tracking-[0.18em] text-[#3D5A73]">
+                  {/* Label "X sélections" : bumpé de 9-10px à 12-14px
+                      (font-black déjà max → on joue sur la taille pour
+                      la lisibilité). Tracking légèrement réduit (0.18em
+                      → 0.14em) pour que le label respire sans s'éclater
+                      à la nouvelle taille. */}
+                  <p className="inline-flex items-center gap-1.5 text-[12px] md:text-[14px] font-black uppercase tracking-[0.14em] text-[#3D5A73]">
                     {entry.external
                       ? "Site principal"
                       : count !== null
                         ? `${count} sélection${count > 1 ? "s" : ""}`
                         : "Découvrir"}
-                    <ArrowRight size={11} className="transition-transform group-hover:translate-x-1" />
+                    <ArrowRight size={13} className="transition-transform group-hover:translate-x-1" />
                   </p>
                 </div>
               </>
@@ -375,12 +403,15 @@ export function ShopLanding({
                 FILTRÉ en temps réel (le compteur dans le header
                 affichait toujours le total non filtré). */}
             <h2>{currentCategory?.label ?? "Sélection de l'atelier"}</h2>
-            {(currentCategory?.description ??
-              "Perles, pierres et figurines que nous aimons associer en atelier — à la pièce ou en lot.") ? (
-              <p className="mnb-section-lead">
-                {currentCategory?.description ??
-                  "Perles, pierres et figurines que nous aimons associer en atelier — à la pièce ou en lot."}
-              </p>
+            {/* Lead descriptif : affiché uniquement quand on est dans
+                une catégorie (description fournie par shopCategories
+                dans lib/shopify/types.ts). Sur la home /shop sans
+                catégorie active, on ne rend rien — le fallback
+                générique "Perles, pierres et figurines…" était bruit
+                visuel qui faisait doublon avec les rayon tiles
+                au-dessus. */}
+            {currentCategory?.description ? (
+              <p className="mnb-section-lead">{currentCategory.description}</p>
             ) : null}
           </div>
         </div>
