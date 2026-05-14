@@ -32,7 +32,7 @@ type ShopifyVariantNode = {
   id: string;
   title: string;
   availableForSale: boolean;
-  quantityAvailable: number | null;
+  // quantityAvailable retiré — exige unauthenticated_read_product_inventory.
   price: ShopifyMoney;
   compareAtPrice: ShopifyMoney | null;
   selectedOptions: { name: string; value: string }[];
@@ -47,7 +47,7 @@ type ShopifyProductNode = {
   productType: string;
   tags: string[];
   availableForSale: boolean;
-  totalInventory: number | null;
+  // totalInventory retiré — exige unauthenticated_read_product_inventory.
   priceRange: { minVariantPrice: ShopifyMoney };
   compareAtPriceRange: { minVariantPrice: ShopifyMoney };
   featuredImage: ShopifyImage | null;
@@ -90,6 +90,12 @@ class ShopifyConfigurationError extends Error {
   }
 }
 
+// NB : `totalInventory` (Product) et `quantityAvailable` (Variant) sont
+// volontairement retirés du fragment. Ces deux champs exigent le scope
+// `unauthenticated_read_product_inventory` qui a tendance à sauter quand
+// on touche aux scopes de l'app Shopify côté admin. La gestion stock est
+// faite côté Shopify (inventory_policy: deny → pas d'oversell), donc
+// le front n'a pas besoin de connaître la quantité exacte.
 const PRODUCT_FRAGMENT = /* GraphQL */ `
   fragment MnbProduct on Product {
     id
@@ -100,7 +106,6 @@ const PRODUCT_FRAGMENT = /* GraphQL */ `
     productType
     tags
     availableForSale
-    totalInventory
     priceRange {
       minVariantPrice {
         amount
@@ -135,7 +140,6 @@ const PRODUCT_FRAGMENT = /* GraphQL */ `
           id
           title
           availableForSale
-          quantityAvailable
           price {
             amount
             currencyCode
@@ -364,8 +368,8 @@ function getShopifyConfig(): ShopifyConfig {
 function mapProduct(product: ShopifyProductNode): ShopProduct {
   const variants = product.variants.edges.map(({ node }) => mapVariant(node));
   const firstVariant = variants[0];
-  const featuredImage = mapImage(product.featuredImage, product.title);
-  const images = product.images.edges.map(({ node }) => mapImage(node, product.title));
+  const featuredImage = mapImage(product.featuredImage, product.title, product.handle);
+  const images = product.images.edges.map(({ node }) => mapImage(node, product.title, product.handle));
 
   return {
     id: product.id,
@@ -378,7 +382,9 @@ function mapProduct(product: ShopifyProductNode): ShopProduct {
     tags: product.tags,
     badges: inferBadges(product.tags),
     availableForSale: product.availableForSale,
-    totalInventory: product.totalInventory,
+    // totalInventory non récupéré (scope manquant) → null. La gestion
+    // stock est faite côté Shopify (deny policy → pas d'oversell).
+    totalInventory: null,
     price: firstVariant?.price ?? product.priceRange.minVariantPrice,
     compareAtPrice: firstVariant?.compareAtPrice ?? product.compareAtPriceRange.minVariantPrice,
     featuredImage,
@@ -392,19 +398,57 @@ function mapVariant(variant: ShopifyVariantNode): ShopProductVariant {
     id: variant.id,
     title: variant.title,
     availableForSale: variant.availableForSale,
-    quantityAvailable: variant.quantityAvailable,
+    // quantityAvailable non récupéré (scope manquant) → null. Le front
+    // continue de fonctionner via `availableForSale` (boolean Shopify).
+    quantityAvailable: null,
     price: variant.price,
     compareAtPrice: variant.compareAtPrice,
     selectedOptions: variant.selectedOptions,
   };
 }
 
-function mapImage(image: ShopifyImage | null, fallback: string): ShopImage {
+/** Le CSV importé sur Shopify a Image Src VIDE volontairement — les
+ *  photos restent gérées par le front Next.js. Cette fonction calcule
+ *  l'URL locale depuis le handle du produit selon la convention
+ *  `public/shop/products/mnb_<handle_snake_case>_v1.jpg`.
+ *
+ *  Si jamais Shopify renvoie quand même une image.url (ex : si tu
+ *  uploades une photo manuellement dans l'admin), on l'utilise en
+ *  priorité — pour ne pas forcer le naming local. */
+function mapImage(
+  image: ShopifyImage | null,
+  fallback: string,
+  handle?: string,
+): ShopImage {
+  // Cas 1 : Shopify a une image → on l'utilise (override admin
+  // possible si vous voulez ponctuellement remonter une photo HD).
+  if (image?.url) {
+    return {
+      url: image.url,
+      altText: image.altText ?? fallback,
+      width: image.width ?? 2048,
+      height: image.height ?? 2048,
+    };
+  }
+
+  // Cas 2 : pas d'image Shopify mais on a un handle → on calcule
+  // l'URL locale depuis le naming convention.
+  if (handle) {
+    const localFilename = `mnb_${handle.replace(/-/g, "_")}_v1.jpg`;
+    return {
+      url: `/shop/products/${localFilename}`,
+      altText: fallback,
+      width: 1400,
+      height: 1400,
+    };
+  }
+
+  // Cas 3 : fallback générique (ne devrait pas se produire en prod).
   return {
-    url: image?.url ?? "/shop/products/mnb_perle_cube_transparent_vert_v1_2048.png",
-    altText: image?.altText ?? fallback,
-    width: image?.width ?? 2048,
-    height: image?.height ?? 2048,
+    url: "/shop/products/mnb_perle_cube_transparent_vert_v1_2048.png",
+    altText: fallback,
+    width: 2048,
+    height: 2048,
   };
 }
 

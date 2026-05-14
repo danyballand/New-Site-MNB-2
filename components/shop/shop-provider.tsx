@@ -41,7 +41,16 @@ export function ShopProvider({ children }: { children: React.ReactNode }) {
     const timer = window.setTimeout(() => {
       try {
         const stored = window.localStorage.getItem(CART_STORAGE_KEY);
-        setItems(stored ? (JSON.parse(stored) as ShopCartItem[]) : []);
+        const parsed = stored ? (JSON.parse(stored) as ShopCartItem[]) : [];
+        // Nettoyage automatique des IDs mock-* hérités d'avant la
+        // connexion Shopify. Sans ça, le user clique "Passer au
+        // paiement" et tombe sur l'erreur 409 "Ces produits sont des
+        // exemples...". On filtre silencieusement plutôt que de
+        // forcer le user à faire localStorage.clear() à la main.
+        const cleaned = parsed.filter(
+          (item) => !item.merchandiseId.startsWith("mock-"),
+        );
+        setItems(cleaned);
       } catch {
         setItems([]);
       } finally {

@@ -1493,12 +1493,16 @@ textarea {
 .mnb-button-primary {
   border-color: var(--mnb-blue);
   background: var(--mnb-ink);
+  /* Cream brand au repos (lisible contre ink sombre), blanc pur au
+     hover : crée un effet "glow" subtil quand l'utilisateur survole
+     le CTA. Plus marquant qu'un changement de fond seul. */
   color: var(--mnb-soft);
 }
 
 .mnb-button-primary:hover {
   border-color: var(--mnb-blue-dark);
   background: var(--mnb-blue-dark);
+  color: #ffffff;
 }
 
 .mnb-hero-products {
@@ -3783,5 +3787,57 @@ textarea {
     text-overflow: ellipsis;
     white-space: nowrap;
   }
+}
+
+/* ─────────────────────────────────────────────────────────────────
+   CHECKOUT CTA — bouton "Passer au paiement" du cart drawer.
+   Classe dédiée (pas de .mnb-button-primary qui se faisait écraser
+   par des règles plus spécifiques). Tout est défini ici, point.
+   ───────────────────────────────────────────────────────────────── */
+
+.mnb-checkout-cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  min-height: 56px;
+  padding: 14px 20px;
+  margin-top: 12px;
+  border: 0;
+  border-radius: 14px;
+  background: #2d3748;
+  color: #ffffff !important;
+  font-family: inherit;
+  font-size: 0.92rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+  box-shadow: 0 12px 28px rgba(45, 55, 72, 0.22);
+  transition:
+    transform 160ms var(--ease),
+    box-shadow 160ms var(--ease),
+    background 160ms var(--ease);
+}
+
+.mnb-checkout-cta:hover:not(:disabled) {
+  background: #1a202c;
+  transform: translateY(-1px);
+  box-shadow: 0 16px 36px rgba(45, 55, 72, 0.28);
+}
+
+.mnb-checkout-cta:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.mnb-checkout-cta:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+.mnb-checkout-cta > span,
+.mnb-checkout-cta > svg {
+  color: #ffffff !important;
 }
 

@@ -152,9 +152,21 @@ export function CartDrawer() {
                 <span>Sous-total</span>
                 <strong>{formatMoney(subtotal)}</strong>
               </div>
-              <button className="mnb-button mnb-button-primary" disabled={isCheckingOut} onClick={checkout} type="button">
-                {isCheckingOut ? <Loader2 className="mnb-spin" size={16} /> : <ArrowRight size={16} />}
-                Passer au paiement
+              {/* CTA checkout : style inline + classe dédiée pour
+                  éviter tout conflit avec `.mnb-button-primary` (qui
+                  se faisait écraser ailleurs et masquait le texte). */}
+              <button
+                type="button"
+                disabled={isCheckingOut}
+                onClick={checkout}
+                className="mnb-checkout-cta"
+              >
+                {isCheckingOut ? (
+                  <Loader2 size={16} className="mnb-spin" />
+                ) : (
+                  <ArrowRight size={16} />
+                )}
+                <span>Passer au paiement</span>
               </button>
             </div>
           </>
