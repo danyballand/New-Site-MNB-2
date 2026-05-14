@@ -151,17 +151,26 @@ export function ProductPurchasePanel({
             </div>
           ) : (
             <div className="mnb-variant-button-list">
-              {product.variants.map((variant) => (
-                <button
-                  className={variant.id === variantId ? "is-selected" : ""}
-                  disabled={!variant.availableForSale}
-                  key={variant.id}
-                  onClick={() => selectVariant(variant.id)}
-                  type="button"
-                >
-                  {variant.title}
-                </button>
-              ))}
+              {product.variants.map((variant) => {
+                // On affiche UNIQUEMENT la valeur du premier
+                // selectedOption (ex. "20 pieces") au lieu de
+                // variant.title qui est la concaténation "20 pieces
+                // / Spacer bronze" — le second option (matière /
+                // couleur) est constant pour le produit, redondant
+                // dans chaque bouton.
+                const label = variant.selectedOptions[0]?.value ?? variant.title;
+                return (
+                  <button
+                    className={variant.id === variantId ? "is-selected" : ""}
+                    disabled={!variant.availableForSale}
+                    key={variant.id}
+                    onClick={() => selectVariant(variant.id)}
+                    type="button"
+                  >
+                    {label}
+                  </button>
+                );
+              })}
             </div>
           )}
           {isPieceChoice && selectedPieceOption ? (

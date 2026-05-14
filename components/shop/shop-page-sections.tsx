@@ -136,8 +136,14 @@ export function ShopLanding({
   const products = result.data;
   const overviewProducts = allProducts ?? products;
   const currentCategory = activeType ? shopCategories.find((category) => category.key === activeType) : undefined;
+  // Sur la home /shop : on affiche TOUTES les 4 catégories actives
+  // (perles, pierres, figurines, porte-cles). Avant on excluait
+  // porte-cles pour pousser vers la tuile rayon dédiée, mais ça
+  // créait l'impression de produits "disparus" pour l'utilisateur
+  // qui comparait avec le total Shopify. Tout afficher est plus
+  // transparent et la tuile rayon reste accessible.
   const boutiqueProducts = overviewProducts.filter((product) =>
-    ["perles", "pierres", "figurines"].includes(product.category),
+    ["perles", "pierres", "figurines", "porte-cles"].includes(product.category),
   );
   const displayProducts = activeType ? products : boutiqueProducts;
   // (Le hero précédent affichait 4 photos produits dans des bulles ;

@@ -35,24 +35,30 @@ IMAGE_BASE_URL = (
 # ─── Étape 1 : extraire les données depuis le TS via Node ───────
 # Plus fiable que de parser le TS en regex — on exécute Node avec
 # tsx pour évaluer mock-products.ts et dumper en JSON.
+# NB : on écrit le JSON dans un fichier temp et on le relit en
+# UTF-8 explicite. Avant : `console.log` + `capture_output=True`
+# captait stdout via l'encoding système (cp1252 sur Windows), ce qui
+# corrompait tous les caractères non-ASCII (em-dash, accents, etc.).
+# Le passage par fichier intermédiaire évite complètement ce piège.
 DUMPER_TS = ROOT / "scripts/dump_products.mts"
-DUMPER_TS.write_text("""\
-import { mockProducts } from "../lib/shopify/mock-products.ts";
-console.log(JSON.stringify(mockProducts));
+DUMP_JSON = ROOT / "scripts/out/products_dump.json"
+DUMPER_TS.write_text(f"""\
+import {{ writeFileSync }} from "fs";
+import {{ mockProducts }} from "../lib/shopify/mock-products.ts";
+writeFileSync("{DUMP_JSON.as_posix()}", JSON.stringify(mockProducts), {{ encoding: "utf-8" }});
 """, encoding="utf-8")
 
 print("Dumping mockProducts to JSON via tsx...")
 result = subprocess.run(
     ["npx", "--yes", "tsx", str(DUMPER_TS)],
     cwd=ROOT,
-    capture_output=True,
-    text=True,
     shell=True,
 )
 if result.returncode != 0:
-    print("STDERR:", result.stderr)
     raise SystemExit(result.returncode)
-products = json.loads(result.stdout)
+with DUMP_JSON.open(encoding="utf-8") as f:
+    products = json.load(f)
+DUMP_JSON.unlink()
 print(f"  loaded {len(products)} products with {sum(len(p['variants']) for p in products)} variants total")
 
 # ─── Étape 2 : générer le CSV Shopify ─────────────────────────────
@@ -94,7 +100,10 @@ def variant_options(variant):
     return result
 
 
-with OUT.open("w", encoding="utf-8", newline="") as f:
+# utf-8-sig (= UTF-8 + BOM) : sans le BOM en début de fichier, Shopify
+# devine Latin-1 et mange tous les accents. Symptôme classique : "é"
+# devient "Ã©", "è" devient "Ã¨", etc. Le BOM force la lecture en UTF-8.
+with OUT.open("w", encoding="utf-8-sig", newline="") as f:
     writer = csv.writer(f, quoting=csv.QUOTE_MINIMAL)
     writer.writerow(HEADERS)
 

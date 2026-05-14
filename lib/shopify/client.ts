@@ -226,8 +226,12 @@ export async function getShopProducts(filters: { type?: ShopProductType; query?:
   }
 
   try {
+    // first: 250 = limite max d'une page Storefront API. Avec ~124
+    // produits actifs on tient largement dans une seule page. Si on
+    // dépasse 250 un jour, il faudra paginer via cursor (hasNextPage
+    // + endCursor) — pas pertinent pour le volume actuel.
     const response = await shopifyFetch<ShopifyProductsResponse>(PRODUCTS_QUERY, {
-      first: 50,
+      first: 250,
       query: filters.query ? `title:*${filters.query.trim()}*` : undefined,
     });
     const products = response.products.edges.map(({ node }) => mapProduct(node));
@@ -454,14 +458,13 @@ function mapImage(
 
 function inferCategory(productType: string, tags: string[]): ShopProductType {
   const source = `${productType} ${tags.join(" ")}`.toLowerCase();
+  // Match par mots entiers, pas substring : avant on avait `source.includes('kit')`
+  // qui matchait "unakite" → pierre Unakite mis-catégorisée en "packs". Regex
+  // \b...\b force le matching sur des word boundaries.
+  const hasWord = (...words: string[]) =>
+    words.some((w) => new RegExp(`\\b${w}\\b`).test(source));
 
-  if (
-    source.includes("pack") ||
-    source.includes("kit") ||
-    source.includes("coffret") ||
-    source.includes("bundle") ||
-    source.includes("atelier maison")
-  ) {
+  if (hasWord("pack", "packs", "kit", "kits", "coffret", "coffrets", "bundle")) {
     return "packs";
   }
 
